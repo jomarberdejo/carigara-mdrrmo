@@ -13,6 +13,7 @@ const getAllUsers = (req, res) => {
     user_id,
     firstname,
     lastname,
+    age,
     location,
     email,
     role,
@@ -34,13 +35,13 @@ const getAllUsers = (req, res) => {
 const loginUser = async(req, res) => {
     const salt = await bcrypt.genSalt(10)
     
-    const {firstname:firstnameValue, lastname:lastnameValue, location:locationValue, email:emailValue, password:passwordValue} = req.body;
+    const {firstname, lastname, location, email, password} = req.body;
 
-    const hashedPassword = await bcrypt.hash(passwordValue, salt)
-    const roleValue = 'User'
+        
+    
 
     const sql = `SELECT * FROM users WHERE email = ?`
-    values = [emailValue]
+    values = [email]
 
     connection.query(sql, values, (err, result)=> {
         if (err){
@@ -51,14 +52,14 @@ const loginUser = async(req, res) => {
                 res.json({message: "Email already in use"})
             }
             else{
-                const sql = `INSERT INTO users (firstname, lastname, location, email, password, role) VALUES (?, ?, ?, ?, ?, ?)`
+                const sql = `INSERT INTO users (firstname, lastname, age, location, email, password) VALUES (?, ?, ?, ?, ?, ?)`
                 const values = [
-                    firstnameValue,
-                    lastnameValue,
-                    locationValue,
-                    emailValue,
+                    firstname,
+                    lastname,
+                    age,
+                    location,
+                    email,
                     hashedPassword,
-                    roleValue,
                 ]
                 const result = connection.query(sql, values, (err, result) => {
                     if (err){

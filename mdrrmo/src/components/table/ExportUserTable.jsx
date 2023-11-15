@@ -55,6 +55,10 @@ const columns = [
     header: 'Last Name',
     size: 120,
   }),
+  columnHelper.accessor('age', {
+    header: 'Age',
+    size: 70,
+  }),
   columnHelper.accessor('location', {
     header: 'Location',
     size: 200,
@@ -63,10 +67,7 @@ const columns = [
     header: 'Email',
     size: 200,
   }),
-  columnHelper.accessor('password', {
-    header: 'Password',
-    size: 150,
-  }),
+ 
   columnHelper.accessor('role', {
     header: 'Role',
     size: 100,

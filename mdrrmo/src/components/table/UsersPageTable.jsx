@@ -59,9 +59,18 @@ const Example = () => {
           },
         },
         {
+          accessorKey: 'age',
+          header: 'Age',
+          muiEditTextFieldProps: {
+            required: true,
+          },
+        },
+        {
           accessorKey: 'location',
           header: 'Location',
-          size: 200,
+          muiEditTextFieldProps: {
+            required: true,
+          },
         },
         {
           accessorKey: 'email',
@@ -83,7 +92,7 @@ const Example = () => {
           header: 'Created At',
           muiEditTextFieldProps: {
            
-            required: true,
+            
             disabled: true,
           },
           size: 150,
@@ -215,19 +224,15 @@ const Example = () => {
       
     />
 
-<Typography variant='body1' sx= {{marginLeft: 1}}>Location</Typography>
-<FormControl>
+
    
-        <Select
-          labelId="location-select-label"
-          id="location-select"
-          
-        >
-          <MenuItem value="option1">Option 1</MenuItem>
-          <MenuItem value="option2">Option 2</MenuItem>
-          <MenuItem value="option3">Option 3</MenuItem>
-        </Select>
-      </FormControl>
+<TextField
+      id="location"
+      label="Location"
+      type="text"
+      variant="outlined"
+      
+    />
         </DialogContent>
         <DialogActions>
           <MRT_EditActionButtons variant="text" table={table} row={row} />

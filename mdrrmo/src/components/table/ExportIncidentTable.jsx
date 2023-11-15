@@ -29,10 +29,11 @@ const columns = [
     header: 'Description',
     size: 200,
   }),
-  columnHelper.accessor('file_path', {
-    header: 'File Path',
+  columnHelper.accessor('location', {
+    header: 'Location',
     size: 200,
   }),
+  
   columnHelper.accessor('reported_at', {
     header: 'Reported At',
     size: 150,

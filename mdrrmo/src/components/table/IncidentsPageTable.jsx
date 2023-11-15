@@ -50,15 +50,13 @@ const Example = () => {
         },
       },
       {
-        accessorKey: 'file_path',
-        header: 'File Path',
+        accessorKey: 'location',
+        header: 'Location',
         muiEditTextFieldProps: {
           required: true,
-         
         },
-        enableEditing: false,
-        
       },
+      
       {
         accessorKey: 'reported_at',
         header: 'Reported At',
@@ -186,23 +184,13 @@ const Example = () => {
     className='border border-dashed border-2 border-gray-600 px-2 py-1 cursor-pointer' />
      
     
-     
+     <TextField
+      id="text"
+      label="Location"
+      type="text"
+      variant="outlined"
       
-
-
-<Typography variant='body1' sx= {{marginLeft: 1}}>Location</Typography>
-<FormControl>
-
-        <Select
-          labelId="location-select-label"
-          id="location-select"
-          value={'option1'}
-        >
-          <MenuItem value="option1">Option 1</MenuItem>
-          <MenuItem value="option2">Option 2</MenuItem>
-          <MenuItem value="option3">Option 3</MenuItem>
-        </Select>
-      </FormControl>
+    />
         </DialogContent>
         <DialogActions>
           <MRT_EditActionButtons variant="text" table={table} row={row} />
@@ -237,6 +225,14 @@ const Example = () => {
       variant="outlined"
       
     />
+    <TextField
+      id="text"
+      label="Location"
+      type="text"
+      variant="outlined"
+      
+    />
+   
         </DialogContent>
         <DialogActions>
           <MRT_EditActionButtons variant="text" table={table} row={row} />

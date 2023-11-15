@@ -6,6 +6,7 @@ const getAllReports = (req, res) => {
     r.report_id,
     r.severity, 
     r.description, 
+    r.location,
     r.file_path,
     DATE_FORMAT(r.reported_at, '%Y-%m-%d %H:%i:%s') AS reported_at, 
     u.firstname
