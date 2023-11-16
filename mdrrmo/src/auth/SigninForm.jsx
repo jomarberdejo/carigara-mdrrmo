@@ -10,13 +10,15 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
+import {useAuth} from '../context/AuthContext'
 import logo from '../assets/images/mdrrmo-logo.png';
 
-const SigninForm = () => {
+const SignInForm = () => {
   const navigate = useNavigate();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [error, setError] = useState(null);
+  const {setIsAuthenticated} = useAuth()
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,6 +34,7 @@ const SigninForm = () => {
 
       
       setError(null);
+      setIsAuthenticated(true);
 
       console.log(data);
 
@@ -40,7 +43,6 @@ const SigninForm = () => {
     } catch (error) {
       console.error(error.response.data.error);
 
-      // Set error state to display on the UI
       setError(error.response ? error.response.data.error : 'An error occurred during sign-in');
     }
   };
@@ -130,4 +132,4 @@ const SigninForm = () => {
   );
 };
 
-export default SigninForm;
+export default SignInForm;

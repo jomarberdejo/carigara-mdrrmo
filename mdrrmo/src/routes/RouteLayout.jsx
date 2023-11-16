@@ -1,15 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Suspense, lazy } from 'react'; 
 
-const AdminLayout = lazy(() => import('../Admin/AdminLayout'));
-const Dashboard = lazy(() => import('../pages/Dashboard'));
-const Incidents = lazy(() => import('../pages/Incidents'));
-const Users = lazy(() => import('../pages/Users'));
-const Profile = lazy(() => import('../pages/Profile'));
-const SigninForm = lazy(() => import('../auth/SigninForm'));
-const SignupForm = lazy(() => import('../auth/SignupForm'));
-
+import AdminLayout from '../Admin/AdminLayout';
+import Incidents from '../pages/Incidents';
+import Users from '../pages/Users'
+import Profile from '../pages/Profile'
+import Incident from '../pages/Incident';
+import SignInForm from '../auth/SignInForm'
+import SignUpForm from '../auth/SignUpForm'
+import Dashboard from '../pages/Dashboard';
 import { useAuth } from '../context/AuthContext';
+
+
 
 const RouteLayout = () => {
   const { isAuthenticated } = useAuth();
@@ -17,23 +18,25 @@ const RouteLayout = () => {
   return (
     <Router>
       {isAuthenticated ? (
-        <Suspense fallback= {null}>
+     
           <AdminLayout>
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/incidents" element={<Incidents />} />
               <Route path="/users" element={<Users />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/incident/:id" element= {<Incident />}/>
+
             </Routes>
           </AdminLayout>
-        </Suspense>
+
       ) : (
-        <Suspense fallback= {null}>
+
           <Routes>
-            <Route path="/" element={<SigninForm />} />
-            <Route path="/signup" element={<SignupForm />} />
+            <Route path="/" element={<SignInForm />} />
+            <Route path="/signup" element={<SignUpForm />} />
           </Routes>
-        </Suspense>
+
       )}
     </Router>
   );

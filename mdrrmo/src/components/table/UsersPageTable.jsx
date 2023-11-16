@@ -72,6 +72,7 @@ const Example = () => {
             required: true,
           },
         },
+        
         {
           accessorKey: 'email',
           header: 'Email',
@@ -80,6 +81,7 @@ const Example = () => {
             required: true,
           },
         },
+        
    
         {
           accessorKey: 'role',

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -25,7 +26,7 @@ import { FormControl, Input, MenuItem, Select, TextField } from '@mui/material';
 
 const Example = () => {
   const [validationErrors, setValidationErrors] = useState({});
-
+  const navigate = useNavigate()
   const columns = useMemo(
     () => [
       {
@@ -255,7 +256,7 @@ const Example = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="View Details">
-          <IconButton onClick={() => console.log(row.original)}>
+          <IconButton onClick={() =>  navigate(`/incident/${row.original.report_id}`)}>
             <VisibilityIcon />
           </IconButton>
         </Tooltip>

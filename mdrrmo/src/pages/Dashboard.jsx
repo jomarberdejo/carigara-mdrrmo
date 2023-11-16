@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+
 import PageIntro from '../components/pageIntro/PageIntro'
 import Cards from '../components/card/Cards'
 import Charts from '../components/charts/Charts'

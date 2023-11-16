@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from 'axios';
 
-const SignupForm = () => {
+const SignUpForm = () => {
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const ageRef = useRef(null);
@@ -156,4 +156,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default SignUpForm;
