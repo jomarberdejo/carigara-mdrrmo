@@ -17,7 +17,7 @@ const RouteLayout = () => {
 
   return (
     <Router>
-      {isAuthenticated ? (
+      {isAuthenticated && (
      
           <AdminLayout>
             <Routes>
@@ -26,15 +26,18 @@ const RouteLayout = () => {
               <Route path="/users" element={<Users />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/incident/:id" element= {<Incident />}/>
-
+              <Route path="/*" element= {<div>Not Found</div>}/>
+             
             </Routes>
           </AdminLayout>
 
-      ) : (
+      )} 
+      {!isAuthenticated && (
 
           <Routes>
             <Route path="/" element={<SignInForm />} />
             <Route path="/signup" element={<SignUpForm />} />
+            <Route path="*" element= {<div>Not Found</div>}/>
           </Routes>
 
       )}

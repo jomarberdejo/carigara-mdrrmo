@@ -28,7 +28,8 @@ const signInUser = async (req, res) => {
         if (isPasswordMatch) {
          
           const token = createToken(user.user_id);
-          return res.status(200).json({ email, token });
+          
+          return res.status(200).json({ user, token });
         } else {
           
           return res.status(401).json({ error: 'Invalid credentials' });
@@ -83,7 +84,17 @@ const signUpUser = async (req, res) => {
 
           const userId = results.insertId;
           const token = createToken(userId);
-          return res.status(200).json({ email, token });
+
+          const userInformation = {
+            userId,
+            firstname,
+            lastname,
+            age,
+            location,
+            email,
+          };
+
+          return res.status(200).json({ user: userInformation, token });
         });
       }
     });

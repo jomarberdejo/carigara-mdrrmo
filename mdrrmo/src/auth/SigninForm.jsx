@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,42 +9,20 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import {useAuth} from '../context/AuthContext'
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import useSignIn from '../hooks/useSignIn';
 import logo from '../assets/images/mdrrmo-logo.png';
 
 const SignInForm = () => {
-  const navigate = useNavigate();
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-  const [error, setError] = useState(null);
-  const {setIsAuthenticated} = useAuth()
 
-  const handleSubmit = async (event) => {
+  const { emailRef, passwordRef, error, handleSignIn } = useSignIn();
+
+  const handleSubmit = async(event) => {
     event.preventDefault();
-
-    try {
-      const userInfo = {
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
-      };
-
-      const result = await axios.post('http://localhost:4000/api/auth/signin', userInfo);
-      const data = result.data;
-
-      
-      setError(null);
-      setIsAuthenticated(true);
-
-      console.log(data);
-
-     
-      navigate('/dashboard');
-    } catch (error) {
-      console.error(error.response.data.error);
-
-      setError(error.response ? error.response.data.error : 'An error occurred during sign-in');
-    }
+   await handleSignIn();
+    
+   
   };
 
   return (

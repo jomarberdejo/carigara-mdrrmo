@@ -33,7 +33,10 @@ const columns = [
     header: 'Location',
     size: 200,
   }),
-  
+  columnHelper.accessor('status', {
+    header: 'Status',
+    size: 200,
+  }),
   columnHelper.accessor('reported_at', {
     header: 'Reported At',
     size: 150,

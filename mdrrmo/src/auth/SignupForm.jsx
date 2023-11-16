@@ -1,6 +1,5 @@
-import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
 
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,37 +9,24 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
+import useSignUp from '../hooks/useSignUp';
 
 const SignUpForm = () => {
-  const firstNameRef = useRef(null);
-  const lastNameRef = useRef(null);
-  const ageRef = useRef(null);
-  const locationRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const {
+    firstNameRef,
+    lastNameRef,
+    ageRef,
+    locationRef,
+    emailRef,
+    passwordRef,
+    handleSignUp,
+  } = useSignUp();
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-    try{
-
-      const userInfo = {
-        firstname: firstNameRef.current.value,
-        lastname: lastNameRef.current.value,
-        age: ageRef.current.value,
-        location: locationRef.current.value,
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
-      };
-    
-
-    const result =  await axios.post('http://localhost:4000/api/auth/signup', userInfo)
-    const data = await result.data
-    console.log(data)
-    }
-    catch(error){
-      console.error(error.response.data.error)
-    }
+    await handleSignUp();
+  
   };
 
   return (

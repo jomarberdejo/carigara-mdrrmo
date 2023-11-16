@@ -32,14 +32,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-router.post('/', upload.single('file'), addReport)
-
+router.post('/', upload.single('file_path'), addReport)
 
 //DELETE reports
-router.delete('/:id' , updateReport)
+router.delete('/:id' , deleteReport)
 
 //UPDATE reports
-router.patch('/:id' , deleteReport)
+router.patch('/:id' , updateReport)
+
+
 
 
 

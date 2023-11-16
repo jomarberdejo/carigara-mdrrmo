@@ -7,6 +7,7 @@ const getAllReports = (req, res) => {
     r.severity, 
     r.description, 
     r.location,
+    r.status,
     r.file_path,
     DATE_FORMAT(r.reported_at, '%Y-%m-%d %H:%i:%s') AS reported_at, 
     u.firstname
@@ -32,6 +33,8 @@ const getOneReport = (req, res) => {
     r.report_id,
     r.severity, 
     r.description, 
+    r.location,
+    r.status,
     r.file_path,
     DATE_FORMAT(r.reported_at, '%Y-%m-%d %H:%i:%s') AS reported_at, 
     u.firstname
@@ -53,21 +56,28 @@ JOIN
 
 
 const addReport = (req, res) => {
-    const { severity, description, userId } = req.body;
+    const { severity, description, location, status, user_id } = req.body;
     const file = req.file;
     console.log('File details:', file);
-
-    const sql = 'INSERT INTO reports (severity, description, user_id, file_path) VALUES (?, ?, ?, ?)';
-    const values = [severity, description, userId, file.path];
-
+    
+    console.log(req.body)
+    
+    const defaultSeverity = severity === 'undefined' ? 'Uncategorized' : severity;
+    const defaultStatus = status === '' ? 'Ongoing' : status;
+  
+    const sql =
+      'INSERT INTO reports (severity, description, location, status, file_path,  user_id) VALUES (?, ?, ?, ?, ?, ?)';
+    const values = [defaultSeverity, description, location, defaultStatus, file.path, user_id];
+  
     connection.query(sql, values, (error, result) => {
-        if (error) {
-            res.status(500).json({ error: error.message });
-        } else {
-            res.status(200).json({ message: 'Report added successfully', result });
-        }
+      if (error) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.status(200).json({ message: 'Report added successfully', result });
+      }
     });
-}
+  };
+  
 
 const deleteReport = (req, res) => {
     const {id} = req.params;
@@ -89,10 +99,10 @@ const deleteReport = (req, res) => {
 }
 
 const updateReport = (req, res) => {
-    const {severity: severityValue, description:descriptionValue} = req.body;
+    const {severity, description, location, status} = req.body;
     const {id} = req.params
 
-    const sql = `UPDATE reports SET severity= '${severityValue}', description= '${descriptionValue}' WHERE report_id = ${Number(id)}`
+    const sql = `UPDATE reports SET severity= '${severity}', description= '${description}', location = '${location}', status = '${status}' WHERE report_id = ${Number(id)}`
 
     connection.query(sql, (error, result) => {
         if (error){

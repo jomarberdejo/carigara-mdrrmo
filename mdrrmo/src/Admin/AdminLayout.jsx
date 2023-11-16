@@ -49,7 +49,7 @@ function AdminLayout({children}) {
   const navigate = useNavigate()
   const location = useLocation();
 
-  const {setIsAuthenticated} = useAuth();
+  const {logoutUser} = useAuth();
  
   
   
@@ -78,7 +78,7 @@ function AdminLayout({children}) {
   };
   
   const handleLogout = ()  => {
-    setIsAuthenticated(false);
+    logoutUser()
     navigate('/')
   }
   
