@@ -12,12 +12,16 @@ const Incident = () => {
         return data
     }
 
-    const {data} = useQuery({
+    const {data, isLoading} = useQuery({
       queryKey: ['singleIncident'],
       queryFn: fetchSingleIncident,
     })  
     console.log(data)
     const imageUrl = `http://localhost:4000/${data?.file_path}`
+
+    if (isLoading) {
+      return <div>Loading...</div>;
+  }
   return (
     <>
      <div>Incident {id} </div>

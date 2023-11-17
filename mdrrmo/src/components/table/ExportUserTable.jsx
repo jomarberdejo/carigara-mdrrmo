@@ -2,6 +2,7 @@ import React from 'react';
 import {
   useQuery,
 } from '@tanstack/react-query';
+import axios from 'axios'
 import {
   MaterialReactTable,
   createMRTColumnHelper,
@@ -86,8 +87,8 @@ const csvConfig = mkConfig({
 
 const ExportUserTable = () => {
   const fetchUsers = async () => {
-    const result = await fetch('http://localhost:4000/api/users/');
-    const data = await result.json();
+    const result = await axios.get('http://localhost:4000/api/users/');
+    const data = await result.data;
     return data;
   };
 

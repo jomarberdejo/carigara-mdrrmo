@@ -60,7 +60,7 @@ const addReport = (req, res) => {
     const file = req.file;
     console.log('File details:', file);
     
-    console.log(req.body)
+    console.log(file.path)
     
     const defaultSeverity = severity === 'undefined' ? 'Uncategorized' : severity;
     const defaultStatus = status === '' ? 'Ongoing' : status;
@@ -71,6 +71,7 @@ const addReport = (req, res) => {
   
     connection.query(sql, values, (error, result) => {
       if (error) {
+        console.error(error); 
         res.status(500).json({ error: error.message });
       } else {
         res.status(200).json({ message: 'Report added successfully', result });
@@ -81,10 +82,10 @@ const addReport = (req, res) => {
 
 const deleteReport = (req, res) => {
     const {id} = req.params;
-    const sql = `DELETE FROM reports WHERE report_id = ${Number(id)}`;
+    const sql = `DELETE FROM reports WHERE report_id = ?`;
+    values= [Number(id)]
 
-
-    connection.query(sql, (error, result) => {
+    connection.query(sql, values, (error, result) => {
         if (error){
             res.json({
                 error: error.message
@@ -99,24 +100,30 @@ const deleteReport = (req, res) => {
 }
 
 const updateReport = (req, res) => {
-    const {severity, description, location, status} = req.body;
-    const {id} = req.params
+    const { severity, description, location, status } = req.body;
+    const { id } = req.params;
 
-    const sql = `UPDATE reports SET severity= '${severity}', description= '${description}', location = '${location}', status = '${status}' WHERE report_id = ${Number(id)}`
+    const sql = `
+        UPDATE reports 
+        SET severity = ?, description = ?, location = ?, status = ?
+        WHERE report_id = ?`;
 
-    connection.query(sql, (error, result) => {
-        if (error){
+    const values = [severity, description, location, status, Number(id)];
+
+    connection.query(sql, values, (error, result) => {
+        if (error) {
             res.json({
                 error: error.message
-            })
-        }
-        else{
+            });
+        } else {
             res.json({
-                message: "Report updated successfully", result
-            })
+                message: "Report updated successfully",
+                result
+            });
         }
-    })
-}
+    });
+};
+
 
 module.exports = {
     getAllReports,

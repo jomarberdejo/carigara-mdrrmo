@@ -9,6 +9,7 @@ import SignInForm from '../auth/SignInForm'
 import SignUpForm from '../auth/SignUpForm'
 import Dashboard from '../pages/Dashboard';
 import { useAuth } from '../context/AuthContext';
+import User from '../pages/User';
 
 
 
@@ -26,6 +27,7 @@ const RouteLayout = () => {
               <Route path="/users" element={<Users />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/incident/:id" element= {<Incident />}/>
+              <Route path="/user/:id" element= {<User />}/>
               <Route path="/*" element= {<div>Not Found</div>}/>
              
             </Routes>

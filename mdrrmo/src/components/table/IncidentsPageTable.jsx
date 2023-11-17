@@ -23,11 +23,12 @@
   import VisibilityIcon from '@mui/icons-material/Visibility';
   import axios from 'axios';
   import { FormControl, MenuItem, Select, TextField } from '@mui/material';
-
+  import {useAuth} from '../../context/AuthContext'
 
   const IncidentsTable = () => {
-    const [validationErrors, setValidationErrors] = useState({});
-    const severityRef = useRef();
+    const {user} = useAuth()
+    
+    const severityRef = useRef('');
     const descriptionRef = useRef();
     const locationRef = useRef();
     const statusRef = useRef();
@@ -97,7 +98,7 @@
           enableEditing: false,
         },
       ],
-      [validationErrors]
+      []
     );
 
     const { mutateAsync: createIncident, isPending: isCreatingIncident } =
@@ -155,7 +156,7 @@
           minHeight: '500px',
         },
       },
-      onCreatingRowCancel: () => setValidationErrors({}),
+
       onCreatingRowSave: () => handleCreateIncident({
         values: {
           severity: severityRef.current.value,
@@ -163,11 +164,11 @@
           location: locationRef.current.value,
           status: statusRef.current.value,
           file_path: filepathRef.current.files[0],
-          user_id: 1,
+          user_id: user.user_id,
         },
         table,
       }),
-      onEditingRowCancel: () => setValidationErrors({}),
+ 
       onEditingRowSave: handleSaveIncident,
       renderCreateRowDialogContent: ({ table, row }) => (
         <>

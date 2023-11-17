@@ -49,7 +49,7 @@ function AdminLayout({children}) {
   const navigate = useNavigate()
   const location = useLocation();
 
-  const {logoutUser} = useAuth();
+  const {logoutUser, user} = useAuth();
  
   
   
@@ -217,7 +217,7 @@ const container = window !== undefined ? () => window().document.body : undefine
               <IconButton 
               
               onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src='jomar.png' alt="Jomar"  />
+                <Avatar src='jomar.png' alt={user.firstname}  />
               </IconButton>
             </Tooltip>
             <Menu

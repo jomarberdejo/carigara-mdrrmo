@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
+
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -29,9 +30,18 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { FormControl, MenuItem, Select, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-const Example = () => {
-  const [validationErrors, setValidationErrors] = useState({});
+const UsersTable = () => {
+  const navigate = useNavigate()
+  
+    const firstnameRef = useRef();
+    const lastnameRef = useRef();
+    const ageRef = useRef();
+    const locationRef = useRef();
+    const emailRef = useRef();
+    const roleRef = useRef();
+    const passwordRef = useRef()
 
   const columns = useMemo(
     () => [
@@ -77,10 +87,10 @@ const Example = () => {
           accessorKey: 'email',
           header: 'Email',
           muiEditTextFieldProps: {
-            type: 'email',
-            required: true,
-          },
+            disabled: true,
+          }
         },
+       
         
    
         {
@@ -102,7 +112,7 @@ const Example = () => {
         },
      
     ],
-    [validationErrors],
+    [],
   );
 
   //call CREATE hook
@@ -124,24 +134,15 @@ const Example = () => {
 
   //CREATE action
   const handleCreateUser = async ({ values, table }) => {
-    const newValidationErrors = validateUser(values);
-    if (Object.values(newValidationErrors).some((error) => error)) {
-      setValidationErrors(newValidationErrors);
-      return;
-    }
-    setValidationErrors({});
+   
+  
     await createUser(values);
-    table.setCreatingRow(null); //exit creating mode
+    table.setCreatingRow(null); 
   };
 
   //UPDATE action
   const handleSaveUser = async ({ values, table }) => {
-    const newValidationErrors = validateUser(values);
-    if (Object.values(newValidationErrors).some((error) => error)) {
-      setValidationErrors(newValidationErrors);
-      return;
-    }
-    setValidationErrors({});
+    
     await updateUser(values);
     table.setEditingRow(null); //exit editing mode
   };
@@ -149,7 +150,7 @@ const Example = () => {
   //DELETE action
   const openDeleteConfirmModal = (row) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
-      deleteUser(row.original.id);
+      deleteUser(row.original.user_id);
     }
   };
 
@@ -173,68 +174,88 @@ const Example = () => {
         minHeight: '500px',
       },
     },
-    onCreatingRowCancel: () => setValidationErrors({}),
-    onCreatingRowSave: handleCreateUser,
-    onEditingRowCancel: () => setValidationErrors({}),
+   
+    onCreatingRowSave: () => handleCreateUser({
+      values: {
+        firstname: firstnameRef.current.value,
+        lastname: lastnameRef.current.value,
+        age: ageRef.current.value,
+        location: locationRef.current.value,
+        email: emailRef.current.value,
+        role: roleRef.current.value,
+        password: passwordRef.current.value,
+      },
+      table,
+    }),
+ 
     onEditingRowSave: handleSaveUser,
-    //optionally customize modal content
-    renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
+   
+    renderCreateRowDialogContent: ({ table, row }) => (
       <>
-        <DialogTitle variant="h5">Create New User</DialogTitle>
+        <DialogTitle variant="h5">Report New Incident</DialogTitle>
         <DialogContent
           sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
         >
-          {/* {...internalEditComponents} or render custom edit components here */}
-          <TextField
-        label="First Name"
-        sx={{marginTop: 2}}
-        {...internalEditComponents[0].muiEditTextFieldProps} // This assumes the first field is for the first name
-      />
-      <TextField
-        label="Last Name"
-        sx={{marginTop: 2}}
-        value={"Berdejo"}
-        {...internalEditComponents[0].muiEditTextFieldProps} // This assumes the first field is for the first name
-      />
-      <Typography variant='body1' sx= {{marginLeft: 1}}>Role</Typography>
-       <FormControl>
         
-        <Select
-          labelId="role-select-label"
-          id="role-select"
+
           
-        >
-          <MenuItem value="option1">Option 1</MenuItem>
-          <MenuItem value="option2">Option 2</MenuItem>
-          <MenuItem value="option3">Option 3</MenuItem>
-        </Select>
-      </FormControl>
 
-      <TextField
-      id="email"
-      label="Email"
-      type="email"
-      variant="outlined"
-      
-    />
+          <TextField
+            sx= {{marginTop: 2}}
+            label="Firstname"
+            type="text"
+            variant="outlined"
+            inputRef={firstnameRef}
+          />
+
+          
+<TextField
+            id="lastname"
+            label="Lastname"
+            type="text"
+            variant="outlined"
+            inputRef={lastnameRef}
+          />
 
 <TextField
-      id="password"
-      label="Password"
-      type="password"
-      variant="outlined"
-      
-    />
+            id="age"
+            label="Age"
+            type="number"
+            variant="outlined"
+            inputRef={ageRef}
+          />
 
+          <TextField
+            id="location"
+            label="Location"
+            type="text"
+            variant="outlined"
+            inputRef={locationRef}
+          />
 
-   
 <TextField
-      id="location"
-      label="Location"
-      type="text"
-      variant="outlined"
-      
-    />
+            id="email"
+            label="Email"
+            type="email"
+            variant="outlined"
+            inputRef={emailRef}
+          />
+
+<TextField
+            id="password"
+            label="Password"
+            type="password"
+            variant="outlined"
+            inputRef={passwordRef}
+          />
+
+          <TextField
+            id="role"
+            label="Role"
+            type="text"
+            variant="outlined"
+            inputRef={roleRef}
+          />
         </DialogContent>
         <DialogActions>
           <MRT_EditActionButtons variant="text" table={table} row={row} />
@@ -248,60 +269,10 @@ const Example = () => {
         <DialogContent
           sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
         >
-          {/* {internalEditComponents} or render custom edit components here */}
-          <TextField
-        label="First Name"
-        sx={{marginTop: 2}}
-        {...internalEditComponents[0].muiEditTextFieldProps} // This assumes the first field is for the first name
-      />
-      <TextField
-        label="Last Name"
-        sx={{marginTop: 2}}
-        value={"Berdejo"}
-        {...internalEditComponents[0].muiEditTextFieldProps} // This assumes the first field is for the first name
-      />
-      <Typography variant='body1' sx= {{marginLeft: 1}}>Role</Typography>
-       <FormControl>
-        
-        <Select
-          labelId="role-select-label"
-          id="role-select"
-          
-        >
-          <MenuItem value="option1">Option 1</MenuItem>
-          <MenuItem value="option2">Option 2</MenuItem>
-          <MenuItem value="option3">Option 3</MenuItem>
-        </Select>
-      </FormControl>
-
-      <TextField
-      id="email"
-      label="Email"
-      type="email"
-      variant="outlined"
-      
-    />
-
-
-
-<Typography variant='body1' sx= {{marginLeft: 1}}>Location</Typography>
-<FormControl>
-   
-        <Select
-          labelId="location-select-label"
-          id="location-select"
-          
-        >
-          <MenuItem value="option1">Option 1</MenuItem>
-          <MenuItem value="option2">Option 2</MenuItem>
-          <MenuItem value="option3">Option 3</MenuItem>
-        </Select>
-      </FormControl>
+          {internalEditComponents} {/* or render custom edit components here */}
         </DialogContent>
         <DialogActions>
-          <MRT_EditActionButtons 
-          
-          variant="text" table={table} row={row} />
+          <MRT_EditActionButtons variant="text" table={table} row={row} />
         </DialogActions>
       </>
     ),
@@ -322,7 +293,7 @@ const Example = () => {
         </Tooltip>
 
         <Tooltip title="View Details">
-          <IconButton onClick={() => alert(JSON.stringify(row))}>
+          <IconButton onClick={() => navigate(`/user/${row.original.user_id}`)}>
             <VisibilityIcon />
           </IconButton>
         </Tooltip>
@@ -332,13 +303,7 @@ const Example = () => {
       <Button
         variant="contained"
         onClick={() => {
-          table.setCreatingRow(true); //simplest way to open the create row modal with no default values
-          //or you can pass in a row object to set default values with the `createRow` helper function
-          // table.setCreatingRow(
-          //   createRow(table, {
-          //     //optionally pass in default values for the new row, useful for nested data or other complex scenarios
-          //   }),
-          // );
+          table.setCreatingRow(true); 
         }}
       >
         Add User
@@ -362,21 +327,14 @@ function useCreateUser() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (user) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
+      
+      const result = await axios.post('http://localhost:4000/api/users/', user)
+      const data = await result.data
+      
+
+      queryClient.invalidateQueries(['users'])
     },
-    //client side optimistic update
-    onMutate: (newUserInfo) => {
-      queryClient.setQueryData(['users'], (prevUsers) => [
-        ...prevUsers,
-        {
-          ...newUserInfo,
-          id: (Math.random() + 1).toString(36).substring(7),
-        },
-      ]);
-    },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    
   });
 }
 
@@ -397,19 +355,14 @@ function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (user) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
+      const result = await axios.patch(`http://localhost:4000/api/users/${user.user_id}`, user)
+      const data = await result.data
+
+      console.log(data)
+      queryClient.invalidateQueries(['users'])
     },
-    //client side optimistic update
-    onMutate: (newUserInfo) => {
-      queryClient.setQueryData(['users'], (prevUsers) =>
-        prevUsers?.map((prevUser) =>
-          prevUser.id === newUserInfo.id ? newUserInfo : prevUser,
-        ),
-      );
-    },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+   
+    
   });
 }
 
@@ -417,18 +370,14 @@ function useUpdateUser() {
 function useDeleteUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (userId) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
+    mutationFn: async (user_id) => {
+      console.log(user_id)
+      const result = await axios.delete(`http://localhost:4000/api/users/${user_id}`)
+      const data = await result.data;
+      console.log(data)
+      queryClient.invalidateQueries(['users'])
     },
-    //client side optimistic update
-    onMutate: (userId) => {
-      queryClient.setQueryData(['users'], (prevUsers) =>
-        prevUsers?.filter((user) => user.id !== userId),
-      );
-    },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+
   });
 }
 
@@ -448,7 +397,7 @@ const UsersPageTable = () => (
         Manage Users 
         </Typography>
        </Toolbar>
-    <Example 
+    <UsersTable 
     
     />
     <Divider />
@@ -458,21 +407,4 @@ const UsersPageTable = () => (
 
 export default UsersPageTable;
 
-const validateRequired = (value) => !!value.length;
-const validateEmail = (email) =>
-  !!email.length &&
-  email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
 
-function validateUser(user) {
-  return {
-    firstname: !validateRequired(user.firstname)
-      ? 'First Name is Required'
-      : '',
-    lastname: !validateRequired(user.lastname) ? 'Last Name is Required' : '',
-    email: !validateEmail(user.email) ? 'Incorrect Email Format' : '',
-  };
-}

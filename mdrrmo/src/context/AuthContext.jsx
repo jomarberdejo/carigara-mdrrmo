@@ -45,7 +45,7 @@ const AuthContextWrapper = ({ children }) => {
     user: userData,
     token,
   };
-
+  
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
 
