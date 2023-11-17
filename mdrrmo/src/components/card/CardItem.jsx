@@ -4,10 +4,12 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function CardItem({title, values}) {
+  const navigate = useNavigate()
   return (
     
     <Card sx={{ minWidth: 275, borderRadius: "1px", boxShadow: "0 1px 3px #ccc"}}>
@@ -25,7 +27,7 @@ export default function CardItem({title, values}) {
       <CardActions
 className= "bg-bkg text-content"
       >
-        <Button size="small">View</Button>
+        <Button size="small" onClick = {()=> navigate('/incidents')}>View</Button>
       </CardActions>
     </Card>
    

@@ -27,10 +27,9 @@ const useSignUp = () => {
       const result = await axios.post('http://localhost:4000/api/auth/signup', userInfo);
       const data = await result.data;
 
-      console.log(data)
       loginUser(data?.user, data?.token)
  
-    
+      navigate('/dashboard')
       return data;
     } catch (error) {
       console.error(error.response.data.error);

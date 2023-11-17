@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
+import { useNavigate } from 'react-router-dom';
 
 const columnHelper = createMRTColumnHelper();
 
@@ -34,9 +35,9 @@ const columns = [
         }}
       >
         <Avatar
-          alt="avatar"
+          alt= {row.original.firstname.toUpperCase()}
           height={30}
-          src={row.original.avatar}
+          src= {'image.png'}
           loading="lazy"
           style={{ borderRadius: '50%' }}
         />
@@ -86,6 +87,8 @@ const csvConfig = mkConfig({
 });
 
 const ExportUserTable = () => {
+
+  const navigate = useNavigate();
   const fetchUsers = async () => {
     const result = await axios.get('http://localhost:4000/api/users/');
     const data = await result.data;
@@ -172,7 +175,7 @@ const ExportUserTable = () => {
       </Toolbar>
       <MaterialReactTable table={table} />
       <Toolbar sx={{ display: 'flex', justifyContent: 'end' }}>
-        <Button size="small">View More</Button>
+        <Button size="small" onClick={()=> navigate('/users')}>View More</Button>
       </Toolbar>
       <Divider />
     </>

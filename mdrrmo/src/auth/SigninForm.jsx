@@ -10,7 +10,6 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import useSignIn from '../hooks/useSignIn';
 import logo from '../assets/images/mdrrmo-logo.png';
 

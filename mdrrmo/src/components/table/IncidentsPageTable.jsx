@@ -16,6 +16,8 @@
   import DialogContent from '@mui/material/DialogContent';
   import DialogTitle from '@mui/material/DialogTitle';
   import IconButton from '@mui/material/IconButton';
+  import AddIcon from '@mui/icons-material/Add';
+
 
   import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
   import EditIcon from '@mui/icons-material/Edit';
@@ -75,6 +77,7 @@
           header: 'Status',
           muiEditTextFieldProps: {
             required: true,
+            label: 'Status (Ongoing / Pending / Resolved)',
           },
         },
         {
@@ -172,7 +175,9 @@
       onEditingRowSave: handleSaveIncident,
       renderCreateRowDialogContent: ({ table, row }) => (
         <>
-          <DialogTitle variant="h5">Report New Incident</DialogTitle>
+          <DialogTitle variant="h5">
+           Report New Incident
+          </DialogTitle>
           <DialogContent
             sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
           >
@@ -183,12 +188,13 @@
           {...internalEditComponents[0].muiEditTextFieldProps} // This assumes the first field is for the first name
         /> */}
 
-            <Typography variant='body1' sx={{ marginLeft: 1 }}>Severity</Typography>
+            <Typography variant='body1' sx={{ marginLeft: 1 }}>Severity (Uncategorized / Mild / Severe)</Typography>
             <FormControl>
 
               <Select
                 labelId="severity-select-label"
-
+               
+                defaultValue="Uncategorized"
                 inputRef={severityRef}>
                 <MenuItem value="Uncategorized">Uncategorized</MenuItem>
                 <MenuItem value="Mild">Mild</MenuItem>
@@ -216,13 +222,20 @@
               inputRef={locationRef}
             />
 
-<TextField
-              id="status"
-              label="Status"
-              type="text"
-              variant="outlined"
-              inputRef={statusRef}
-            />
+
+
+            <Typography variant='body1' sx={{ marginLeft: 1 }}>Status (Ongoing / Pending / Resolved)</Typography>
+            <FormControl>
+
+              <Select
+                labelId="status-select-label"
+                defaultValue="Ongoing"
+                inputRef={statusRef}>
+                <MenuItem value="Ongoing">Ongoing</MenuItem>
+                <MenuItem value="Pending">Pending</MenuItem>
+                <MenuItem value="Resolved">Resolved</MenuItem>
+              </Select>
+            </FormControl>
           </DialogContent>
           <DialogActions>
             <MRT_EditActionButtons variant="text" table={table} row={row} />
@@ -266,13 +279,15 @@
       ),
       renderTopToolbarCustomActions: ({ table }) => (
         <Button
-          variant="contained"
-          onClick={() => {
-            table.setCreatingRow(true);
-          }}
-        >
-          Report New Incident
-        </Button>
+    variant="contained"
+    startIcon={<AddIcon />}
+    onClick={() => {
+        table.setCreatingRow(true);
+    }}
+>
+    Report New Incident
+</Button>
+
       ),
       state: {
         isLoading: isLoadingIncidents,

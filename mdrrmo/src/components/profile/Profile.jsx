@@ -96,7 +96,7 @@ const ProfilePage = () => {
               width: 100,
               height: 100,  
             }}
-            alt={userData?.firstname}
+            alt={userData?.firstname.toUpperCase()}
             src="/path_to_user_avatar.jpg"
           />
         </Toolbar>

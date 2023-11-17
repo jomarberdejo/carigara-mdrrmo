@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
+import { useNavigate } from 'react-router-dom';
 
 const columnHelper = createMRTColumnHelper();
 
@@ -54,6 +55,7 @@ const csvConfig = mkConfig({
 });
 
 const ExportIncidentTable = () => {
+  const navigate = useNavigate()
   const fetchReports = async () => {
     const result = await axios.get('http://localhost:4000/api/reports/');
     const data = await result.data;
@@ -129,7 +131,7 @@ const ExportIncidentTable = () => {
       </Toolbar>
       <MaterialReactTable table={table} />
       <Toolbar sx={{ display: 'flex', justifyContent: 'end' }}>
-        <Button size="small">View More</Button>
+        <Button size="small" onClick={()=> navigate('/incidents')}>View More</Button>
       </Toolbar>
       <Divider />
     </>

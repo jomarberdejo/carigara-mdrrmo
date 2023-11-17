@@ -11,7 +11,7 @@ require('dotenv').config();
 const usersRoute = require('./routes/users')
 const reportsRoute = require('./routes/reports')
 const authRoutes = require('./routes/auth')
-
+const dashboardRoutes = require('./routes/dashboard')
 const app = express();
 app.use(cors())
 app.use('/uploads/reports', express.static(path.join(__dirname, 'uploads/reports')));
@@ -33,3 +33,4 @@ if (connection){
 app.use('/api/auth', authRoutes)
 app.use('/api/users', usersRoute)
 app.use('/api/reports', reportsRoute)
+app.use('/api/dashboard', dashboardRoutes)

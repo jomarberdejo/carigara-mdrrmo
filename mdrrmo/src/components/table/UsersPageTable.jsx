@@ -15,7 +15,7 @@ import Divider from '@mui/material/Divider';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
@@ -98,6 +98,10 @@ const UsersTable = () => {
           header: 'Role',
          
           size: 100,
+          muiEditTextFieldProps: {
+            required: true,
+            label: 'Role (User / Admin)',
+          },
         },
         {
           accessorKey: 'created_at',
@@ -192,7 +196,7 @@ const UsersTable = () => {
    
     renderCreateRowDialogContent: ({ table, row }) => (
       <>
-        <DialogTitle variant="h5">Report New Incident</DialogTitle>
+        <DialogTitle variant="h5">Create User</DialogTitle>
         <DialogContent
           sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
         >
@@ -249,13 +253,18 @@ const UsersTable = () => {
             inputRef={passwordRef}
           />
 
-          <TextField
-            id="role"
-            label="Role"
-            type="text"
-            variant="outlined"
-            inputRef={roleRef}
-          />
+<Typography variant='body1' sx={{ marginLeft: 1 }}>Role (User / Admin)</Typography>
+            <FormControl>
+
+              <Select
+                labelId="role-select-label"
+                defaultValue="User"
+                inputRef={roleRef}>
+                <MenuItem value="User">User</MenuItem>
+                <MenuItem value="Admin">Admin</MenuItem>
+           
+              </Select>
+            </FormControl>
         </DialogContent>
         <DialogActions>
           <MRT_EditActionButtons variant="text" table={table} row={row} />
@@ -301,13 +310,14 @@ const UsersTable = () => {
     ),
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
-        variant="contained"
-        onClick={() => {
-          table.setCreatingRow(true); 
-        }}
-      >
-        Add User
-      </Button>
+      variant="contained"
+      startIcon={<AddIcon />}
+      onClick={() => {
+          table.setCreatingRow(true);
+      }}
+  >
+      Create User
+  </Button>
     ),
     state: {
       isLoading: isLoadingUsers,

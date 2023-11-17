@@ -1,7 +1,7 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {NavLink, useNavigate, useLocation} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext'
-
+import { useGetUser } from '../hooks/useGetUser';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -46,13 +46,27 @@ const settings = [
 ];
 
 function AdminLayout({children}) {
+  const {fetchUser} = useGetUser()
   const navigate = useNavigate()
   const location = useLocation();
+  const [currUserName, setCurrUserName] = useState('')
 
   const {logoutUser, user} = useAuth();
  
-  
-  
+ 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await fetchUser(user.user_id);
+        setCurrUserName(userData.firstname);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    fetchData();
+  }, [fetchUser, user.user_id]);
+
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   
@@ -217,7 +231,7 @@ const container = window !== undefined ? () => window().document.body : undefine
               <IconButton 
               
               onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src='jomar.png' alt={user.firstname}  />
+                <Avatar src='jomar.png' alt={currUserName.toUpperCase()}  />
               </IconButton>
             </Tooltip>
             <Menu

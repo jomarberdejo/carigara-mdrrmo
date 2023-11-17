@@ -19,7 +19,7 @@ const useSignIn = () => {
       };
 
       const result = await axios.post('http://localhost:4000/api/auth/signin', userInfo);
-      const data = result.data;
+      const data = await result.data;
 
       setError(null);
       loginUser(data.user, data.token); 
