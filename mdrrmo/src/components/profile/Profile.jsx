@@ -27,6 +27,8 @@ const ProfilePage = () => {
     location: '',
   })
   const { user } = useAuth();
+
+  console.log(user)
   
   const fetchUser = async () => {
     const result = await axios.get(`http://localhost:4000/api/users/${user.user_id}`);
@@ -39,7 +41,7 @@ const ProfilePage = () => {
 
 
   const { data: userData, isLoading } = useQuery({
-    queryKey:['user', user.user_id],
+    queryKey:['user', user?.user_id],
     queryFn: fetchUser,
   });
 
@@ -52,11 +54,11 @@ const ProfilePage = () => {
   const handleModalOpen = () => {
     setModalOpen(true);
     setFormData({
-      firstname: userData.firstname,
-      lastname: userData.lastname,
-      age: userData.age,
-      role: userData.role,
-      location: userData.location,
+      firstname: userData?.firstname,
+      lastname: userData?.lastname,
+      age: userData?.age,
+      role: userData?.role,
+      location: userData?.location,
     })
   };
 
@@ -66,7 +68,7 @@ const ProfilePage = () => {
   
   const handleSave = async () => {
     try {
-      const result = await axios.patch(`http://localhost:4000/api/users/${userData.user_id}`, formData);
+      const result = await axios.patch(`http://localhost:4000/api/users/${userData?.user_id}`, formData);
       const data = await result.data;
       console.log(data);
       localStorage.setItem('user', JSON.stringify(userData));
@@ -94,23 +96,23 @@ const ProfilePage = () => {
               width: 100,
               height: 100,  
             }}
-            alt={userData.firstname}
+            alt={userData?.firstname}
             src="/path_to_user_avatar.jpg"
           />
         </Toolbar>
         <Divider sx={{ marginTop: 2 }} />
         <Typography variant="h5" sx={{ marginTop: 2 }}>
-          {`${userData.firstname} ${userData.lastname}`}
+          {`${userData?.firstname} ${userData?.lastname}`}
         </Typography>
         <Box sx={{ marginTop: 2 }}>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Age: {userData.age}
+            Age: {userData?.age}
           </Typography>
         </Box>
         <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
-          {`Role: ${userData.role}`}
+          {`Role: ${userData?.role}`}
         </Typography>
-        <Typography variant="body1">Location: {userData.location}</Typography>
+        <Typography variant="body1">Location: {userData?.location}</Typography>
         <Button
           variant="outlined"
           startIcon={<EditIcon />}

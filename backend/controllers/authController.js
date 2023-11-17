@@ -82,11 +82,11 @@ const signUpUser = async (req, res) => {
             return res.status(500).json({ error: 'Error creating user' });
           }
 
-          const userId = results.insertId;
-          const token = createToken(userId);
+          const user_id = results.insertId;
+          const token = createToken(user_id);
 
           const userInformation = {
-            userId,
+            user_id,
             firstname,
             lastname,
             age,

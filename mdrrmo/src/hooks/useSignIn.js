@@ -22,9 +22,11 @@ const useSignIn = () => {
       const data = result.data;
 
       setError(null);
-      loginUser(data.user, data.token); // Use loginUser from context to set user and token
+      loginUser(data.user, data.token); 
 
       navigate('/dashboard')
+
+      return data;
     } catch (error) {
       console.error(error.response.data.error);
 
