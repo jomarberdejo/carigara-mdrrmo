@@ -26,7 +26,7 @@ const ProfilePage = () => {
     role: '',
     location: '',
   })
-  const { user } = useAuth();
+  const { user, setUserData} = useAuth();
 
   console.log(user)
   
@@ -71,11 +71,22 @@ const ProfilePage = () => {
       const result = await axios.patch(`http://localhost:4000/api/users/${userData?.user_id}`, formData);
       const data = await result.data;
       console.log(data);
-      localStorage.setItem('user', JSON.stringify(userData));
+      
 
-      // Invalidate the query to refetch the updated user data
+     
+      
+      const updatedUserData = {
+        ...userData,
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        age: formData.age,
+        location: formData.location,
+      };
+      
+      setUserData(updatedUserData);
+      localStorage.setItem('user', JSON.stringify(updatedUserData));
+      
       queryClient.invalidateQueries(['user', userData.user_id]);
-
       setModalOpen(false);
     } catch (error) {
       throw new Error(error.result?.data?.message || 'Failed to update profile');

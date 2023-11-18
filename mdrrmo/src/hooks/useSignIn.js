@@ -23,7 +23,7 @@ const useSignIn = () => {
 
       setError(null);
       loginUser(data.user, data.token); 
-
+      
       navigate('/dashboard')
 
       return data;

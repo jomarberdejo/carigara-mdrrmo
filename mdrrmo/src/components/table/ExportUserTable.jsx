@@ -92,7 +92,14 @@ const ExportUserTable = () => {
   const fetchUsers = async () => {
     const result = await axios.get('http://localhost:4000/api/users/');
     const data = await result.data;
-    return data;
+     
+     const sortedUsers = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+     
+     const recentUsers = sortedUsers.slice(0, 10);
+ 
+     return recentUsers;
+    
   };
 
   const { data } = useQuery({

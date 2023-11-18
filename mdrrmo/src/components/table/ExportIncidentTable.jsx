@@ -59,7 +59,12 @@ const ExportIncidentTable = () => {
   const fetchReports = async () => {
     const result = await axios.get('http://localhost:4000/api/reports/');
     const data = await result.data;
-    return data;
+    const sortedIncidents = data.sort((a, b) => new Date(b.reported_at) - new Date(a.reported_at));
+
+     
+     const recentIncidents = sortedIncidents.slice(0, 10);
+ 
+     return recentIncidents;
   };
 
   const { data } = useQuery({

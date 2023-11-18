@@ -29,9 +29,27 @@ const storage = multer.diskStorage({
 });
 
 
-const upload = multer({ storage: storage });
+const fileFilter = (req, file, cb) => {
+    if (req.body.file_path !== 'null') {
+      const allowedMimeTypes = ['image/jpeg', 'image/png', 'video/mp4', 'video/quicktime'];
+  
+      if (allowedMimeTypes.includes(file.mimetype)) {
+        cb(null, true); // Accept the file
+      } else {
+        cb(null, false); // Reject the file
+      }
+    } else {
+      cb(null, false); // Reject the file
+    }
+  };
+  
+  const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+  });
+  
 
-
+//ADD REPORTS
 router.post('/', upload.single('file_path'), addReport)
 
 //DELETE reports

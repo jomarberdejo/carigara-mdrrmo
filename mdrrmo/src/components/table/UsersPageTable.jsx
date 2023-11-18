@@ -31,6 +31,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { FormControl, MenuItem, Select, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const UsersTable = () => {
   const navigate = useNavigate()
@@ -137,18 +138,19 @@ const UsersTable = () => {
     useDeleteUser();
 
   //CREATE action
-  const handleCreateUser = async ({ values, table }) => {
-   
+ 
+const handleCreateUser = async ({ values, table }) => {
+
+    await createUser({ values, table });
   
-    await createUser(values);
-    table.setCreatingRow(null); 
-  };
+};
+
 
   //UPDATE action
   const handleSaveUser = async ({ values, table }) => {
     
-    await updateUser(values);
-    table.setEditingRow(null); //exit editing mode
+    await updateUser({values, table});
+
   };
 
   //DELETE action
@@ -173,11 +175,7 @@ const UsersTable = () => {
           children: 'Error loading data',
         }
       : undefined,
-    muiTableContainerProps: {
-      sx: {
-        minHeight: '500px',
-      },
-    },
+ 
    
     onCreatingRowSave: () => handleCreateUser({
       values: {
@@ -336,18 +334,37 @@ const UsersTable = () => {
 function useCreateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (user) => {
-      
-      const result = await axios.post('http://localhost:4000/api/users/', user)
-      const data = await result.data
-      
+    mutationFn: async ({ values, table }) => {
+      try {
+        const result = await axios.post('http://localhost:4000/api/users/', values);
+        const data = result.data;
+        
+        queryClient.invalidateQueries(['users']);
+        toast.success(data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: 'green',
+            color: 'white',
+          },
+        });
+        table.setCreatingRow(null);
+        return data;
+      } catch (error) {
+        toast.error(`Error creating user:  ${error.response.data.error}`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: '#2f2d2d',
+            color: 'white',
+          },
+        });
 
-      queryClient.invalidateQueries(['users'])
+        
+      }
     },
-    
   });
 }
-
 //READ hook (get users from api)
 function useGetUsers() {
   return useQuery({
@@ -363,17 +380,39 @@ function useGetUsers() {
 //UPDATE hook (put user in api)
 function useUpdateUser() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (user) => {
-      const result = await axios.patch(`http://localhost:4000/api/users/${user.user_id}`, user)
-      const data = await result.data
-
-      console.log(data)
-      queryClient.invalidateQueries(['users'])
-    },
-   
+  return useMutation({ 
+  mutationFn: async ({values, table}) => {
+     
+  
+  try {
+    const result = await axios.patch(`http://localhost:4000/api/users/${values.user_id}`, values)
+    const data = await result.data
     
-  });
+    queryClient.invalidateQueries(['users'])
+    toast.success(data.message, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+      style: {
+        backgroundColor: 'green',
+        color: 'white',
+      },
+    });
+    table.setEditingRow(null); 
+    return data;
+  } catch (error) {
+    toast.error(`Error updating user:  ${error.response.data.error}`, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+      style: {
+        backgroundColor: '#2f2d2d',
+        color: 'white',
+      },
+    });
+
+    
+  }
+}
+})
 }
 
 //DELETE hook (delete user in api)
@@ -394,7 +433,7 @@ function useDeleteUser() {
 
 
 const UsersPageTable = () => (
-  //Put this with your other react-query providers near root of your app
+
 
   <>
       <Toolbar

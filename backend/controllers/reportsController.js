@@ -1,3 +1,4 @@
+const validator = require('validator')
 const connection = require('../dbConfig/db');
 
 const getAllReports = (req, res) => {
@@ -54,29 +55,45 @@ JOIN
 }
 
 
-
 const addReport = (req, res) => {
     const { severity, description, location, status, user_id } = req.body;
     const file = req.file;
-    console.log('File details:', file);
     
-    console.log(file.path)
+    try{
+        if (!severity || !description || !location || !status) {
+            return res.status(400).json({ error: 'All required fields must be filled' });
+          } 
+        const validSeverity = ['Uncategorized', 'Mild', 'Mild', 'Severe']
+        const validStatus = ['Ongoing', 'Pending', 'Resolved']
+
+        if (!validSeverity.includes(severity)){
+            return res.status(400).json({ error: 'Please choose available options for severity' });
+        }
+
+        if (!validStatus.includes(status)){
+            return res.status(400).json({ error: 'Please choose available options for status' });
+        }
+
+        const file_path = file ? file.path : null;
+  
+        const sql =
+        'INSERT INTO reports (severity, description, location, status, file_path, user_id) VALUES (?, ?, ?, ?, ?, ?)';
+        const values = [severity, description, location, status, file_path, user_id];
     
-    const defaultSeverity = severity === 'undefined' ? 'Uncategorized' : severity;
-    const defaultStatus = status === '' ? 'Ongoing' : status;
-  
-    const sql =
-      'INSERT INTO reports (severity, description, location, status, file_path,  user_id) VALUES (?, ?, ?, ?, ?, ?)';
-    const values = [defaultSeverity, description, location, defaultStatus, file.path, user_id];
-  
-    connection.query(sql, values, (error, result) => {
-      if (error) {
-        console.error(error); 
-        res.status(500).json({ error: error.message });
-      } else {
-        res.status(200).json({ message: 'Report added successfully', result });
-      }
-    });
+        connection.query(sql, values, (error, result) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({ error: error.message });
+        } else {
+            res.status(200).json({ message: 'Reported incident updated successfully', result });
+        }
+        });
+     }
+     catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+    
   };
   
 
@@ -93,7 +110,7 @@ const deleteReport = (req, res) => {
         }
         else{
             res.json({
-                message: "Report deleted successfully", result
+                message: "Reported incident deleted successfully", result
             })
         }
     })
@@ -102,26 +119,44 @@ const deleteReport = (req, res) => {
 const updateReport = (req, res) => {
     const { severity, description, location, status } = req.body;
     const { id } = req.params;
+    try{
+        if (!severity || !description || !location || !status) {
+            return res.status(400).json({ error: 'All required fields must be filled' });
+          } 
+        const validSeverity = ['Uncategorized', 'Mild', 'Severe']
+        const validStatus = ['Ongoing', 'Pending', 'Resolved']
 
-    const sql = `
-        UPDATE reports 
-        SET severity = ?, description = ?, location = ?, status = ?
-        WHERE report_id = ?`;
-
-    const values = [severity, description, location, status, Number(id)];
-
-    connection.query(sql, values, (error, result) => {
-        if (error) {
-            res.json({
-                error: error.message
-            });
-        } else {
-            res.json({
-                message: "Report updated successfully",
-                result
-            });
+        if (!validSeverity.includes(severity)){
+            return res.status(400).json({ error: 'Please choose available options for severity' });
         }
-    });
+
+        if (!validStatus.includes(status)){
+            return res.status(400).json({ error: 'Please choose available options for status' });
+        }
+
+          const sql = `
+          UPDATE reports 
+          SET severity = ?, description = ?, location = ?, status = ?
+          WHERE report_id = ?`;
+  
+      const values = [severity, description, location, status, Number(id)];
+  
+      connection.query(sql, values, (error, result) => {
+          if (error) {
+              res.json(error);
+          } else {
+              res.json({
+                  message: "Reported incident updated successfully",
+                  result
+              });
+          }
+      });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+   
 };
 
 

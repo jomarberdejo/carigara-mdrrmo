@@ -43,6 +43,7 @@ const AuthContextWrapper = ({ children }) => {
     loginUser,
     logoutUser,
     user: userData,
+    setUserData,
     token,
   };
   

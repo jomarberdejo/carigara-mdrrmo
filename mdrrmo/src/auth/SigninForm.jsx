@@ -12,17 +12,43 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import useSignIn from '../hooks/useSignIn';
 import logo from '../assets/images/mdrrmo-logo.png';
+import { toast } from 'react-toastify';
+
 
 const SignInForm = () => {
 
   const { emailRef, passwordRef, error, handleSignIn } = useSignIn();
 
   const handleSubmit = async(event) => {
-    event.preventDefault();
-   await handleSignIn();
-    
+    event.preventDefault(); 
+
+    try {
+      const credential = await handleSignIn();
+      toast.success(`Logged in as: ${credential.user.firstname} ${credential.user.lastname}`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+        style: {
+          backgroundColor: 'green',
+          color: 'white',
+        },
+      });
+    } catch (error) {
+      toast.error(`Signup Failed: ${error.response.data.error}`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+        style: {
+          backgroundColor: '#2f2d2d',
+          color: 'white',
+        },
+      });
+    }
    
+   
+    
   };
+
+
+  
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
@@ -79,11 +105,7 @@ const SignInForm = () => {
               inputRef={passwordRef}
             />
 
-            {error && (
-              <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-                {error}
-              </Typography>
-            )}
+           
 
             <Button
               type="submit"

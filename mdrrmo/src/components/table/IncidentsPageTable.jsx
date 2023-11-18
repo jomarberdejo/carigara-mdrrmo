@@ -26,10 +26,11 @@
   import axios from 'axios';
   import { FormControl, MenuItem, Select, TextField } from '@mui/material';
   import {useAuth} from '../../context/AuthContext'
+  import { toast } from 'react-toastify';
 
   const IncidentsTable = () => {
-    const {user} = useAuth()
-    
+    const {user} = useAuth()    
+    const [error, setError] = useState('')
     const severityRef = useRef('');
     const descriptionRef = useRef();
     const locationRef = useRef();
@@ -55,7 +56,7 @@
           header: 'Severity',
           muiEditTextFieldProps: {
             required: true,
-            label: "Severity (Mild/Severe/Uncategorized)"
+            label: "Severity (Mild/Moderate/Severe/Uncategorized)"
           }
         },
         {
@@ -118,17 +119,18 @@
       useDeleteIncident();
 
     const handleCreateIncident = async ({ values, table }) => {
+    
+        await createIncident({values, table});
+       
       
       
-      await createIncident(values);
-      table.setCreatingRow(null);
     };
 
     const handleSaveIncident = async ({ values, table }) => {
       
     
-      await updateIncident(values);
-      table.setEditingRow(null);
+      await updateIncident({values, table});
+   
     };
 
     const openDeleteConfirmModal = (row) => {
@@ -154,11 +156,7 @@
           children: 'Error loading data',
         }
         : undefined,
-      muiTableContainerProps: {
-        sx: {
-          minHeight: '500px',
-        },
-      },
+      
 
       onCreatingRowSave: () => handleCreateIncident({
         values: {
@@ -188,7 +186,7 @@
           {...internalEditComponents[0].muiEditTextFieldProps} // This assumes the first field is for the first name
         /> */}
 
-            <Typography variant='body1' sx={{ marginLeft: 1 }}>Severity (Uncategorized / Mild / Severe)</Typography>
+            <Typography variant='body1' sx={{ marginLeft: 1 }}>Severity (Uncategorized / Mild / Moderate/ Severe)</Typography>
             <FormControl>
 
               <Select
@@ -198,6 +196,7 @@
                 inputRef={severityRef}>
                 <MenuItem value="Uncategorized">Uncategorized</MenuItem>
                 <MenuItem value="Mild">Mild</MenuItem>
+                <MenuItem value="Moderate">Moderate</MenuItem>
                 <MenuItem value="Severe">Severe</MenuItem>
               </Select>
             </FormControl>
@@ -244,7 +243,7 @@
       ),
       renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
         <>
-          <DialogTitle variant="h5">Edit User</DialogTitle>
+          <DialogTitle variant="h5">Edit Reported Incident</DialogTitle>
           <DialogContent
             sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
           >
@@ -303,17 +302,19 @@
   function useCreateIncident() {
     const queryClient = useQueryClient();
     return useMutation({
-      mutationFn: async (incident) => {
+      mutationFn: async ({values, table}) => {
 
-        const formData = new FormData();
-        formData.append('severity', incident.severity);
-        formData.append('description', incident.description);
-        formData.append('location', incident.location);
-        formData.append('status', incident.status);
-        formData.append('file_path', incident.file_path);
-        formData.append('user_id', incident.user_id);
-        console.log(incident)
+        
+       
         try {
+          const formData = new FormData();
+        formData.append('severity', values.severity);
+        formData.append('description', values.description);
+        formData.append('location', values.location);
+        formData.append('status', values.status);
+        formData.append('file_path', values.file_path);
+        formData.append('user_id', values.user_id);
+
           const result = await axios.post('http://localhost:4000/api/reports/', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -321,10 +322,28 @@
           });
           const data = await result.data;
 
-          console.log(data);
+          table.setCreatingRow(null);
+          toast.success('Report Added Successfully.', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            style: {
+              backgroundColor: 'green',
+              color: 'white',
+            },
+          });
+          
           queryClient.invalidateQueries(['incidents']);
-        } catch (err) {
-          console.error(err);
+          return data;
+        } catch (error) {
+          toast.error(`${error.response.data.error}`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            style: {
+              backgroundColor: '#2f2d2d',
+              color: 'white',
+            },
+          });
+        
         }
       },
       // onMutate: (newIncidentInfo) => {
@@ -356,16 +375,42 @@
 
   function useUpdateIncident() {
     const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: async (incident) => {
-        const result = await axios.patch(`http://localhost:4000/api/reports/${incident.report_id}`, incident)
+   
+    return useMutation({ 
+      mutationFn: async ({values, table}) => {
+         
+      
+      try {
+        const result = await axios.patch(`http://localhost:4000/api/reports/${values.report_id}`, values)
         const data = await result.data
     
 
         queryClient.invalidateQueries(['reports'])
-      },
-
-    });
+        
+        toast.success(data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: 'green',
+            color: 'white',
+          },
+        });
+        table.setEditingRow(null); 
+        return data;
+      } catch (error) {
+        toast.error(`Error updating reported incident:  ${error.response.data.error}`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: '#2f2d2d',
+            color: 'white',
+          },
+        });
+    
+        
+      }
+    }
+    })
   }
 
   function useDeleteIncident() {
