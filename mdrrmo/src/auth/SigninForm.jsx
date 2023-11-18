@@ -33,7 +33,7 @@ const SignInForm = () => {
         },
       });
     } catch (error) {
-      toast.error(`Signup Failed: ${error.response.data.error}`, {
+      toast.error(`Sign In Failed: ${error.response.data.error}`, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
         style: {

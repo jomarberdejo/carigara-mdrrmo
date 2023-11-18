@@ -35,9 +35,9 @@ const Cards = () => {
   
   const { totalIncidents, ongoingIncidents, pendingIncidents, resolvedIncidents } = data;
 
-  const ongoingPercentage = (ongoingIncidents / totalIncidents) * 100;
-  const pendingPercentage = (pendingIncidents / totalIncidents) * 100;
-  const resolvedPercentage = (resolvedIncidents / totalIncidents) * 100;
+  const ongoingPercentage = (ongoingIncidents / totalIncidents) * 100 || 0;
+  const pendingPercentage = (pendingIncidents / totalIncidents) * 100 || 0;
+  const resolvedPercentage = (resolvedIncidents / totalIncidents) * 100 || 0;
 
   return (
     <>

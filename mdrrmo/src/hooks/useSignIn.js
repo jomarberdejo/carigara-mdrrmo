@@ -9,7 +9,7 @@ const useSignIn = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [error, setError] = useState(null);
-  const { loginUser } = useAuth(); // Update to use loginUser from context
+  const { loginUser } = useAuth(); 
 
   const handleSignIn = async () => {
     try {
@@ -28,13 +28,12 @@ const useSignIn = () => {
 
       return data;
     } catch (error) {
-      console.error(error.response.data.error);
+      throw error
 
-      setError(error.response ? error.response.data.error : 'An error occurred during sign-in');
     }
   };
 
-  return { emailRef, passwordRef, error, handleSignIn };
+  return { emailRef, passwordRef, handleSignIn };
 };
 
 export default useSignIn;

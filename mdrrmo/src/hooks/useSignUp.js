@@ -32,7 +32,7 @@ const useSignUp = () => {
       navigate('/dashboard');
       return data;
     } catch (error) {
-      setError(error.response.data.error);
+     
       throw error; 
     }
   };
@@ -45,7 +45,7 @@ const useSignUp = () => {
     emailRef,
     passwordRef,
     handleSignUp,
-    error,
+ 
   };
 };
 

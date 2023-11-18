@@ -176,7 +176,9 @@ const ExportUserTable = () => {
   }
 
   return (
-    <>
+  
+    <div className={`${data?.length === 0 && "hidden"}`}>
+
       <Toolbar>
         <Typography variant="h6">Recent Users</Typography>
       </Toolbar>
@@ -185,7 +187,8 @@ const ExportUserTable = () => {
         <Button size="small" onClick={()=> navigate('/users')}>View More</Button>
       </Toolbar>
       <Divider />
-    </>
+    </div>
+    
   );
 };
 

@@ -130,7 +130,7 @@ const ExportIncidentTable = () => {
   }
 
   return (
-    <>
+    <div className={`${data?.length === 0 && "hidden"}`}>
       <Toolbar>
         <Typography variant="h6">Recent Reported Incidents</Typography>
       </Toolbar>
@@ -139,7 +139,7 @@ const ExportIncidentTable = () => {
         <Button size="small" onClick={()=> navigate('/incidents')}>View More</Button>
       </Toolbar>
       <Divider />
-    </>
+    </div>
   );
 };
 

@@ -12,7 +12,15 @@ const signInUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-  
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Please provide your email or password' });
+    }
+    
+
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ error: 'Invalid email' });
+    }
+
     const userQuery = 'SELECT * FROM users WHERE email = ?';
     connection.query(userQuery, [email], async (error, results) => {
       if (error) {
@@ -69,6 +77,7 @@ const signUpUser = async (req, res) => {
     connection.query(checkQuery, [email], async (error, results) => {
       if (error) {
         return res.status(500).json({ error: 'Error checking existing user' });
+      
       }
 
       if (results.length > 0) {
@@ -99,7 +108,9 @@ const signUpUser = async (req, res) => {
       }
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: error.message });
+ 
   }
 };
 

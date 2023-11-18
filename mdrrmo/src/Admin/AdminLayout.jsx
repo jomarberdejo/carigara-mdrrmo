@@ -25,6 +25,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import Groups3Icon from '@mui/icons-material/Groups3';
+import { Badge } from '@mui/material';
 
 
 const drawerWidth = 260;
@@ -128,7 +129,9 @@ function AdminLayout({children}) {
     <ListItem key="Incidents" disablePadding className={location.pathname == '/incidents' ? 'bg-gray-200' : null}>
       <ListItemButton>
         <ListItemIcon>
+        <Badge color="secondary" badgeContent={22}>
           <AssessmentIcon className="text-content" />
+          </Badge>
         </ListItemIcon>
         <ListItemText primary="Incidents" />
       </ListItemButton>
@@ -138,9 +141,13 @@ function AdminLayout({children}) {
   <NavLink to="/users">
     <ListItem key="Users" disablePadding className={location.pathname == '/users' ? 'bg-gray-200' : null}>
       <ListItemButton>
+      
         <ListItemIcon>
+        <Badge color="secondary" badgeContent={22}>
           <Groups3Icon className="text-content" />
+          </Badge>
         </ListItemIcon>
+       
         <ListItemText primary="Users" />
       </ListItemButton>
     </ListItem>

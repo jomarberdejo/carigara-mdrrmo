@@ -208,10 +208,14 @@
               variant="outlined"
               inputRef={descriptionRef}
             />
-
+            <Button sx={{border: "1px dashed gray", cursor: "pointer"}}>
             <input type="file"
-              className='border border-dashed border-2 border-gray-600 px-2 py-1 cursor-pointer' ref={filepathRef} />
+              className=' p-1  cursor-pointer w-full' ref={filepathRef} />
 
+            </Button>
+            
+         
+           
 
             <TextField
               id="location"
@@ -324,12 +328,14 @@
 
           table.setCreatingRow(null);
           toast.success('Report Added Successfully.', {
-            position: toast.POSITION.TOP_RIGHT,
+            position: toast.POSITION.RIGHT,
             autoClose: 3000,
             style: {
               backgroundColor: 'green',
               color: 'white',
+            
             },
+           
           });
           
           queryClient.invalidateQueries(['incidents']);

@@ -23,7 +23,6 @@
       emailRef,
       passwordRef,
       handleSignUp,
-      error,
     } = useSignUp();
 
 
@@ -42,7 +41,7 @@
           },
         });
       } catch (error) {
-        toast.error(`Signup Failed: ${error.response.data.error}`, {
+        toast.error(`Sign Up Failed: ${error.response.data.error}`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
           style: {

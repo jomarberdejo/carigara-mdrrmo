@@ -11,25 +11,38 @@ const LineChart = () => {
   const fetchMonthlyData = async () => {
     try {
       const result = await axios.get(`http://localhost:4000/api/dashboard/linechart`);
-      console.log(result.data)
+      
       return result.data;
     } catch (error) {
       throw new Error('Error fetching monthly data');
     }
   };
 
+  const fetchReports = async() => {
+    const response = await axios.get('http://localhost:4000/api/reports/')
+    const data = await response.data
+
+    return data
+  }
+  const { data:allReports, isLoading: isAllReportsLoading } = useQuery({
+    queryKey: ['allreports'],
+    queryFn: fetchReports,
+  });
+
   const { data, error, isLoading } = useQuery({
     queryKey: ['linechart'],
     queryFn: fetchMonthlyData,
   });
 
-  if (isLoading) {
+  if (isLoading || isAllReportsLoading) {
     return <p>Loading...</p>;
   }
 
   if (error) {
     return <p>Error fetching monthly data</p>;
   }
+
+
 
   const { series, categories } = data;
 
@@ -45,16 +58,19 @@ const chartOptions = {
   },
 };
 
+
+
+
   return (
-    <>
-      <div className="w-full">
+   
+      <div className={`w-full col-span-2 ${allReports?.length === 0 && "hidden"}`}>
         <Toolbar>
           <Typography variant="h6">Incidents Reported Monthly</Typography>
         </Toolbar>
         <Divider sx={{ marginBottom: '10px' }} />
         <ReactApexChart options={chartOptions} series={series} type="line" />
       </div>
-    </>
+    
   );
 };
 
