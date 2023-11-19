@@ -7,10 +7,12 @@ const multer = require('multer');
 const path = require('path');
 const router = express.Router();
 
-const { getAllReports, getOneReport, addReport, updateReport, deleteReport } = require('../controllers/reportsController');
+const { getAllReports, getOneReport, addReport, updateReport, deleteReport, getAllUserReports, updateReportStatus } = require('../controllers/reportsController');
 
 
 router.get('/', getAllReports)
+
+router.get('/user/:id', getAllUserReports)
 
 //GET SINGLE reports
 router.get('/:id' , getOneReport)
@@ -57,6 +59,11 @@ router.delete('/:id' , deleteReport)
 
 //UPDATE reports
 router.patch('/:id' , updateReport)
+
+//UPDATE reports
+router.patch('/status/:id' , updateReportStatus)
+
+
 
 
 

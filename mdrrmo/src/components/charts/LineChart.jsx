@@ -63,7 +63,7 @@ const chartOptions = {
 
   return (
    
-      <div className={`w-full col-span-2 ${allReports?.length === 0 && "hidden"}`}>
+      <div className={`w-full col-span-1 ${allReports?.length === 0 && "hidden"}`}>
         <Toolbar>
           <Typography variant="h6">Incidents Reported Monthly</Typography>
         </Toolbar>

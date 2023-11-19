@@ -12,6 +12,7 @@ const usersRoute = require('./routes/users')
 const reportsRoute = require('./routes/reports')
 const authRoutes = require('./routes/auth')
 const dashboardRoutes = require('./routes/dashboard')
+
 const app = express();
 app.use(cors())
 app.use('/uploads/reports', express.static(path.join(__dirname, 'uploads/reports')));

@@ -120,7 +120,7 @@ const SignUpForm = () => {
                   labelId="location-select-label"
                   id="location-select"
                   inputRef= {locationRef}
-                  defaultValue='Balilit'
+                  defaultValue=''
                 >
                   {locationOptions.map((location, index) => (
                     <MenuItem key={index} value={location}>

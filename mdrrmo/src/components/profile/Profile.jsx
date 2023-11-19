@@ -17,6 +17,7 @@ import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import EditIcon from '@mui/icons-material/Edit';
+
 import { toast } from 'react-toastify';
 import {locationOptions} from '../../utils/locationOptions.js'
 
@@ -134,15 +135,14 @@ const ProfilePage = () => {
         <Typography variant="h5" sx={{ marginTop: 2 }}>
           {`${userData?.firstname} ${userData?.lastname}`}
         </Typography>
-        <Box sx={{ marginTop: 2 }}>
+      
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Age: {userData?.age}
+           {`${userData?.age}, ${userData?.role}`}
           </Typography>
-        </Box>
-        <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
-          {`Role: ${userData?.role}`}
-        </Typography>
-        <Typography variant="body1">Location: {userData?.location}</Typography>
+    
+       
+       
+        <Typography variant="body1" className='text-gray-600'>Location: {userData?.location}</Typography>
         <Button
           variant="outlined"
           startIcon={<EditIcon />}

@@ -25,6 +25,7 @@
   import EditIcon from '@mui/icons-material/Edit';
   import DeleteIcon from '@mui/icons-material/Delete';
   import VisibilityIcon from '@mui/icons-material/Visibility';
+  import CheckIcon from '@mui/icons-material/Check';
   import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
   import {locationOptions} from '../../utils/locationOptions'
 
@@ -32,7 +33,9 @@
   import {useAuth} from '../../context/AuthContext'
   import { toast } from 'react-toastify';
 
+
   const IncidentsTable = () => {
+    const queryClient = useQueryClient()
     const {user} = useAuth()    
    
     const severityRef = useRef('');
@@ -52,12 +55,13 @@
         {
           accessorKey: 'report_id',
           header: 'Report ID',
-          size: 80,
+          size: 30,
           enableEditing: false,
         },
         {
           accessorKey: 'severity',
           header: 'Severity',
+          size: 70,
           muiEditTextFieldProps: {
             required: true,
             label: "Severity (Mild/Moderate/Severe/Uncategorized)"
@@ -66,6 +70,7 @@
         {
           accessorKey: 'description',
           header: 'Description',
+          size: 200,
           muiEditTextFieldProps: {
             required: true,
           },
@@ -73,6 +78,7 @@
         {
           accessorKey: 'location',
           header: 'Location',
+          size: 100,
           muiEditTextFieldProps: {
             required: true,
           },
@@ -80,6 +86,7 @@
         {
           accessorKey: 'status',
           header: 'Status',
+          size: 50,
           muiEditTextFieldProps: {
             required: true,
             label: 'Status (Ongoing / Pending / Resolved)',
@@ -88,6 +95,7 @@
         {
           accessorKey: 'reported_at',
           header: 'Reported At',
+          size: 100,
           muiEditTextFieldProps: {
             type: 'datetime-local',
             required: true,
@@ -126,6 +134,35 @@
       []
     );
 
+    const handleResolved = async(id) => {
+       try{
+        const result = await axios.patch(`http://localhost:4000/api/reports/status/${id}`)
+        const data = await result.data
+        toast.success(data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: 'green',
+            color: 'white',
+          },
+        });
+        queryClient.invalidateQueries(['reports'])
+        return data;
+      } catch (error) {
+        toast.error(`Error updating reported incident:  ${error.response.data.error}`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: '#2f2d2d',
+            color: 'white',
+          },
+        });
+  
+       }
+      
+        
+    }
+
     const { mutateAsync: createIncident, isPending: isCreatingIncident } =
       useCreateIncident();
     const {
@@ -153,6 +190,8 @@
       await updateIncident({values, table});
    
     };
+
+
 
     const openDeleteConfirmModal = (row) => {
       if (window.confirm('Are you sure you want to delete this incident?')) {
@@ -213,7 +252,7 @@
               <Select
                 labelId="severity-select-label"
                
-                defaultValue="Uncategorized"
+                defaultValue=""
                 inputRef={severityRef}>
                 <MenuItem value="Uncategorized">Uncategorized</MenuItem>
                 <MenuItem value="Mild">Mild</MenuItem>
@@ -239,7 +278,7 @@
                   labelId="location-select-label"
                   id="location-select"
                   inputRef= {locationRef}
-                  defaultValue='Balilit'
+                  defaultValue=''
                 >
                   {locationOptions.map((location, index) => (
                     <MenuItem key={index} value={location}>
@@ -291,6 +330,11 @@
       ),
       renderRowActions: ({ row, table }) => (
         <Box sx={{ display: 'flex', gap: '1rem' }}>
+          <Tooltip title="Mark as Resolved">
+            <IconButton onClick={() => handleResolved(`${row.original.report_id}`)}>
+              <CheckIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Edit">
             <IconButton onClick={() => table.setEditingRow(row)}>
               <EditIcon />

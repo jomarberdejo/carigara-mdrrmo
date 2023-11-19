@@ -11,15 +11,16 @@ import Dashboard from '../pages/Dashboard';
 import { useAuth } from '../context/AuthContext';
 import User from '../pages/User';
 import NotFound from '../pages/NotFound';
+import Homepage from '../pages/Homepage';
+import UserLayout from '../User/UserLayout';
 
 
 
 const RouteLayout = () => {
-  const { isAuthenticated } = useAuth();
-
+  const { isAuthenticated, user } = useAuth();
   return (
     <Router>
-      {isAuthenticated && (
+      {isAuthenticated && user.role === "Admin" && (
      
           <AdminLayout>
             <Routes>
@@ -34,6 +35,17 @@ const RouteLayout = () => {
           </AdminLayout>
 
       )} 
+        {isAuthenticated && user.role === "User" && (
+            
+            <UserLayout>
+              <Routes>
+                <Route path="/" element={<Homepage />} /> 
+                <Route path="/profile" element={<Profile />} />   
+                <Route path="*" element= {<NotFound/>}/>
+              </Routes>
+            </UserLayout>
+
+        )} 
       {!isAuthenticated && (
 
           <Routes>

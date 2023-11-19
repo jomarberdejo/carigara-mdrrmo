@@ -48,36 +48,36 @@ const columns = [
   },
   columnHelper.accessor('user_id', {
     header: 'ID',
-    size: 40,
+    size: 30,
   }),
   columnHelper.accessor('firstname', {
     header: 'First Name',
-    size: 120,
+    size: 70,
   }),
   columnHelper.accessor('lastname', {
     header: 'Last Name',
-    size: 120,
+    size: 70,
   }),
   columnHelper.accessor('age', {
     header: 'Age',
-    size: 70,
+    size: 30,
   }),
   columnHelper.accessor('location', {
     header: 'Location',
-    size: 200,
+    size: 100,
   }),
   columnHelper.accessor('email', {
     header: 'Email',
-    size: 200,
+    size: 150,
   }),
  
   columnHelper.accessor('role', {
     header: 'Role',
-    size: 100,
+    size: 30,
   }),
   columnHelper.accessor('created_at', {
     header: 'Created At',
-    size: 150,
+    size: 100,
   }),
 ];
 

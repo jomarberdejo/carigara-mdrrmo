@@ -21,11 +21,11 @@ const columnHelper = createMRTColumnHelper();
 const columns = [
   columnHelper.accessor('report_id', {
     header: 'Report ID',
-    size: 100,
+    size: 30,
   }),
   columnHelper.accessor('severity', {
     header: 'Severity',
-    size: 100,
+    size: 70,
   }),
   columnHelper.accessor('description', {
     header: 'Description',
@@ -33,15 +33,15 @@ const columns = [
   }),
   columnHelper.accessor('location', {
     header: 'Location',
-    size: 200,
+    size: 100,
   }),
   columnHelper.accessor('status', {
     header: 'Status',
-    size: 200,
+    size: 70,
   }),
   columnHelper.accessor('reported_at', {
     header: 'Reported At',
-    size: 150,
+    size: 100,
   }),
   {
     accessorFn: (row) => `${row.firstname} ${row.lastname}`,

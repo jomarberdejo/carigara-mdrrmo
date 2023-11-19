@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 const PageIntro = () => {
   return (
       <>
+    
       <Typography 
       variant = "h6"
         sx = {{marginBottom: 2, fontWeight: "light"}}

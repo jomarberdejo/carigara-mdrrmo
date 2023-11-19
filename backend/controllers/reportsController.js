@@ -1,5 +1,36 @@
-const validator = require('validator')
+
 const connection = require('../dbConfig/db');
+
+const getAllUserReports = (req, res) => {
+    const { id } = req.params; 
+  
+    const sql = `
+      SELECT 
+        r.report_id,
+        r.severity, 
+        r.description, 
+        r.location,
+        r.status,
+        r.file_path,
+        DATE_FORMAT(r.reported_at, '%Y-%m-%d %H:%i:%s') AS reported_at, 
+        u.firstname,
+        u.lastname
+      FROM 
+        reports AS r
+      JOIN 
+        users AS u ON r.user_id = u.user_id
+      WHERE 
+        r.user_id = ?
+    `;
+  
+    connection.query(sql, [Number(id)], (error, result) => {
+      if (error) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.status(200).json(result);
+      }
+    });
+  };
 
 const getAllReports = (req, res) => {
     const sql = `
@@ -27,6 +58,9 @@ JOIN
         }
     });
 }
+
+
+  
 
 const getOneReport = (req, res) => {
     const {id} = req.params;
@@ -162,11 +196,45 @@ const updateReport = (req, res) => {
    
 };
 
+const updateReportStatus = (req, res) => {
+    const { id } = req.params;
+    const status = "Resolved"
+    try{
+   
+        
+
+          const sql = `
+          UPDATE reports 
+          SET status = ? WHERE report_id = ?`;
+  
+      const values = [ status, Number(id)];
+  
+      connection.query(sql, values, (error, result) => {
+          if (error) {
+              res.json(error);
+          } else {
+              res.json({
+                  message: "Reported incident status changed to Resolved.",
+                  result
+              });
+          }
+      });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+   
+};
+
 
 module.exports = {
+    getAllUserReports,
     getAllReports,
+    
     getOneReport,
 addReport,
 deleteReport,
-updateReport
+updateReport,
+updateReportStatus
 }

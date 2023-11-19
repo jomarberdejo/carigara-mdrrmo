@@ -61,7 +61,7 @@ const PieChart = () => {
   
 
   return (
-    <div className= {`w-full  ${data?.series?.length === 0 ? "hidden" : "block"} col-span-2`}>
+    <div className= {`w-full  ${data?.series?.length === 0 ? "hidden" : "block"} col-span-1`}>
       <Toolbar>
         <Typography variant="h6">Reported Incidents Severity</Typography>
       </Toolbar>

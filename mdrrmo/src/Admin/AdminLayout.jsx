@@ -25,7 +25,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import Groups3Icon from '@mui/icons-material/Groups3';
-import { Badge } from '@mui/material';
+
 
 
 const drawerWidth = 260;
@@ -129,9 +129,9 @@ function AdminLayout({children}) {
     <ListItem key="Incidents" disablePadding className={location.pathname == '/incidents' ? 'bg-gray-200' : null}>
       <ListItemButton>
         <ListItemIcon>
-        <Badge color="secondary" badgeContent={22}>
+     
           <AssessmentIcon className="text-content" />
-          </Badge>
+      
         </ListItemIcon>
         <ListItemText primary="Incidents" />
       </ListItemButton>
@@ -143,9 +143,9 @@ function AdminLayout({children}) {
       <ListItemButton>
       
         <ListItemIcon>
-        <Badge color="secondary" badgeContent={22}>
+    
           <Groups3Icon className="text-content" />
-          </Badge>
+       
         </ListItemIcon>
        
         <ListItemText primary="Users" />
@@ -184,13 +184,9 @@ function AdminLayout({children}) {
     </div>
   );
 
-  /* AdminLayout(props)
-const { window } = props;
-const container = window !== undefined ? () => window().document.body : undefined;
-*/
 
   return (
-    <Box sx={{ display: 'flex'  }}
+    <Box
       className={'bg-bkg text-content min-h-[100svh]'}
     
     >
@@ -200,10 +196,10 @@ const container = window !== undefined ? () => window().document.body : undefine
         
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: '100%',
           ml: { sm: `${drawerWidth}px`,
           background: 'transparent',
-            
+         
           },
           
           
@@ -217,7 +213,7 @@ const container = window !== undefined ? () => window().document.body : undefine
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { lg: 'block' } }}
           >
             <MenuIcon />
           </IconButton>
@@ -291,7 +287,7 @@ const container = window !== undefined ? () => window().document.body : undefine
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { md: 'block', sm: 'block' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
@@ -300,7 +296,7 @@ const container = window !== undefined ? () => window().document.body : undefine
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
+            display: { xs: 'none', sm: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
           open
@@ -310,7 +306,7 @@ const container = window !== undefined ? () => window().document.body : undefine
       </Box>
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{ flexGrow: 1, p: 3, width:  '100%' }}
         className='w-full'
       >
         <Toolbar 

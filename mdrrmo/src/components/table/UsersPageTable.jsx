@@ -54,7 +54,7 @@ const UsersTable = () => {
         {
           accessorKey: 'user_id',
           header: 'ID',
-          size: 80,
+          size: 30,
           muiEditTextFieldProps: {
             disabled: true
           }
@@ -62,6 +62,7 @@ const UsersTable = () => {
         {
           accessorKey: 'firstname',
           header: 'First Name',
+          size: 70,
           muiEditTextFieldProps: {
             required: true,
           },
@@ -69,6 +70,7 @@ const UsersTable = () => {
         {
           accessorKey: 'lastname',
           header: 'Last Name',
+          size: 70,
           muiEditTextFieldProps: {
             required: true,
           },
@@ -76,6 +78,7 @@ const UsersTable = () => {
         {
           accessorKey: 'age',
           header: 'Age',
+          size: 30,
           muiEditTextFieldProps: {
             required: true,
           },
@@ -83,6 +86,7 @@ const UsersTable = () => {
         {
           accessorKey: 'location',
           header: 'Location',
+          size: 70,
           muiEditTextFieldProps: {
             required: true,
           },
@@ -91,6 +95,7 @@ const UsersTable = () => {
         {
           accessorKey: 'email',
           header: 'Email',
+          size: 100,
           muiEditTextFieldProps: {
             disabled: true,
           }
@@ -102,7 +107,7 @@ const UsersTable = () => {
           accessorKey: 'role',
           header: 'Role',
          
-          size: 100,
+          size: 50,
           muiEditTextFieldProps: {
             required: true,
             label: 'Role (User / Admin)',
@@ -238,7 +243,7 @@ const handleCreateUser = async ({ values, table }) => {
                   labelId="location-select-label"
                   id="location-select"
                   inputRef= {locationRef}
-                  defaultValue='Balilit'
+                  defaultValue=''
                 >
                   {locationOptions.map((location, index) => (
                     <MenuItem key={index} value={location}>
@@ -269,7 +274,7 @@ const handleCreateUser = async ({ values, table }) => {
 
               <Select
                 labelId="role-select-label"
-                defaultValue="User"
+                defaultValue=""
                 inputRef={roleRef}>
                 <MenuItem value="User">User</MenuItem>
                 <MenuItem value="Admin">Admin</MenuItem>
