@@ -36,12 +36,12 @@ const fileFilter = (req, file, cb) => {
       const allowedMimeTypes = ['image/jpeg', 'image/png', 'video/mp4', 'video/quicktime'];
   
       if (allowedMimeTypes.includes(file.mimetype)) {
-        cb(null, true); // Accept the file
+        cb(null, true); 
       } else {
-        cb(null, false); // Reject the file
+        cb(null, false); 
       }
     } else {
-      cb(null, false); // Reject the file
+      cb(null, false); 
     }
   };
   

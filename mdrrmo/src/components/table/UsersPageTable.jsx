@@ -121,7 +121,7 @@ const UsersTable = () => {
             
             disabled: true,
           },
-          size: 150,
+          size: 200,
           
         },
      

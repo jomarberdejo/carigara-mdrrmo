@@ -77,7 +77,7 @@ const columns = [
   }),
   columnHelper.accessor('created_at', {
     header: 'Created At',
-    size: 100,
+    size: 200,
   }),
 ];
 

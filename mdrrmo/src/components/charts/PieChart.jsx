@@ -35,10 +35,11 @@ const PieChart = () => {
         return '#000000'; 
       case 'severe':
         return '#FF0000'; 
-      case 'mild':
-        return '#0000FF'; 
+      
       case 'moderate':
-        return '#FFFF00'; 
+        return '#0000FF'; 
+        case 'mild':
+        return '#F28C28'; 
       default:
         return '#000000'; 
     }

@@ -1,4 +1,4 @@
-
+const moment = require('moment');
 const connection = require('../dbConfig/db');
 
 const getAllUserReports = (req, res) => {
@@ -12,7 +12,7 @@ const getAllUserReports = (req, res) => {
         r.location,
         r.status,
         r.file_path,
-        DATE_FORMAT(r.reported_at, '%Y-%m-%d %H:%i:%s') AS reported_at, 
+        r.reported_at,
         u.firstname,
         u.lastname
       FROM 
@@ -27,37 +27,46 @@ const getAllUserReports = (req, res) => {
       if (error) {
         res.status(500).json({ error: error.message });
       } else {
+        result.forEach((report) => {
+            report.reported_at = moment(report.reported_at).fromNow();
+        });
         res.status(200).json(result);
       }
     });
   };
 
-const getAllReports = (req, res) => {
-    const sql = `
-    SELECT 
-    r.report_id,
-    r.severity, 
-    r.description, 
-    r.location,
-    r.status,
-    r.file_path,
-    DATE_FORMAT(r.reported_at, '%Y-%m-%d %H:%i:%s') AS reported_at, 
-    u.firstname,
-    u.lastname
-FROM 
-    reports AS r
-JOIN 
-    users AS u ON r.user_id = u.user_id
-`;
 
-    connection.query(sql, (error, result) => {
-        if (error) {
-            res.json(error);
-        } else {
-            res.json(result);
-        }
-    });
-}
+
+  const getAllReports = (req, res) => {
+      const sql = `
+      SELECT 
+      r.report_id,
+      r.severity, 
+      r.description, 
+      r.location,
+      r.status,
+      r.file_path,
+      r.reported_at,
+      u.firstname,
+      u.lastname
+  FROM 
+      reports AS r
+  JOIN 
+      users AS u ON r.user_id = u.user_id
+  `;
+  
+      connection.query(sql, (error, result) => {
+          if (error) {
+              res.json(error);
+          } else {
+              result.forEach((report) => {
+                  report.reported_at = moment(report.reported_at).format('YYYY/MM/DD hh:mm A');
+              });
+              res.json(result);
+          }
+      });
+  }
+  
 
 
   
@@ -72,7 +81,7 @@ const getOneReport = (req, res) => {
     r.location,
     r.status,
     r.file_path,
-    DATE_FORMAT(r.reported_at, '%Y-%m-%d %H:%i:%s') AS reported_at, 
+    r.reported_at, 
     r.user_id, 
     u.firstname,
     u.lastname
@@ -86,6 +95,9 @@ JOIN
         if (error) {
             res.json(error);
         } else {
+            result.forEach((report) => {
+                report.reported_at = moment(report.reported_at).fromNow();
+            });
             res.json(result);
         }
     });
@@ -97,6 +109,8 @@ const addReport = (req, res) => {
     const file = req.file;
     
     try{
+        console.log(file)
+     
         if (!severity || !description || !location || !status) {
             return res.status(400).json({ error: 'All required fields must be filled' });
           } 
@@ -110,9 +124,10 @@ const addReport = (req, res) => {
         if (!validStatus.includes(status)){
             return res.status(400).json({ error: 'Please choose available options for status' });
         }
-
+        
         const file_path = file ? file.path : null;
-  
+     
+
         const sql =
         'INSERT INTO reports (severity, description, location, status, file_path, user_id) VALUES (?, ?, ?, ?, ?, ?)';
         const values = [severity, description, location, status, file_path, user_id];

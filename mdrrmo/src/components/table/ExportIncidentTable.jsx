@@ -41,7 +41,7 @@ const columns = [
   }),
   columnHelper.accessor('reported_at', {
     header: 'Reported At',
-    size: 100,
+    size: 200,
   }),
   {
     accessorFn: (row) => `${row.firstname} ${row.lastname}`,

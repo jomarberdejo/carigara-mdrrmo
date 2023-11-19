@@ -95,9 +95,9 @@
         {
           accessorKey: 'reported_at',
           header: 'Reported At',
-          size: 100,
+          size: 200,
           muiEditTextFieldProps: {
-            type: 'datetime-local',
+            
             required: true,
 
           },
@@ -134,9 +134,17 @@
       []
     );
 
-    const handleResolved = async(id) => {
+    const handleResolved = async(report) => {
        try{
-        const result = await axios.patch(`http://localhost:4000/api/reports/status/${id}`)
+        if (report.status === 'Resolved'){
+          toast.info('Nothing to changed, status already resolved.', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            
+          });
+          return
+        }
+        const result = await axios.patch(`http://localhost:4000/api/reports/status/${report.report_id}`)
         const data = await result.data
         toast.success(data.message, {
           position: toast.POSITION.TOP_RIGHT,
@@ -331,7 +339,7 @@
       renderRowActions: ({ row, table }) => (
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <Tooltip title="Mark as Resolved">
-            <IconButton onClick={() => handleResolved(`${row.original.report_id}`)}>
+            <IconButton onClick={() => handleResolved(row.original)}>
               <CheckIcon />
             </IconButton>
           </Tooltip>

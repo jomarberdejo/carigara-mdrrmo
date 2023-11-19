@@ -55,11 +55,11 @@ const signInUser = async (req, res) => {
 
 // signup a user
 const signUpUser = async (req, res) => {
-  const { firstname, lastname, age, location, email, password } = req.body;
-
+  const { firstname, lastname, age, location,  email, password, role} = req.body;
+  console.log(req.body)
   try {
     // validation
-    if (!firstname || !lastname || !age || !location || !email || !password) {
+    if (!firstname || !lastname || !age || !location || !role || !email || !password) {
       return res.status(400).json({ error: 'All fields must be filled' });
     }
     if (!validator.isInt(age.toString(), {min: 0})) {
@@ -85,8 +85,8 @@ const signUpUser = async (req, res) => {
       } else {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const insertQuery = 'INSERT INTO users (firstname, lastname, age, location, email, password) VALUES (?, ?, ?, ?, ?, ?)';
-        connection.query(insertQuery, [firstname, lastname, age, location, email, hashedPassword], (error, results) => {
+        const insertQuery = 'INSERT INTO users (firstname, lastname, age, location, email, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        connection.query(insertQuery, [firstname, lastname, age, location, email,hashedPassword,  role, ], (error, results) => {
           if (error) {
             return res.status(500).json({ error: 'Error creating user' });
           }
@@ -101,6 +101,7 @@ const signUpUser = async (req, res) => {
             age,
             location,
             email,
+            role,
           };
 
           return res.status(200).json({ user: userInformation, token });

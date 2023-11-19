@@ -1,26 +1,24 @@
-
-
-import * as React from 'react';
+import {useState, useRef} from 'react'
+import { useAuth } from '../context/AuthContext';
+import { locationOptions } from '../utils/locationOptions';
+import axios from 'axios';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Masonry from '@mui/lab/Masonry';
-import { styled } from '@mui/material/styles';
-import { useTheme } from '@mui/system';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  FormControl,
-  Select,
-  MenuItem,
-  TextField,
-  CardHeader,
-  Avatar,
-  Divider,
-  Container,
-  Stack,
-} from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Avatar from '@mui/material/Avatar';
+import CardHeader from '@mui/material/CardHeader';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -32,20 +30,18 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import WarningIcon from '@mui/icons-material/Warning';
 import LocationOn from '@mui/icons-material/LocationOn';
-import { useAuth } from '../context/AuthContext';
-import { locationOptions } from '../utils/locationOptions';
-import axios from 'axios';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
+import DeleteIcon from '@mui/icons-material/Delete';
+import  IconButton  from '@mui/material/IconButton';
+
 
 
 const Homepage = () => {
-  const [isModalOpen, setModalOpen] = React.useState(false);
-  const severityRef = React.useRef(null);
-  const descriptionRef = React.useRef(null);
-  const locationRef = React.useRef(null);
-  const statusRef = React.useRef(null);
-  const filepathRef = React.useRef(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const severityRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const locationRef = useRef(null);
+  const statusRef = useRef(null);
+  const filepathRef = useRef(null);
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
@@ -71,8 +67,54 @@ const Homepage = () => {
     setModalOpen(false);
   };
 
+ 
+  const handleDeleteReport = async(id) => {
+    if (confirm("Are you sure you want to delete this report?")=== true){
+      try{
+        const result = await axios.delete(`http://localhost:4000/api/reports/${id}`)
+        const data = await result.data;
+        toast.success(data.message, {
+          position: toast.POSITION.RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: 'green',
+            color: 'white',
+          },
+        });
+        queryClient.invalidateQueries(['userReport'])
+        return data
+      }
+      catch(error){
+        toast.error(`${error.response.data.error}`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: '#2f2d2d',
+            color: 'white',
+          },
+        });
+      }
+      
+    }
+  }
+ 
+
   const handleAddReport = async () => {
+    
     try {
+      const file = filepathRef.current.files[0]
+      if (file && !file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+        toast.error('Please upload only an image or video.', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: '#2f2d2d',
+            color: 'white',
+          },
+        });
+        return;
+      }
+
       const formData = new FormData();
       formData.append('severity', severityRef.current.value);
       formData.append('description', descriptionRef.current.value);
@@ -80,7 +122,7 @@ const Homepage = () => {
       formData.append('status', statusRef.current.value);
       formData.append('file_path', filepathRef.current.files[0]);
       formData.append('user_id', user.user_id);
-
+      
       const result = await axios.post('http://localhost:4000/api/reports/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -138,7 +180,7 @@ const Homepage = () => {
 
             <Typography
               component="h1"
-              variant="h3"
+              variant= 'h4'
               align="center"
               color="text.primary"
               gutterBottom
@@ -149,14 +191,14 @@ const Homepage = () => {
           </Container>
         </Box>
       <Container sx={{ py: 8 }} maxWidth="md">
-        <Masonry columns={{md:1,lg:2}} spacing={4}>
+        <Masonry columns={{md:1,lg:2}} sx= {{margin: 'auto'}} spacing={4}>
           {data.length > 0 &&
             data.map((report, index) => (
               <div key={report.report_id}>
                    <Card sx={{ maxWidth: 700 }} className='block mx-auto' >
-        <Box className= 'flex justify-between items-center sm:flex-col sm:items-start'>
+        <Box className= 'flex justify-between  flex-col items-start relative'>
         <CardHeader
-
+        
        
         
           avatar={
@@ -165,9 +207,16 @@ const Homepage = () => {
               {report?.firstname[0]}
             </Avatar>
           }
+          action={
+            <IconButton
+            onClick={()=> handleDeleteReport(report?.report_id)}
+            sx= {{position: 'absolute', right: '10px', top: '20px', color: 'red'}} aria-label="settings">
+              <DeleteIcon />
+            </IconButton>
+          }
           title= {`${report?.firstname} ${report?.lastname}`}
           subheader={report?.reported_at}
-        >
+        > 
             
         </CardHeader>
 
@@ -278,6 +327,7 @@ const Homepage = () => {
               labelId="status-select-label"
               defaultValue="Ongoing"
               inputRef={statusRef}
+              disabled = {user.role === "Admin" ? false : true}
             >
               <MenuItem value="Ongoing">Ongoing</MenuItem>
               <MenuItem value="Pending">Pending</MenuItem>

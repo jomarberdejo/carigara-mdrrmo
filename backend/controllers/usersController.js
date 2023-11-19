@@ -1,5 +1,5 @@
 
-
+const moment= require('moment')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const connection = require('../dbConfig/db');
@@ -15,7 +15,7 @@ const getOneUser = async (req, res) => {
         location,
         email,
         role,
-        DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS created_at
+       created_at
         FROM users WHERE user_id = ${Number(id)}
     `;
 
@@ -23,6 +23,9 @@ const getOneUser = async (req, res) => {
         if (error) {
             res.json(error);
         } else {
+            result.forEach((user) => {
+                user.created_at = moment(user.created_at).fromNow();
+            });
             res.json(result);
         }
     });
@@ -38,7 +41,7 @@ const getAllUsers = (req, res) => {
     location,
     email,
     role,
-    DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS created_at
+    created_at
     FROM users`;
 
     const result = connection.query(sql, (error, result)=> {
@@ -46,6 +49,9 @@ const getAllUsers = (req, res) => {
             res.json(error)
         }
         else{
+            result.forEach((user) => {
+                user.created_at = moment(user.created_at).format('YYYY/MM/DD hh:mm A');
+            });
             res.json(result)
         }
     });

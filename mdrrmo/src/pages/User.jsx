@@ -100,11 +100,15 @@ const User = () => {
           </Typography>
         </CardContent>
       </Card>
-      <Divider sx={{ marginBottom:8, marginTop: 8 }}>
-          <Typography variant="h6"> {`${userData.firstname} ${userData.lastname}`}`s Reported Incidents</Typography>
-          </Divider>
+    
+   
+      
       {userReports.length > 0 && (
+       
         <Container sx={{ py: 2 }}>
+           <Divider sx={{ marginBottom:8, marginTop: 8 }}>
+        <Typography variant="h6"> {`${userData.firstname} ${userData.lastname}`}`s Reported Incidents</Typography>
+        </Divider>
           
           <Masonry  columns={{ sm:1, md:2}}  spacing={2}>
             {userReports.map((report, index) => (
