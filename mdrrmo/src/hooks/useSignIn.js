@@ -8,7 +8,7 @@ const useSignIn = () => {
     const navigate = useNavigate()
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const [error, setError] = useState(null);
+
   const { loginUser } = useAuth(); 
 
   const handleSignIn = async () => {
@@ -21,10 +21,10 @@ const useSignIn = () => {
       const result = await axios.post('http://localhost:4000/api/auth/signin', userInfo);
       const data = await result.data;
 
-      setError(null);
+     
       loginUser(data.user, data.token); 
       
-      navigate('/dashboard')
+      navigate('/')
 
       return data;
     } catch (error) {

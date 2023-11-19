@@ -38,7 +38,7 @@ const settings = [
   {
     name: 'Dashboard',
     icon: <DashboardIcon/>,
-    path: '/dashboard',
+    path: '/',
   },
   {
     name: 'Logout',
@@ -114,8 +114,8 @@ function AdminLayout({children}) {
       <Divider
       />
 <List>
-  <NavLink to="/dashboard" >
-    <ListItem key="Dashboard" disablePadding className={location.pathname == '/dashboard' ? 'bg-gray-200' : null }>
+  <NavLink to="/" >
+    <ListItem key="Dashboard" disablePadding className={location.pathname == '/' ? 'bg-gray-200' : null }>
       <ListItemButton>
         <ListItemIcon>
           <DashboardIcon className="text-content" />
@@ -238,7 +238,8 @@ const container = window !== undefined ? () => window().document.body : undefine
               <IconButton 
               
               onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src='jomar.png' alt={currUserName.toUpperCase()}  />
+                <Avatar   src= {currUserName}
+                sx={{ backgroundColor: '#EE4B2B' }}  alt={currUserName.toUpperCase()}  />
               </IconButton>
             </Tooltip>
             <Menu

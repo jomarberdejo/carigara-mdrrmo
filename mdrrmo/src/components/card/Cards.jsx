@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
-import Divider from '@mui/material/Divider';
+
 import CardItem from './CardItem';
 
 

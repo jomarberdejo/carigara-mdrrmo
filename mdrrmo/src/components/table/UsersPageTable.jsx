@@ -12,6 +12,10 @@ import Tooltip from '@mui/material/Tooltip';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -29,10 +33,10 @@ import {
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { FormControl, MenuItem, Select, TextField } from '@mui/material';
+
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { locationOptions } from '../../utils/locationOptions';
 const UsersTable = () => {
   const navigate = useNavigate()
   
@@ -227,13 +231,22 @@ const handleCreateUser = async ({ values, table }) => {
             inputRef={ageRef}
           />
 
-          <TextField
-            id="location"
-            label="Location"
-            type="text"
-            variant="outlined"
-            inputRef={locationRef}
-          />
+<Typography variant='body1' sx={{ color: 'gray'}}>Location*</Typography>
+            <FormControl fullWidth>
+                
+                <Select
+                  labelId="location-select-label"
+                  id="location-select"
+                  inputRef= {locationRef}
+                  defaultValue='Balilit'
+                >
+                  {locationOptions.map((location, index) => (
+                    <MenuItem key={index} value={location}>
+                      {location}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl> 
 
 <TextField
             id="email"
@@ -251,7 +264,7 @@ const handleCreateUser = async ({ values, table }) => {
             inputRef={passwordRef}
           />
 
-<Typography variant='body1' sx={{ marginLeft: 1 }}>Role (User / Admin)</Typography>
+<Typography variant='body1' sx={{ color: 'gray'}}>Role (User / Admin)*</Typography>
             <FormControl>
 
               <Select

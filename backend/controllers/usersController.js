@@ -36,9 +36,7 @@ const getAllUsers = (req, res) => {
     lastname,
     age,
     location,
-  
     email,
-    password,
     role,
     DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS created_at
     FROM users`;

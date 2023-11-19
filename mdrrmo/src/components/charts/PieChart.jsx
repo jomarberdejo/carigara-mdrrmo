@@ -29,6 +29,21 @@ const PieChart = () => {
 
   const { series, labels } = data;
 
+  const getColorForSeverity = (severity) => {
+    switch (severity.toLowerCase()) {
+      case 'uncategorized':
+        return '#000000'; 
+      case 'severe':
+        return '#FF0000'; 
+      case 'mild':
+        return '#0000FF'; 
+      case 'moderate':
+        return '#FFFF00'; 
+      default:
+        return '#000000'; 
+    }
+  };
+  
   const chartOptions = {
     chart: {
       type: 'donut',
@@ -41,8 +56,9 @@ const PieChart = () => {
         return `${seriesName}: ${opts.w.globals.series[opts.seriesIndex]}`;
       },
     },
-    colors: ['#FF5733', '#FFA533', '#A5A5A5'],
+    colors: labels.map((label) => getColorForSeverity(label)),
   };
+  
 
   return (
     <div className= {`w-full  ${data?.series?.length === 0 ? "hidden" : "block"} col-span-2`}>

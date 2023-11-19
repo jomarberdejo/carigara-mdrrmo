@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useLayoutEffect } from 'react';
 
 const AuthContext = createContext();
 
@@ -11,7 +11,7 @@ const AuthContextWrapper = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [token, setToken] = useState(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     
     const storedToken = localStorage.getItem('token');
     if (storedToken) {

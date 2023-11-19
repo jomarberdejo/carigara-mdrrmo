@@ -37,7 +37,8 @@ const columns = [
         <Avatar
           alt= {row.original.firstname.toUpperCase()}
           height={30}
-          src= {'image.png'}
+          src= {row.original.firstname}
+          sx={{ backgroundColor: '#EE4B2B' }} 
           loading="lazy"
           style={{ borderRadius: '50%' }}
         />

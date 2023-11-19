@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 const useSignUp = () => {
-  const [error, setError] = useState('');
+
   const navigate = useNavigate();
   const { loginUser } = useAuth();
   const firstNameRef = useRef(null);
@@ -29,7 +29,7 @@ const useSignUp = () => {
 
       loginUser(data?.user, data?.token);
 
-      navigate('/dashboard');
+      navigate('/');
       return data;
     } catch (error) {
      

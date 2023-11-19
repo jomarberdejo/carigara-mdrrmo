@@ -16,21 +16,25 @@
   import DialogContent from '@mui/material/DialogContent';
   import DialogTitle from '@mui/material/DialogTitle';
   import IconButton from '@mui/material/IconButton';
+  import Avatar from '@mui/material/Avatar';
+  import FormControl from '@mui/material/FormControl';
+  import MenuItem from '@mui/material/MenuItem';
+  import Select from '@mui/material/Select';
+  import TextField from '@mui/material/TextField';
   import AddIcon from '@mui/icons-material/Add';
-
-
-  import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
   import EditIcon from '@mui/icons-material/Edit';
   import DeleteIcon from '@mui/icons-material/Delete';
   import VisibilityIcon from '@mui/icons-material/Visibility';
+  import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+  import {locationOptions} from '../../utils/locationOptions'
+
   import axios from 'axios';
-  import { FormControl, MenuItem, Select, TextField } from '@mui/material';
   import {useAuth} from '../../context/AuthContext'
   import { toast } from 'react-toastify';
 
   const IncidentsTable = () => {
     const {user} = useAuth()    
-    const [error, setError] = useState('')
+   
     const severityRef = useRef('');
     const descriptionRef = useRef();
     const locationRef = useRef();
@@ -93,13 +97,30 @@
 
         },
         {
-          accessorKey: 'firstname',
-          header: 'Name',
-          muiEditTextFieldProps: {
-            required: true,
-
-          },
+          accessorFn: (row) => `${row.firstname} ${row.lastname}`,
+          id: 'name',
+          header: 'Reported By',
+          size: 250,
           enableEditing: false,
+          Cell: ({ renderedCellValue, row }) => (
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+              }}
+            >
+              <Avatar
+                alt= {row.original.firstname.toUpperCase()}
+                height={30}
+                src= {row.original.firstname}
+                sx={{ backgroundColor: '#EE4B2B' }} 
+                loading="lazy"
+                style={{ borderRadius: '50%' }}
+              />
+              <span>{renderedCellValue}</span>
+            </Box>
+          ),
         },
       ],
       []
@@ -186,7 +207,7 @@
           {...internalEditComponents[0].muiEditTextFieldProps} // This assumes the first field is for the first name
         /> */}
 
-            <Typography variant='body1' sx={{ marginLeft: 1 }}>Severity (Uncategorized / Mild / Moderate/ Severe)</Typography>
+            <Typography variant='body1' sx={{ color: 'gray' }}>Severity (Uncategorized / Mild / Moderate/ Severe)*</Typography>
             <FormControl>
 
               <Select
@@ -208,26 +229,29 @@
               variant="outlined"
               inputRef={descriptionRef}
             />
-            <Button sx={{border: "1px dashed gray", cursor: "pointer"}}>
-            <input type="file"
-              className=' p-1  cursor-pointer w-full' ref={filepathRef} />
-
-            </Button>
+             
             
-         
-           
 
-            <TextField
-              id="location"
-              label="Location"
-              type="text"
-              variant="outlined"
-              inputRef={locationRef}
-            />
+              <Typography variant='body1' sx={{ color: 'gray'}}>Location*</Typography>
+            <FormControl fullWidth>
+                
+                <Select
+                  labelId="location-select-label"
+                  id="location-select"
+                  inputRef= {locationRef}
+                  defaultValue='Balilit'
+                >
+                  {locationOptions.map((location, index) => (
+                    <MenuItem key={index} value={location}>
+                      {location}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl> 
 
 
 
-            <Typography variant='body1' sx={{ marginLeft: 1 }}>Status (Ongoing / Pending / Resolved)</Typography>
+            <Typography variant='body1' sx={{color: 'gray'}}>Status (Ongoing / Pending / Resolved)*</Typography>
             <FormControl>
 
               <Select
@@ -239,6 +263,13 @@
                 <MenuItem value="Resolved">Resolved</MenuItem>
               </Select>
             </FormControl>
+
+            <Typography variant='body1' sx={{ color: 'gray' }}>Image / Video (Optional)*</Typography>
+            <Button sx={{border: "1px dashed gray", cursor: "pointer"}}>
+            <input type="file"
+              className=' p-1  cursor-pointer w-full' ref={filepathRef} />
+
+            </Button>
           </DialogContent>
           <DialogActions>
             <MRT_EditActionButtons variant="text" table={table} row={row} />

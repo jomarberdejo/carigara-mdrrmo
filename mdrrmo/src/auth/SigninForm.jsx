@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 
 const SignInForm = () => {
 
-  const { emailRef, passwordRef, error, handleSignIn } = useSignIn();
+  const { emailRef, passwordRef, handleSignIn } = useSignIn();
 
   const handleSubmit = async(event) => {
     event.preventDefault(); 

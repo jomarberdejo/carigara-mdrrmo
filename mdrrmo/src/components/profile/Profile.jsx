@@ -6,6 +6,9 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Toolbar from '@mui/material/Toolbar';
+import FormControl from '@mui/material/FormControl';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -14,8 +17,8 @@ import Modal from '@mui/material/Modal';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import EditIcon from '@mui/icons-material/Edit';
-
-
+import { toast } from 'react-toastify';
+import {locationOptions} from '../../utils/locationOptions.js'
 
 const ProfilePage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -28,12 +31,12 @@ const ProfilePage = () => {
   })
   const { user, setUserData} = useAuth();
 
-  console.log(user)
+  
   
   const fetchUser = async () => {
     const result = await axios.get(`http://localhost:4000/api/users/${user.user_id}`);
     const data = result.data[0]
-    console.log(data)
+  
     return data
   };
 
@@ -70,11 +73,8 @@ const ProfilePage = () => {
     try {
       const result = await axios.patch(`http://localhost:4000/api/users/${userData?.user_id}`, formData);
       const data = await result.data;
-      console.log(data);
-      
 
-     
-      
+        
       const updatedUserData = {
         ...userData,
         firstname: formData.firstname,
@@ -83,13 +83,32 @@ const ProfilePage = () => {
         location: formData.location,
       };
       
+      
+      toast.success('Profile Updated Sucessfully.', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+        style: {
+          backgroundColor: 'green',
+          color: 'white',
+        },
+      });
       setUserData(updatedUserData);
       localStorage.setItem('user', JSON.stringify(updatedUserData));
       
       queryClient.invalidateQueries(['user', userData.user_id]);
       setModalOpen(false);
+      return data
     } catch (error) {
-      throw new Error(error.result?.data?.message || 'Failed to update profile');
+      toast.error(`Sign In Failed: ${error.response.data.error}`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+        style: {
+          backgroundColor: '#2f2d2d',
+          color: 'white',
+        },
+      });
+      
+    
     }
   };
 
@@ -164,22 +183,47 @@ const ProfilePage = () => {
               value={formData.age}
               onChange={(e) => setFormData({ ...formData, age: e.target.value })}
             />
-            <TextField
-              label="Role"
-              variant="outlined"
-              fullWidth
-              sx={{ marginBottom: 2 }}
-              value={formData.role}
-              disabled
-            />
-            <TextField
-              label="Location"
-              variant="outlined"
-              fullWidth
-              sx={{ marginBottom: 2 }}
-              value={formData.location}
-              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-            />
+         
+            
+            <Typography variant='body1' sx={{ color: 'gray'}}>Role (User / Admin)*</Typography>
+            <FormControl fullWidth  sx={{ marginBottom: 2 }}>
+                
+                <Select
+                  labelId="role-select-label"
+                  id="role-select"
+                  value={formData.role}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  disabled = {userData.role === "User" ? true : false}
+                >
+         
+                    <MenuItem  value="User">
+                      User
+                    </MenuItem>
+                    <MenuItem  value="Admin">
+                      Admin
+                    </MenuItem>
+           
+                </Select>
+              </FormControl> 
+         
+            
+            <Typography variant='body1' sx={{ color: 'gray'}}>Location*</Typography>
+            <FormControl fullWidth  sx={{ marginBottom: 2 }}>
+                
+                <Select
+                  labelId="location-select-label"
+                  id="location-select"
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  
+                >
+                  {locationOptions.map((location, index) => (
+                    <MenuItem key={index} value={location}>
+                      {location}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl> 
             <Button variant="contained" onClick={handleSave} sx={{ marginBottom: 2, width: '100%' }}>
               Save
             </Button>

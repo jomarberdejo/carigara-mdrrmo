@@ -7,13 +7,14 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
+
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { useNavigate } from 'react-router-dom';
+import  Avatar  from '@mui/material/Avatar';
 
 const columnHelper = createMRTColumnHelper();
 
@@ -42,10 +43,31 @@ const columns = [
     header: 'Reported At',
     size: 150,
   }),
-  columnHelper.accessor('firstname', {
-    header: 'Name',
-    size: 150,
-  }),
+  {
+    accessorFn: (row) => `${row.firstname} ${row.lastname}`,
+    id: 'name',
+    header: 'Reported By',
+    size: 250,
+    Cell: ({ renderedCellValue, row }) => (
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem',
+        }}
+      >
+        <Avatar
+          alt= {row.original.firstname.toUpperCase()}
+          height={30}
+          src= {row.original.firstname}
+          sx={{ backgroundColor: '#EE4B2B' }} 
+          loading="lazy"
+          style={{ borderRadius: '50%' }}
+        />
+        <span>{renderedCellValue}</span>
+      </Box>
+    ),
+  },
 ];
 
 const csvConfig = mkConfig({
@@ -68,9 +90,20 @@ const ExportIncidentTable = () => {
   };
 
   const { data } = useQuery({
-    queryKey: ['reports'],
+    queryKey: ['reportss'],
     queryFn: fetchReports,
   });
+
+  const handleExportRows = (rows) => {
+    const rowData = rows.map((row) => row.original);
+    const csv = generateCsv(csvConfig)(rowData);
+    download(csvConfig)(csv);
+  };
+
+  const handleExportData = () => {
+    const csv = generateCsv(csvConfig)(data);
+    download(csvConfig)(csv);
+  };
 
   const table = useMaterialReactTable({
     columns,
@@ -95,7 +128,7 @@ const ExportIncidentTable = () => {
         }}
       >
         <Button
-          onClick={() => handleExportData}
+          onClick={handleExportData}
           startIcon={<FileDownloadIcon />}
         >
           Export All Data

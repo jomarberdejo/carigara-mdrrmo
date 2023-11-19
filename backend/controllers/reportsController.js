@@ -11,7 +11,8 @@ const getAllReports = (req, res) => {
     r.status,
     r.file_path,
     DATE_FORMAT(r.reported_at, '%Y-%m-%d %H:%i:%s') AS reported_at, 
-    u.firstname
+    u.firstname,
+    u.lastname
 FROM 
     reports AS r
 JOIN 
@@ -38,7 +39,9 @@ const getOneReport = (req, res) => {
     r.status,
     r.file_path,
     DATE_FORMAT(r.reported_at, '%Y-%m-%d %H:%i:%s') AS reported_at, 
-    u.firstname
+    r.user_id, 
+    u.firstname,
+    u.lastname
 FROM 
     reports AS r
 JOIN 
@@ -63,7 +66,7 @@ const addReport = (req, res) => {
         if (!severity || !description || !location || !status) {
             return res.status(400).json({ error: 'All required fields must be filled' });
           } 
-        const validSeverity = ['Uncategorized', 'Mild', 'Mild', 'Severe']
+        const validSeverity = ['Uncategorized', 'Mild', 'Moderate', 'Severe']
         const validStatus = ['Ongoing', 'Pending', 'Resolved']
 
         if (!validSeverity.includes(severity)){
@@ -123,7 +126,7 @@ const updateReport = (req, res) => {
         if (!severity || !description || !location || !status) {
             return res.status(400).json({ error: 'All required fields must be filled' });
           } 
-        const validSeverity = ['Uncategorized', 'Mild', 'Severe']
+        const validSeverity = ['Uncategorized', 'Mild', 'Moderate', 'Severe']
         const validStatus = ['Ongoing', 'Pending', 'Resolved']
 
         if (!validSeverity.includes(severity)){
