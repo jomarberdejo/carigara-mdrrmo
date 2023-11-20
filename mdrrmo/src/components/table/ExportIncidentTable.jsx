@@ -15,10 +15,38 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { useNavigate } from 'react-router-dom';
 import  Avatar  from '@mui/material/Avatar';
+import { useMemo } from 'react';
 
-const columnHelper = createMRTColumnHelper();
 
-const columns = [
+
+const ExportIncidentTable = () => {
+  const navigate = useNavigate()
+  const fetchReports = async () => {
+    const result = await axios.get('http://localhost:4000/api/reports/');
+    const data = await result.data;
+    const sortedIncidents = data.sort((a, b) => new Date(b.reported_at) - new Date(a.reported_at));
+
+     
+     const recentIncidents = sortedIncidents.slice(0, 10);
+ 
+     return recentIncidents;
+  };
+
+  const { data } = useQuery({
+    queryKey: ['reportss'],
+    queryFn: fetchReports,
+  });
+
+  const columnHelper = createMRTColumnHelper();
+
+
+const csvConfig = mkConfig({
+  fieldSeparator: ',',
+  decimalSeparator: '.',
+  useKeysAsHeaders: true,
+});
+  
+const columns = useMemo(()=> [
   columnHelper.accessor('report_id', {
     header: 'Report ID',
     size: 30,
@@ -68,31 +96,7 @@ const columns = [
       </Box>
     ),
   },
-];
-
-const csvConfig = mkConfig({
-  fieldSeparator: ',',
-  decimalSeparator: '.',
-  useKeysAsHeaders: true,
-});
-
-const ExportIncidentTable = () => {
-  const navigate = useNavigate()
-  const fetchReports = async () => {
-    const result = await axios.get('http://localhost:4000/api/reports/');
-    const data = await result.data;
-    const sortedIncidents = data.sort((a, b) => new Date(b.reported_at) - new Date(a.reported_at));
-
-     
-     const recentIncidents = sortedIncidents.slice(0, 10);
- 
-     return recentIncidents;
-  };
-
-  const { data } = useQuery({
-    queryKey: ['reportss'],
-    queryFn: fetchReports,
-  });
+] );
 
   const handleExportRows = (rows) => {
     const rowData = rows.map((row) => row.original);

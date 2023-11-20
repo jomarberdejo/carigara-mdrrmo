@@ -17,10 +17,26 @@ import Divider from '@mui/material/Divider';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 
-const columnHelper = createMRTColumnHelper();
 
-const columns = [
+const ExportUserTable = () => {
+
+  const columnHelper = createMRTColumnHelper();
+
+
+  const csvConfig = mkConfig({
+    fieldSeparator: ',',
+    decimalSeparator: '.',
+    useKeysAsHeaders: true,
+  });
+  
+const columns = useMemo( () => [
+ 
+  columnHelper.accessor('user_id', {
+    header: 'ID',
+    size: 30,
+  }),
   {
     accessorFn: (row) => `${row.firstname} ${row.lastname}`,
     id: 'name',
@@ -37,7 +53,7 @@ const columns = [
         <Avatar
           alt= {row.original.firstname.toUpperCase()}
           height={30}
-          src= {row.original.firstname}
+          src= {row?.original.firstname || null}
           sx={{ backgroundColor: '#EE4B2B' }} 
           loading="lazy"
           style={{ borderRadius: '50%' }}
@@ -46,10 +62,6 @@ const columns = [
       </Box>
     ),
   },
-  columnHelper.accessor('user_id', {
-    header: 'ID',
-    size: 30,
-  }),
   columnHelper.accessor('firstname', {
     header: 'First Name',
     size: 70,
@@ -79,15 +91,7 @@ const columns = [
     header: 'Created At',
     size: 200,
   }),
-];
-
-const csvConfig = mkConfig({
-  fieldSeparator: ',',
-  decimalSeparator: '.',
-  useKeysAsHeaders: true,
-});
-
-const ExportUserTable = () => {
+])
 
   const navigate = useNavigate();
   const fetchUsers = async () => {
@@ -104,7 +108,7 @@ const ExportUserTable = () => {
   };
 
   const { data } = useQuery({
-    queryKey: ['userss'],
+    queryKey: ['users'],
     queryFn: fetchUsers,
   });
 

@@ -13,14 +13,32 @@ import User from '../pages/User';
 import NotFound from '../pages/NotFound';
 import Homepage from '../pages/Homepage';
 import UserLayout from '../User/UserLayout';
+import axios from 'axios';
+import {  useQuery } from '@tanstack/react-query';
 
 
 
 const RouteLayout = () => {
   const { isAuthenticated, user } = useAuth();
+
+  const fetchUser = async() => {
+    const response = await axios.get(`http://localhost:4000/api/users/${user.user_id}`)
+    const data = await response.data[0]
+  
+    return data
+  }
+  
+  const {data} = useQuery({
+    queryKey: ['singleUser', user?.user_id],
+    queryFn: fetchUser,
+  })
+  
+  
+
+  
   return (
     <Router>
-      {isAuthenticated && user.role === "Admin" && (
+      {isAuthenticated && data?.role === "Admin" && (
      
           <AdminLayout>
             <Routes>
@@ -35,7 +53,7 @@ const RouteLayout = () => {
           </AdminLayout>
 
       )} 
-        {isAuthenticated && user.role === "User" && (
+        {isAuthenticated && data?.role === "User" && (
             
             <UserLayout>
               <Routes>

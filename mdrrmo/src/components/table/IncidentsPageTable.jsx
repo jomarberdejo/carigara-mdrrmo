@@ -134,6 +134,137 @@
       []
     );
 
+    function useCreateIncident() {
+     
+      return useMutation({
+        mutationFn: async ({values, table}) => {
+  
+          
+         
+          try {
+            const formData = new FormData();
+          formData.append('severity', values.severity);
+          formData.append('description', values.description);
+          formData.append('location', values.location);
+          formData.append('status', values.status);
+          formData.append('file_path', values.file_path);
+          formData.append('user_id', values.user_id);
+  
+            const result = await axios.post('http://localhost:4000/api/reports/', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+            const data = await result.data;
+  
+            table.setCreatingRow(null);
+            toast.success('Report Added Successfully.', {
+              position: toast.POSITION.RIGHT,
+              autoClose: 3000,
+              style: {
+                backgroundColor: 'green',
+                color: 'white',
+              
+              },
+             
+            });
+            
+            queryClient.invalidateQueries(['incidents']);
+            return data;
+          } catch (error) {
+            toast.error(`${error.response.data.error}`, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+              style: {
+                backgroundColor: '#2f2d2d',
+                color: 'white',
+              },
+            });
+          
+          }
+        },
+        // onMutate: (newIncidentInfo) => {
+        //   queryClient.setQueryData(['incidents'], (prevIncidents) => [
+        //     ...prevIncidents,
+        //     {
+        //       ...newIncidentInfo,
+        //       report_id: (Math.random() + 1).toString(36).substring(7),
+        //     },
+        //   ]);
+        // },
+      });
+    }
+  
+    const getAllIncidents = async () => {
+      const result = await axios.get('http://localhost:4000/api/reports/')
+      const data = result.data
+  
+      return data
+    }
+  
+    function useGetIncidents() {
+      return useQuery({
+        queryKey: ['reports'],
+        queryFn: getAllIncidents,
+        refetchOnWindowFocus: true,
+      });
+    }
+  
+    function useUpdateIncident() {
+     
+     
+      return useMutation({ 
+        mutationFn: async ({values, table}) => {
+           
+        
+        try {
+          const result = await axios.patch(`http://localhost:4000/api/reports/${values.report_id}`, values)
+          const data = await result.data
+      
+  
+          queryClient.invalidateQueries(['reports'])
+          
+          toast.success(data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            style: {
+              backgroundColor: 'green',
+              color: 'white',
+            },
+          });
+          table.setEditingRow(null); 
+          return data;
+        } catch (error) {
+          toast.error(`Error updating reported incident:  ${error.response.data.error}`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            style: {
+              backgroundColor: '#2f2d2d',
+              color: 'white',
+            },
+          });
+      
+          
+        }
+      }
+      })
+    }
+  
+    function useDeleteIncident() {
+     
+      return useMutation({
+        mutationFn: async (reportId) => {
+          console.log(reportId)
+          const result = await axios.delete(`http://localhost:4000/api/reports/${reportId}`)
+          const data = await result.data;
+   
+          queryClient.invalidateQueries(['incidents'])
+        },
+  
+      });
+    }
+  
+
     const handleResolved = async(report) => {
        try{
         if (report.status === 'Resolved'){
@@ -386,136 +517,6 @@
     return <MaterialReactTable table={table} />;
   };
 
-  function useCreateIncident() {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: async ({values, table}) => {
-
-        
-       
-        try {
-          const formData = new FormData();
-        formData.append('severity', values.severity);
-        formData.append('description', values.description);
-        formData.append('location', values.location);
-        formData.append('status', values.status);
-        formData.append('file_path', values.file_path);
-        formData.append('user_id', values.user_id);
-
-          const result = await axios.post('http://localhost:4000/api/reports/', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          const data = await result.data;
-
-          table.setCreatingRow(null);
-          toast.success('Report Added Successfully.', {
-            position: toast.POSITION.RIGHT,
-            autoClose: 3000,
-            style: {
-              backgroundColor: 'green',
-              color: 'white',
-            
-            },
-           
-          });
-          
-          queryClient.invalidateQueries(['incidents']);
-          return data;
-        } catch (error) {
-          toast.error(`${error.response.data.error}`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-            style: {
-              backgroundColor: '#2f2d2d',
-              color: 'white',
-            },
-          });
-        
-        }
-      },
-      // onMutate: (newIncidentInfo) => {
-      //   queryClient.setQueryData(['incidents'], (prevIncidents) => [
-      //     ...prevIncidents,
-      //     {
-      //       ...newIncidentInfo,
-      //       report_id: (Math.random() + 1).toString(36).substring(7),
-      //     },
-      //   ]);
-      // },
-    });
-  }
-
-  const getAllIncidents = async () => {
-    const result = await axios.get('http://localhost:4000/api/reports/')
-    const data = result.data
-
-    return data
-  }
-
-  function useGetIncidents() {
-    return useQuery({
-      queryKey: ['incidents'],
-      queryFn: getAllIncidents,
-      refetchOnWindowFocus: false,
-    });
-  }
-
-  function useUpdateIncident() {
-    const queryClient = useQueryClient();
-   
-    return useMutation({ 
-      mutationFn: async ({values, table}) => {
-         
-      
-      try {
-        const result = await axios.patch(`http://localhost:4000/api/reports/${values.report_id}`, values)
-        const data = await result.data
-    
-
-        queryClient.invalidateQueries(['reports'])
-        
-        toast.success(data.message, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-          style: {
-            backgroundColor: 'green',
-            color: 'white',
-          },
-        });
-        table.setEditingRow(null); 
-        return data;
-      } catch (error) {
-        toast.error(`Error updating reported incident:  ${error.response.data.error}`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-          style: {
-            backgroundColor: '#2f2d2d',
-            color: 'white',
-          },
-        });
-    
-        
-      }
-    }
-    })
-  }
-
-  function useDeleteIncident() {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: async (reportId) => {
-        console.log(reportId)
-        const result = await axios.delete(`http://localhost:4000/api/reports/${reportId}`)
-        const data = await result.data;
- 
-        queryClient.invalidateQueries(['incidents'])
-      },
-
-    });
-  }
-
   const IncidentsPageTable = () => (
     <>
       <Toolbar>
@@ -525,6 +526,6 @@
       <Divider />
     </>
   );
-
+ 
   export default IncidentsPageTable;
 

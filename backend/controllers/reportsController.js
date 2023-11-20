@@ -59,9 +59,13 @@ const getAllUserReports = (req, res) => {
           if (error) {
               res.json(error);
           } else {
-              result.forEach((report) => {
-                  report.reported_at = moment(report.reported_at).format('YYYY/MM/DD hh:mm A');
-              });
+            //   result.forEach((report) => {
+            //       report.reported_at = moment(report.reported_at).format('YYYY/MM/DD hh:mm A');
+            //   });
+            result.forEach((report) => {
+                report.reported_at = moment(report.reported_at).format('YYYY-MM-DD HH:mm');
+                
+            })
               res.json(result);
           }
       });
@@ -137,7 +141,8 @@ const addReport = (req, res) => {
             console.error(error);
             res.status(500).json({ error: error.message });
         } else {
-            res.status(200).json({ message: 'Reported incident updated successfully', result });
+        
+            res.status(200).json({ message: 'Report updated successfully', result });
         }
         });
      }
@@ -162,7 +167,7 @@ const deleteReport = (req, res) => {
         }
         else{
             res.json({
-                message: "Reported incident deleted successfully", result
+                message: "Report deleted successfully", result
             })
         }
     })
@@ -198,7 +203,7 @@ const updateReport = (req, res) => {
               res.json(error);
           } else {
               res.json({
-                  message: "Reported incident updated successfully",
+                  message: "Report updated successfully",
                   result
               });
           }
@@ -229,7 +234,7 @@ const updateReportStatus = (req, res) => {
               res.json(error);
           } else {
               res.json({
-                  message: "Reported incident status changed to Resolved.",
+                  message: "Report status changed to Resolved.",
                   result
               });
           }

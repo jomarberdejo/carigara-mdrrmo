@@ -36,6 +36,8 @@ import  IconButton  from '@mui/material/IconButton';
 
 
 const Homepage = () => {
+
+ 
   const [isModalOpen, setModalOpen] = useState(false);
   const severityRef = useRef(null);
   const descriptionRef = useRef(null);
@@ -81,7 +83,7 @@ const Homepage = () => {
             color: 'white',
           },
         });
-        queryClient.invalidateQueries(['userReport'])
+        queryClient.invalidateQueries(['reports'])
         return data
       }
       catch(error){
@@ -140,7 +142,7 @@ const Homepage = () => {
         },
       });
 
-      queryClient.invalidateQueries(['useReports']);
+      queryClient.invalidateQueries(['reports']);
       return responseData;
     } catch (error) {
       toast.error(`${error.response.data.error}`, {
@@ -186,14 +188,15 @@ const Homepage = () => {
               gutterBottom
               sx= {{marginTop: 8}}
             >
-              My Reported Incidents
+              My Reports
             </Typography>
           </Container>
         </Box>
       <Container sx={{ py: 8 }} maxWidth="md">
+      {data?.length > 0 ? (
         <Masonry columns={{md:1,lg:2}} sx= {{margin: 'auto'}} spacing={4}>
-          {data.length > 0 &&
-            data.map((report, index) => (
+        
+           {data.map((report, index) => (
               <div key={report.report_id}>
                    <Card sx={{ maxWidth: 700 }} className='block mx-auto' >
         <Box className= 'flex justify-between  flex-col items-start relative'>
@@ -202,7 +205,7 @@ const Homepage = () => {
        
         
           avatar={
-            <Avatar className='text-red-500' aria-label="user-profile"
+            <Avatar sx={{background: 'red'}} aria-label="user-profile"
             >
               {report?.firstname[0]}
             </Avatar>
@@ -266,8 +269,7 @@ const Homepage = () => {
       </Card>
               </div>
             ))}
-        </Masonry>
-        {data?.length === 0 && (
+        </Masonry> ) : (
           <Typography variant="h4" className="text-gray-700 text-center">
             You haven't submitted any reports yet.
           </Typography>

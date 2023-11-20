@@ -50,7 +50,8 @@ const getAllUsers = (req, res) => {
         }
         else{
             result.forEach((user) => {
-                user.created_at = moment(user.created_at).format('YYYY/MM/DD hh:mm A');
+                user.created_at = moment(user.created_at).format('YYYY-MM-DD HH:mm:ss');
+                
             });
             res.json(result)
         }
