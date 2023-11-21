@@ -1,3 +1,4 @@
+const fs = require('fs');
 const moment = require('moment');
 const connection = require('../dbConfig/db');
 
@@ -152,27 +153,48 @@ const addReport = (req, res) => {
     }
     
   };
+
+
+  const deleteReport = (req, res) => {
+      const { id } = req.params;
+      const sqlSelect = `SELECT file_path FROM reports WHERE report_id = ?`;
+      const sqlDelete = `DELETE FROM reports WHERE report_id = ?`;
+      const values = [Number(id)];
   
-
-const deleteReport = (req, res) => {
-    const {id} = req.params;
-    const sql = `DELETE FROM reports WHERE report_id = ?`;
-    values= [Number(id)]
-
-    connection.query(sql, values, (error, result) => {
-        if (error){
-            res.json({
-                error: error.message
-            })
-        }
-        else{
-            res.json({
-                message: "Report deleted successfully", result
-            })
-        }
-    })
-}
-
+      connection.query(sqlSelect, values, (error, result) => {
+          if (error) {
+              return res.json({
+                  error: error.message,
+              });
+          } else {
+              const filePath = result[0].file_path;
+  
+            
+              connection.query(sqlDelete, values, (errorDelete, resultDelete) => {
+                  if (errorDelete) {
+                      return res.json({
+                          error: errorDelete.message,
+                      });
+                  } else {
+                      // If there is a file associated with the report, delete it
+                      if (filePath) {
+                          fs.unlink(filePath, (errorUnlink) => {
+                              if (errorUnlink) {
+                                  console.error(errorUnlink);
+                              }
+                          });
+                      }
+  
+                      return res.json({
+                          message: 'Report deleted successfully',
+                          result: resultDelete,
+                      });
+                  }
+              });
+          }
+      });
+  };
+  
 const updateReport = (req, res) => {
     const { severity, description, location, status } = req.body;
     const { id } = req.params;

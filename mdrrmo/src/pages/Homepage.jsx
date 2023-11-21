@@ -11,7 +11,6 @@ import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
 import CardHeader from '@mui/material/CardHeader';
-import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
@@ -32,6 +31,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import LocationOn from '@mui/icons-material/LocationOn';
 import DeleteIcon from '@mui/icons-material/Delete';
 import  IconButton  from '@mui/material/IconButton';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 
 
@@ -296,12 +296,15 @@ const Homepage = () => {
             </Select>
           </FormControl>
 
-          <TextField
-            label="Description"
-            type="text"
-            variant="outlined"
-            inputRef={descriptionRef}
-          />
+     
+<TextareaAutosize
+                aria-label="minimum height"
+                minRows={3}
+                placeholder="Report Details / Description..."
+                style={{padding: 10, background: 'transparent', border: '1px solid lightgray'}}
+             
+                inputRef={descriptionRef}
+                />
 
           <Typography variant="body1" sx={{ color: 'gray' }}>
             Location*

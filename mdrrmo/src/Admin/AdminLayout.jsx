@@ -25,9 +25,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import Groups3Icon from '@mui/icons-material/Groups3';
-
-
-
+import EventNoteIcon from '@mui/icons-material/EventNote';
 const drawerWidth = 260;
 const settings = [
   {
@@ -149,6 +147,21 @@ function AdminLayout({children}) {
         </ListItemIcon>
        
         <ListItemText primary="Users" />
+      </ListItemButton>
+    </ListItem>
+  </NavLink>
+
+  <NavLink to="/events">
+    <ListItem key="Events" disablePadding className={location.pathname == '/events' ? 'bg-gray-200' : null}>
+      <ListItemButton>
+      
+        <ListItemIcon>
+    
+          <EventNoteIcon className="text-content" />
+       
+        </ListItemIcon>
+       
+        <ListItemText primary="Events" />
       </ListItemButton>
     </ListItem>
   </NavLink>

@@ -45,7 +45,7 @@ const ProfilePage = () => {
 
 
   const { data: userData, isLoading } = useQuery({
-    queryKey:['users', {user: user.user_id}],
+    queryKey:['users', user.user_id],
     queryFn: fetchUser,
   });
 
@@ -96,7 +96,7 @@ const ProfilePage = () => {
       setUserData(updatedUserData);
       localStorage.setItem('user', JSON.stringify(updatedUserData));
       
-      queryClient.invalidateQueries(['users', {user: user.user_id}]);
+      queryClient.invalidateQueries(['users', user.user_id]);
       setModalOpen(false);
       return data
     } catch (error) {

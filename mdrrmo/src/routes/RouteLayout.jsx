@@ -15,6 +15,7 @@ import Homepage from '../pages/Homepage';
 import UserLayout from '../User/UserLayout';
 import axios from 'axios';
 import {  useQuery } from '@tanstack/react-query';
+import Events from '../pages/Events';
 
 
 
@@ -45,6 +46,7 @@ const RouteLayout = () => {
               <Route path="/" element={<Dashboard />} />
               <Route path="/incidents" element={<Incidents />} />
               <Route path="/users" element={<Users />} />
+              <Route path='/events' element= {<Events/>}></Route>
               <Route path="/profile" element={<Profile />} />
               <Route path="/incident/:id" element= {<Incident />}/>
               <Route path="/user/:id" element= {<User />}/>       
@@ -59,7 +61,9 @@ const RouteLayout = () => {
               <Routes>
                 <Route path="/" element={<Homepage />} /> 
                 <Route path="/profile" element={<Profile />} />   
+              
                 <Route path="*" element= {<NotFound/>}/>
+               
               </Routes>
             </UserLayout>
 
