@@ -21,7 +21,7 @@ const getAllUserReports = (req, res) => {
       JOIN 
         users AS u ON r.user_id = u.user_id
       WHERE 
-        r.user_id = ?
+        r.user_id = ? ORDER BY reported_at DESC
     `;
   
     connection.query(sql, [Number(id)], (error, result) => {
@@ -53,7 +53,7 @@ const getAllUserReports = (req, res) => {
   FROM 
       reports AS r
   JOIN 
-      users AS u ON r.user_id = u.user_id
+      users AS u ON r.user_id = u.user_id ORDER BY reported_at DESC
   `;
   
       connection.query(sql, (error, result) => {
@@ -64,7 +64,7 @@ const getAllUserReports = (req, res) => {
             //       report.reported_at = moment(report.reported_at).format('YYYY/MM/DD hh:mm A');
             //   });
             result.forEach((report) => {
-                report.reported_at = moment(report.reported_at).format('YYYY-MM-DD HH:mm');
+                report.reported_at = moment(report.reported_at).format('MMM, DD, YYYY h:mm A');
                 
             })
               res.json(result);

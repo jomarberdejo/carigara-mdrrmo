@@ -13,7 +13,7 @@ const useSignUp = () => {
   
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const roleRef = useRef(null)
+  const roleRef = useRef('User')
 
   const handleSignUp = async () => {
     try {
@@ -24,7 +24,7 @@ const useSignUp = () => {
         location: locationRef.current.value,
         email: emailRef.current.value,   
         password: passwordRef.current.value,
-        role: roleRef.current.value,
+        role: roleRef.current,
       };
 
       console.log(userInfo);
@@ -49,7 +49,7 @@ const useSignUp = () => {
     locationRef,
     emailRef,
     passwordRef,
-     roleRef,
+
     handleSignUp,
    }
 };

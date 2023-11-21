@@ -24,7 +24,6 @@ const SignUpForm = () => {
     locationRef,
     emailRef,
     passwordRef,
-    roleRef,
     handleSignUp,
   } = useSignUp();
 
@@ -152,7 +151,7 @@ const SignUpForm = () => {
                 inputRef={passwordRef}
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
             <Typography variant='body1' sx={{ color: 'gray'}}>Role (User / Admin)*</Typography>
             <FormControl fullWidth>
 
@@ -160,12 +159,14 @@ const SignUpForm = () => {
                 labelId="role-select-label"
                 defaultValue="User"
                 disabled
+               
                 inputRef={roleRef}>
+              
                 <MenuItem value="User">User</MenuItem>
                 <MenuItem value="Admin">Admin</MenuItem>
                     
               </Select>
-            </FormControl>   </Grid>
+            </FormControl>   </Grid> */}
 
           </Grid>
           <Button

@@ -42,7 +42,7 @@ const getAllUsers = (req, res) => {
     email,
     role,
     created_at
-    FROM users`;
+    FROM users  ORDER BY created_at DESC`;
 
     const result = connection.query(sql, (error, result)=> {
         if (error) {
@@ -50,7 +50,7 @@ const getAllUsers = (req, res) => {
         }
         else{
             result.forEach((user) => {
-                user.created_at = moment(user.created_at).format('YYYY-MM-DD HH:mm:ss');
+                user.created_at = moment(user.created_at).format('MMM, DD, YYYY h:mm A');
                 
             });
             res.json(result)
@@ -153,7 +153,7 @@ const updateUser = async (req, res) => {
         const sql = `
         UPDATE users 
         SET firstname = ?, lastname = ?, age = ?, role = ?, location = ?
-        WHERE user_id = ?`;
+        WHERE user_id = ? `;
 
     const values = [firstname, lastname, age, role, location, Number(id)];
 

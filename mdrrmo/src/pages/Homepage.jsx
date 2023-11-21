@@ -104,6 +104,7 @@ const Homepage = () => {
   const handleAddReport = async () => {
     
     try {
+   
       const file = filepathRef.current.files[0]
       if (file && !file.type.startsWith('image/') && !file.type.startsWith('video/')) {
         toast.error('Please upload only an image or video.', {
@@ -196,7 +197,7 @@ const Homepage = () => {
       {data?.length > 0 ? (
         <Masonry columns={{md:1,lg:2}} sx= {{margin: 'auto'}} spacing={4}>
         
-           {data.map((report, index) => (
+           {data?.map((report, index) => (
               <div key={report.report_id}>
                    <Card sx={{ maxWidth: 700 }} className='block mx-auto' >
         <Box className= 'flex justify-between  flex-col items-start relative'>
@@ -296,16 +297,16 @@ const Homepage = () => {
             </Select>
           </FormControl>
 
-     
+          <FormControl fullWidth>
 <TextareaAutosize
                 aria-label="minimum height"
                 minRows={3}
                 placeholder="Report Details / Description..."
                 style={{padding: 10, background: 'transparent', border: '1px solid lightgray'}}
-             
-                inputRef={descriptionRef}
+              
+                ref={descriptionRef}
                 />
-
+    </FormControl>
           <Typography variant="body1" sx={{ color: 'gray' }}>
             Location*
           </Typography>

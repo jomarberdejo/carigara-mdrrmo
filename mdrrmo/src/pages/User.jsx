@@ -34,9 +34,11 @@ const User = () => {
   };
 
   const { data: userData, isLoading: userIsLoading, isError: userIsError } = useQuery({
-    queryKey: ['singleUser'],
+    queryKey: ['singleUser', id],
     queryFn: fetchSingleUser,
   });
+
+
 
   const fetchUserReports = async () => {
     const result = await axios.get(`http://localhost:4000/api/reports/user/${Number(id)}`);
