@@ -1,17 +1,27 @@
 // LineChart.js
 import React from 'react';
+import {useAuth} from '../../context/AuthContext'
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import ReactApexChart from 'react-apexcharts';
 import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
+
 
 const LineChart = () => {
+  const {token} = useAuth()
   const fetchMonthlyData = async () => {
     try {
-      const result = await axios.get(`http://localhost:4000/api/dashboard/linechart`);
-      
+      const result = await axios.get(`http://localhost:4000/api/dashboard/linechart`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+       }
+      );
+        
       return result.data;
     } catch (error) {
       throw new Error('Error fetching monthly data');
@@ -19,7 +29,12 @@ const LineChart = () => {
   };
 
   const fetchReports = async() => {
-    const response = await axios.get('http://localhost:4000/api/reports/')
+    const response = await axios.get('http://localhost:4000/api/reports/', 
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+     })
     const data = await response.data
 
     return data
@@ -35,7 +50,7 @@ const LineChart = () => {
   });
 
   if (isLoading || isAllReportsLoading) {
-    return <p>Loading...</p>;
+    return  null
   }
 
   if (error) {
@@ -44,7 +59,7 @@ const LineChart = () => {
 
 
 
-  const { series, categories } = data;
+  const { series, categories } = data ? data : [];
 
 const chartOptions = {
   chart: {
@@ -62,8 +77,8 @@ const chartOptions = {
 
 
   return (
-   
-      <div className={`w-full col-span-1 ${allReports?.length === 0 && "hidden"}`}>
+    
+      <div className={`w-full col-span-1 bg-white ${allReports?.length === 0 && "hidden"}`}>
         <Toolbar>
           <Typography variant="h6">Incidents Reported Monthly</Typography>
         </Toolbar>

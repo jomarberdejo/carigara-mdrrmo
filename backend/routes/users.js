@@ -3,7 +3,10 @@ const express = require('express')
 const router = express.Router();
 
 const { createUser, updateUser, deleteUser, getOneUser, getAllUsers } = require('../controllers/usersController');
+const requireAuth = require('../middleware/requireAuth')
 
+//require auth for all routes
+router.use(requireAuth)
 
 //GET ALL users
 router.get('/' , getAllUsers)

@@ -26,6 +26,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import Groups3Icon from '@mui/icons-material/Groups3';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import { Container } from '@mui/material';
 const drawerWidth = 260;
 const settings = [
   {
@@ -233,7 +234,7 @@ function AdminLayout({children}) {
           <Typography
           
           variant="h6" noWrap component="div">
-             Incident Reporting and Analysis System  
+             Incident Reporting and Management System  
           </Typography>
           
           <Box 
@@ -288,7 +289,7 @@ function AdminLayout({children}) {
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
+        
       >
 
         <Drawer
@@ -306,7 +307,7 @@ function AdminLayout({children}) {
         >
           {drawer}
         </Drawer>
-        <Drawer
+        {/* <Drawer
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'none' },
@@ -315,18 +316,20 @@ function AdminLayout({children}) {
           open
         >
           {drawer}
-        </Drawer>
+        </Drawer> */}
       </Box>
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, width:  '100%' }}
+        sx={{ flexGrow: 1, p: 2, width:  '100%' }}
         className='w-full'
       >
         <Toolbar 
         
         />
-       
+  
        {children}
+     
+       
 
       </Box>
     </Box>

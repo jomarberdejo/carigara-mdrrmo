@@ -16,37 +16,47 @@ import UserLayout from '../User/UserLayout';
 import axios from 'axios';
 import {  useQuery } from '@tanstack/react-query';
 import Events from '../pages/Events';
+import EventList from '../components/event/EventList';
 
 
 
 const RouteLayout = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, token } = useAuth();
 
-  const fetchUser = async() => {
-    const response = await axios.get(`http://localhost:4000/api/users/${user.user_id}`)
-    const data = await response.data[0]
+  // const fetchUser = async() => {
+  //   const response = await axios.get(`https://mdrrmoserver.onrender.com/api/users/${user.user_id}`,
+  //   {
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`
+  //     }
+  //    }
+  //    )
+  //   const data = await response.data[0]
   
-    return data
-  }
+  //   return data
+  // }
   
-  const {data} = useQuery({
-    queryKey: ['singleUser', user?.user_id],
-    queryFn: fetchUser,
-  })
+  // const {data, isLoading} = useQuery({
+  //   queryKey: ['singleUser', user?.user_id],
+  //   queryFn: fetchUser,
+  //   refetchOnWindowFocus: false,
+  // })
   
-  
+  // if (isLoading){
+  //   return null
+  // }
 
   
   return (
     <Router>
-      {isAuthenticated && data?.role === "Admin" && (
+      {isAuthenticated && user?.role === "Admin" && (
      
           <AdminLayout>
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/incidents" element={<Incidents />} />
               <Route path="/users" element={<Users />} />
-              <Route path='/events' element= {<Events/>}></Route>
+              <Route path='/events' element= {<Events/>}/>
               <Route path="/profile" element={<Profile />} />
               <Route path="/incident/:id" element= {<Incident />}/>
               <Route path="/user/:id" element= {<User />}/>       
@@ -55,13 +65,13 @@ const RouteLayout = () => {
           </AdminLayout>
 
       )} 
-        {isAuthenticated && data?.role === "User" && (
+        {isAuthenticated && user?.role === "User" && (
             
             <UserLayout>
               <Routes>
                 <Route path="/" element={<Homepage />} /> 
                 <Route path="/profile" element={<Profile />} />   
-              
+                <Route path='/eventlist' element= {<EventList/>}/>
                 <Route path="*" element= {<NotFound/>}/>
                
               </Routes>

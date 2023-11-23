@@ -6,12 +6,23 @@ import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
 
 import CardItem from './CardItem';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import PendingIcon from '@mui/icons-material/Pending';
+import { useAuth } from '../../context/AuthContext';
+
 
 
 const Cards = () => {
+  const {token} = useAuth()
   const fetchReports = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/dashboard/stats/');
+      const response = await axios.get('http://localhost:4000/api/dashboard/stats/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       return response.data;
       
     } catch (error) {
@@ -24,8 +35,8 @@ const Cards = () => {
     queryFn: fetchReports,
   });
 
-  if (isLoading) {
-    return <p>Loading...</p>;
+  if (isLoading ) {
+    return  null  
   }
 
   if (error) {
@@ -33,7 +44,7 @@ const Cards = () => {
   }
 
   
-  const { totalIncidents, ongoingIncidents, pendingIncidents, resolvedIncidents } = data;
+  const { totalIncidents, ongoingIncidents, pendingIncidents, resolvedIncidents } = data ? data : [];
 
   const ongoingPercentage = (ongoingIncidents / totalIncidents) * 100 || 0;
   const pendingPercentage = (pendingIncidents / totalIncidents) * 100 || 0;
@@ -45,10 +56,10 @@ const Cards = () => {
         <Typography variant="h6">Reported Incidents Statistics</Typography>
       </Toolbar>
       <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-2">
-        <CardItem title="Reported Incidents" values={totalIncidents} />
-        <CardItem title="Ongoing" values={`${ongoingPercentage.toFixed(2)}%`} />
-        <CardItem title="Pending" values={`${pendingPercentage.toFixed(2)}%`} />
-        <CardItem title="Resolved" values={`${resolvedPercentage.toFixed(2)}%`} />
+        <CardItem title="Reported Incidents" values={totalIncidents} icon= {<SummarizeIcon/>} />
+        <CardItem title="Ongoing" values={`${ongoingPercentage.toFixed(2)}%`} icon= {<DirectionsBikeIcon/>} />
+        <CardItem title="Pending" values={`${pendingPercentage.toFixed(2)}%`} icon= {<PendingIcon/>} />
+        <CardItem title="Resolved" values={`${resolvedPercentage.toFixed(2)}%`} icon= {<DoneAllIcon/>}  />
       </div>
     </>
   );

@@ -21,7 +21,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 import {locationOptions} from '../../utils/locationOptions.js'
 
+
 const ProfilePage = () => {
+  const [pending, setPending] = useState(false)
   const [isModalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstname: '',
@@ -30,12 +32,18 @@ const ProfilePage = () => {
     role: '',
     location: '',
   })
-  const { user, setUserData} = useAuth();
+  const { user, setUserData, token} = useAuth();
 
   
   
   const fetchUser = async () => {
-    const result = await axios.get(`http://localhost:4000/api/users/${user.user_id}`);
+    const result = await axios.get(`http://localhost:4000/api/users/${user.user_id}`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+     }
+    );
     const data = result.data[0]
   
     return data
@@ -49,10 +57,10 @@ const ProfilePage = () => {
     queryFn: fetchUser,
   });
 
-  if (isLoading){
-    return <div>Loading</div>
+  
+  if (isLoading ) {
+    return  null  
   }
-
 
 
   const handleModalOpen = () => {
@@ -70,9 +78,17 @@ const ProfilePage = () => {
     setModalOpen(false);
   };
   
-  const handleSave = async () => {
+  const handleSave = async () => {  
+    setPending(true)
     try {
-      const result = await axios.patch(`http://localhost:4000/api/users/${userData?.user_id}`, formData);
+      const result = await axios.patch(`http://localhost:4000/api/users/${userData?.user_id}`, formData, 
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+       }
+      
+      );
       const data = await result.data;
 
         
@@ -81,6 +97,7 @@ const ProfilePage = () => {
         firstname: formData.firstname,
         lastname: formData.lastname,
         age: formData.age,
+        role: formData.role,
         location: formData.location,
       };
       
@@ -110,6 +127,9 @@ const ProfilePage = () => {
       });
       
     
+    }
+    finally{
+      setPending(false)
     }
   };
 
@@ -150,6 +170,7 @@ const ProfilePage = () => {
           sx={{
             marginTop: 2,
           }}
+          disabled = {pending}
           onClick={handleModalOpen}
         >
           Edit Profile
@@ -194,7 +215,7 @@ const ProfilePage = () => {
                   id="role-select"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  disabled = {userData.role === "User" ? true : false}
+                  disabled = {userData?.role === "User" ? true : false}
                 >
          
                     <MenuItem  value="User">

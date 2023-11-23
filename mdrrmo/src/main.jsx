@@ -28,7 +28,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
    <ToastContainer />
     <App />
   </AuthContextWrapper>
-  <ReactQueryDevtools initialIsOpen= {false}/>
+  {/* <ReactQueryDevtools initialIsOpen= {false}/> */}
   </QueryClientProvider>
 
   </React.StrictMode>

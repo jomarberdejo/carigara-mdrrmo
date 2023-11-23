@@ -5,11 +5,20 @@ import ReactApexChart from 'react-apexcharts';
 import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
+import { useAuth } from '../../context/AuthContext';
+
 
 
 const PieChart = () => {
+  const {token} = useAuth()
   const fetchReports = async() => {
-    const response = await axios.get('http://localhost:4000/api/dashboard/piechart')
+    const response = await axios.get('http://localhost:4000/api/dashboard/piechart',
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+     }
+    )
     const data = await response.data
     return data
   }
@@ -19,7 +28,7 @@ const PieChart = () => {
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return  null
   }
 
   if (error) {
@@ -27,7 +36,7 @@ const PieChart = () => {
   }
 
 
-  const { series, labels } = data;
+  const { series, labels } = data ? data : [];
 
   const getColorForSeverity = (severity) => {
     switch (severity.toLowerCase()) {
@@ -62,7 +71,7 @@ const PieChart = () => {
   
 
   return (
-    <div className= {`w-full  ${data?.series?.length === 0 ? "hidden" : "block"} col-span-1`}>
+    <div className= {`w-full bg-white  ${data?.series?.length === 0 ? "hidden" : "block"} col-span-1`}>
       <Toolbar>
         <Typography variant="h6">Reported Incidents Severity</Typography>
       </Toolbar>

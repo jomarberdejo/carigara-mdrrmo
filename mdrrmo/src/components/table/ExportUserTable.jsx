@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 import {
   useQuery,
 } from '@tanstack/react-query';
 import axios from 'axios'
+import {useAuth} from '../../context/AuthContext'
 import {
   MaterialReactTable,
   createMRTColumnHelper,
@@ -16,12 +19,11 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
-import { useNavigate } from 'react-router-dom';
-import { useMemo } from 'react';
+
 
 
 const ExportUserTable = () => {
-
+  const {token} = useAuth()
   const columnHelper = createMRTColumnHelper();
 
 
@@ -53,7 +55,7 @@ const columns = useMemo( () => [
         <Avatar
           alt= {row.original.firstname.toUpperCase()}
           height={30}
-          src= {row?.original.firstname || null}
+          src= {row?.original.firstname}
           sx={{ backgroundColor: '#EE4B2B' }} 
           loading="lazy"
           style={{ borderRadius: '50%' }}
@@ -95,7 +97,13 @@ const columns = useMemo( () => [
 
   const navigate = useNavigate();
   const fetchUsers = async () => {
-    const result = await axios.get('http://localhost:4000/api/users/');
+    const result = await axios.get('http://localhost:4000/api/users/',
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+    );
     const data = await result.data;
      
      const sortedUsers = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));

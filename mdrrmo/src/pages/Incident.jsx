@@ -16,13 +16,22 @@ import LocationOn from '@mui/icons-material/LocationOn';
 import WarningIcon from '@mui/icons-material/Warning';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import { useAuth } from '../context/AuthContext';
+import LoadingItem from '../utils/LoadingItem';
 
  function Incident() {
   const { id } = useParams()
   const navigate = useNavigate()
-  console.log(id)
+  const {token} = useAuth();
+
   const fetchSingleIncident = async () => {
-    const result = await axios.get(`http://localhost:4000/api/reports/${Number(id)}`)
+    const result = await axios.get(`http://localhost:4000/api/reports/${Number(id)}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    )
     const data = await result.data[0]
     return data
   }
@@ -34,8 +43,9 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
   
   const imageUrl = data?.file_path ?  `http://localhost:4000/${data?.file_path}` : null
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  
+  if (isLoading ) {
+    return  null  
   }
 
 
@@ -46,12 +56,12 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
     <Container>
       <Divider sx={{ margin: 1}}>
         <Typography variant='h5'>
-          Incident Reported
+          Incident Report
         </Typography>
       </Divider>
     
       <Card sx={{ maxWidth: 700 }} className='block mx-auto' >
-        <Box className= 'flex justify-between items-center'>
+        <Box className= 'flex sm:flex-row justify-between items-start sm:items-center  flex-col'>
         <CardHeader
         sx={{cursor: 'pointer' }}
         onClick= {()=> navigate(`/user/${data?.user_id}`)}
@@ -76,17 +86,25 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
            
        
         </Box>
-    
-        {
-          imageUrl !== null && (
+        { imageUrl !== null && imageUrl.includes('mp4') ? (
+            <CardMedia
+              component="video"
+              controls
+              height="194"
+              src={imageUrl}
+              alt={`Video`}
+            />
+          ) : imageUrl.includes('img') ? (
             <CardMedia
               component="img"
               height="194"
               image={imageUrl}
-              alt={imageUrl}
+              alt={`Image`}
             />
-          )
-        }
+          ) : null}
+
+        
+         
 
         <CardContent>
 

@@ -1,6 +1,4 @@
 
-
-
 import {useEffect, useState} from 'react';
 import { useNavigate, useLocation} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext'
@@ -18,9 +16,8 @@ import MenuItem from '@mui/material/MenuItem';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import HomeIcon from '@mui/icons-material/Home';
-
-import Link from '@mui/material/Link';
-
+import { Container } from '@mui/material';
+import logo from '../assets/images/mdrrmo-logo.png'
 
 
 
@@ -111,11 +108,16 @@ const settings = [
         <Toolbar
         className = "bg-bkg text-content h-[65px]"
         >
-          <Typography
-          
-          variant="h6" sx= {{fontWeight: 'medium'}} noWrap component="h1">
-             MDRRMO CARIGARA
-          </Typography>
+            <div className='flex items-center'>
+            <Avatar src={logo} alt='MDRRMO CARIGARA'/>
+              <Typography variant='h6'   sx= {{marginLeft: 2}}>
+               MDRRMO CARIGARA
+
+              </Typography>
+            </div>
+             
+             
+       
           
           <Box 
           className= "ml-auto bg-bkg text-content"
@@ -168,7 +170,10 @@ const settings = [
         </Toolbar>
       </AppBar>
       <Box sx= {{marginTop: '100px'}}>
-      {children}
+        <Container> 
+        {children}
+        </Container>
+ 
       </Box>
                 
       {/* Footer

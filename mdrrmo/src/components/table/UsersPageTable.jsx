@@ -37,10 +37,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { locationOptions } from '../../utils/locationOptions';
+import { useAuth } from '../../context/AuthContext';
 
 const UsersTable = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient();
+  const {token} = useAuth()
   const firstnameRef = useRef();
   const lastnameRef = useRef();
   const ageRef = useRef();
@@ -48,7 +50,7 @@ const UsersTable = () => {
   const emailRef = useRef();
   const roleRef = useRef();
   const passwordRef = useRef()
-
+  const confirmPasswordRef = useRef()
   const columns = useMemo(
     () => [
 
@@ -224,6 +226,7 @@ const UsersTable = () => {
         email: emailRef.current.value,
         role: roleRef.current.value,
         password: passwordRef.current.value,
+        confirmPassword: confirmPasswordRef.current.value,
       },
       table,
     }),
@@ -290,6 +293,7 @@ const UsersTable = () => {
             inputRef={emailRef}
           />
 
+<Tooltip  title="Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)" placement="top-end">
           <TextField
             id="password"
             label="Password"
@@ -297,7 +301,16 @@ const UsersTable = () => {
             variant="outlined"
             inputRef={passwordRef}
           />
-
+          </Tooltip>
+          <Tooltip  title="Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)" placement="top-end">
+<TextField
+            id="confirm-password"
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            inputRef={confirmPasswordRef}
+          />
+   </Tooltip>
           <Typography variant='body1' sx={{ color: 'gray' }}>Role (User / Admin)*</Typography>
           <FormControl>
 
@@ -378,7 +391,13 @@ const UsersTable = () => {
     return useMutation({
       mutationFn: async ({ values, table }) => {
         try {
-          const result = await axios.post('http://localhost:4000/api/users/', values);
+          const result = await axios.post('http://localhost:4000/api/users/', values,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+          );
           const data = result.data;
 
           queryClient.invalidateQueries(['users']);
@@ -412,7 +431,13 @@ const UsersTable = () => {
     return useQuery({
       queryKey: ['users'],
       queryFn: async () => {
-        const result = await axios.get('http://localhost:4000/api/users/');
+        const result = await axios.get('http://localhost:4000/api/users/',
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+        );
         const data = await result.data;
         return data;
       },
@@ -427,7 +452,13 @@ const UsersTable = () => {
 
 
         try {
-          const result = await axios.patch(`http://localhost:4000/api/users/${values.user_id}`, values)
+          const result = await axios.patch(`http://localhost:4000/api/users/${values.user_id}`, values,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+          )
           const data = await result.data
 
           queryClient.invalidateQueries(['users'])
@@ -459,21 +490,42 @@ const UsersTable = () => {
 
   //DELETE hook (delete user in api)
   function useDeleteUser() {
-
+     
     return useMutation({
       mutationFn: async (user_id) => {
-        console.log(user_id)
-        const result = await axios.delete(`http://localhost:4000/api/users/${user_id}`)
+      try{
+        const result = await axios.delete(`http://localhost:4000/api/users/${user_id}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
         const data = await result.data;
-        console.log(data)
+
+        toast.success(data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: 'green',
+            color: 'white',
+          },
+        });
+       
+      
+ 
         queryClient.invalidateQueries(['users'])
-      },
-
-    });
-  }
-
-
-
+      }
+catch (error) {
+      toast.error(`Error updating reported user:  ${error.response.data.error}`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+        style: {
+          backgroundColor: '#2f2d2d',
+          color: 'white',
+        },
+      });
+    }
+      }})}
 
 
 

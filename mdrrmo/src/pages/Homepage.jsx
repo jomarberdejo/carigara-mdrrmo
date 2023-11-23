@@ -1,4 +1,5 @@
 import {useState, useRef} from 'react'
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { locationOptions } from '../utils/locationOptions';
 import axios from 'axios';
@@ -32,26 +33,41 @@ import LocationOn from '@mui/icons-material/LocationOn';
 import DeleteIcon from '@mui/icons-material/Delete';
 import  IconButton  from '@mui/material/IconButton';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import { Tooltip } from '@mui/material';
+
+import LoadingItem from '../utils/LoadingItem';
+
 
 
 
 const Homepage = () => {
-
- 
+  const [pending, setPending] = useState()
+  
   const [isModalOpen, setModalOpen] = useState(false);
   const severityRef = useRef(null);
   const descriptionRef = useRef(null);
   const locationRef = useRef(null);
   const statusRef = useRef(null);
   const filepathRef = useRef(null);
+  const navigate = useNavigate()
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   const fetchReports = async () => {
-    const result = await axios.get(`http://localhost:4000/api/reports/user/${user.user_id}`);
+    const result = await axios.get(`http://localhost:4000/api/reports/user/${user.user_id}`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+    );
     const data = await result.data;
     const sortedIncidents = data.sort((a, b) => new Date(b.reported_at) - new Date(a.reported_at));
-    return sortedIncidents;
+    return sortedIncidents.map(report => ({
+      ...report,
+      mediaType: report.file_path ? (report.file_path.includes('.mp4') ? 'video' : 'image') : null,
+    }));
+   
   };
 
   const { data, isLoading } = useQuery({
@@ -59,11 +75,13 @@ const Homepage = () => {
     queryFn: fetchReports,
   });
 
-  if (isLoading) {
-    return <div>Loading</div>;
+  if (isLoading){
+    return <LoadingItem/>
+    
   }
 
-  const imageUrlArray = data.map((path) => (path?.file_path ? `http://localhost:4000/${path.file_path}` : null));
+
+  const imageUrlArray = data?.map((path) => (path?.file_path ? `http://localhost:4000/${path.file_path}` : null));
 
   const onClose = () => {
     setModalOpen(false);
@@ -73,7 +91,13 @@ const Homepage = () => {
   const handleDeleteReport = async(id) => {
     if (confirm("Are you sure you want to delete this report?")=== true){
       try{
-        const result = await axios.delete(`http://localhost:4000/api/reports/${id}`)
+        const result = await axios.delete(`http://localhost:4000/api/reports/${id}`, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+        )
         const data = await result.data;
         toast.success(data.message, {
           position: toast.POSITION.RIGHT,
@@ -96,13 +120,13 @@ const Homepage = () => {
           },
         });
       }
-      
+     
     }
   }
  
 
   const handleAddReport = async () => {
-    
+    setPending(true)
     try {
    
       const file = filepathRef.current.files[0]
@@ -129,6 +153,7 @@ const Homepage = () => {
       const result = await axios.post('http://localhost:4000/api/reports/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
         },
       });
       const responseData = await result.data;
@@ -155,6 +180,9 @@ const Homepage = () => {
         },
       });
     }
+    finally{
+      setPending(false)
+    }
   };
 
   return (
@@ -170,15 +198,14 @@ const Homepage = () => {
             
             
             <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
+              sx={{ pt: 1, display: 'flex', flexDirection: 'column'}}
+              className='flex sm:flex-col md:flex-row  gap-4'
+              
             >
               <Button variant="contained" 
                onClick={() => setModalOpen(true)}
-               > <AddIcon/> Report Incident or Concern</Button>
-              <Button variant="outlined">View Upcoming Events</Button>
+               > <AddIcon/> Report Incident</Button>
+              <Button variant="outlined" onClick= {()=> navigate('/eventlist')}>View Events</Button>
             </Stack>
 
             <Typography
@@ -193,14 +220,14 @@ const Homepage = () => {
             </Typography>
           </Container>
         </Box>
-      <Container sx={{ py: 8 }} maxWidth="md">
+      <Container sx= {{display: "grid", placeItems:"center"}}  >
+   
       {data?.length > 0 ? (
-        <Masonry columns={{md:1,lg:2}} sx= {{margin: 'auto'}} spacing={4}>
-        
+        <Masonry columns={{sm: 1,md:2, lg:3}} spacing={4}>
            {data?.map((report, index) => (
               <div key={report.report_id}>
-                   <Card sx={{ maxWidth: 700 }} className='block mx-auto' >
-        <Box className= 'flex justify-between  flex-col items-start relative'>
+                   <Card sx= {{maxWidth: 345}}>
+       
         <CardHeader
         
        
@@ -212,11 +239,15 @@ const Homepage = () => {
             </Avatar>
           }
           action={
+            <Tooltip title= "Delete this report" placement='top-end'>
+
+            
             <IconButton
             onClick={()=> handleDeleteReport(report?.report_id)}
-            sx= {{position: 'absolute', right: '10px', top: '20px', color: 'red'}} aria-label="settings">
+            sx= {{color: 'red'}} aria-label="settings">
               <DeleteIcon />
             </IconButton>
+            </Tooltip>
           }
           title= {`${report?.firstname} ${report?.lastname}`}
           subheader={report?.reported_at}
@@ -233,17 +264,25 @@ const Homepage = () => {
 
            
        
-        </Box>
+      
     
        
-        {imageUrlArray[index] !== null && (
-          <CardMedia
-            component="img"
-            height="194"
-            image={imageUrlArray[index]}
-            alt={imageUrlArray[index]}
-          />
-        )}
+          {report.mediaType === 'video' ? (
+            <CardMedia
+              component="video"
+              controls
+              height="194"
+              src={imageUrlArray[index]}
+              alt={`Video ${index}`}
+            />
+          ) : report.mediaType === 'image' ? (
+            <CardMedia
+              component="img"
+              height="194"
+              image={imageUrlArray[index]}
+              alt={`Image ${index}`}
+            />
+          ) : null}
 
         
 
@@ -251,15 +290,15 @@ const Homepage = () => {
 
           <Divider sx= {{marginBottom: 2}}/>
           <Typography aria-label="status" className='text-gray-600 flex items-center gap-1 text-base'  sx= {{marginBottom: 1}} >
-            <WarningIcon className='text-green-700'/>Severity: {report?.severity}
+            <WarningIcon className='text-gray-700'/>Severity: {report?.severity}
               </Typography>
               <Typography aria-label="location" className='text-gray-600 flex items-center gap-1 text-base' sx= {{marginBottom: 1}} > 
-            <LocationOn className='text-green-700'/>Location: {report?.location}
+            <LocationOn className='text-gray-700'/>Location: {report?.location}
              </Typography> 
 
          
             <Typography aria-label="description"className=' text-gray-600 flex items-center gap-1 text-base'  sx= {{marginBottom: 1}} > 
-             <CheckCircleIcon className='text-green-700'/>Description: {report?.description}
+             <CheckCircleIcon className='text-gray-700'/>Description: {report?.description}
              </Typography> 
              
 
@@ -356,7 +395,7 @@ const Homepage = () => {
           <Button variant="outlined" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="contained" onClick={handleAddReport}>
+          <Button variant="contained" disabled = {pending} onClick={handleAddReport}>
             <CheckIcon />Done
           </Button>
         </DialogActions>

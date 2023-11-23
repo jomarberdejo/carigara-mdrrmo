@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,13 +15,14 @@ import logo from '../assets/images/mdrrmo-logo.png';
 import { toast } from 'react-toastify';
 
 
-const SignInForm = () => {
 
+const SignInForm = () => {
+  const [pending, setPending] = useState(false)
   const { emailRef, passwordRef, handleSignIn } = useSignIn();
 
   const handleSubmit = async(event) => {
     event.preventDefault(); 
-
+    setPending(true)
     try {
       const credential = await handleSignIn();
       toast.success(`Logged in as: ${credential.user.firstname} ${credential.user.lastname}`, {
@@ -42,7 +43,9 @@ const SignInForm = () => {
         },
       });
     }
-   
+    finally{
+      setPending(false)
+    }
    
     
   };
@@ -110,6 +113,7 @@ const SignInForm = () => {
             <Button
               type="submit"
               fullWidth
+              disabled = {pending}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
@@ -118,7 +122,7 @@ const SignInForm = () => {
             <Grid container justifyContent="center">
               <Grid item>
                 <Link to="/signup">
-                  <Typography variant="h6">
+                  <Typography variant="body2">
                     Don't have an account? <span className="underline underline-offset-4">Sign Up</span>
                   </Typography>
                 </Link>

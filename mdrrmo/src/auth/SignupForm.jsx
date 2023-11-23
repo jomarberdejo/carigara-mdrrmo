@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -11,12 +11,14 @@ import MenuItem from '@mui/material/MenuItem'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import  Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
 import useSignUp from '../hooks/useSignUp';
 import { toast } from 'react-toastify';
 import {locationOptions} from '../utils/locationOptions'
-const SignUpForm = () => {
 
+const SignUpForm = () => {
+  const [pending, setPending] = useState(false)
   const {
     firstNameRef,
     lastNameRef,
@@ -24,6 +26,7 @@ const SignUpForm = () => {
     locationRef,
     emailRef,
     passwordRef,
+    confirmPasswordRef,
     handleSignUp,
   } = useSignUp();
 
@@ -33,6 +36,7 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setPending(true)
     try {
       const credential = await handleSignUp();
       toast.success(`Logged in as: ${credential.user.firstname} ${credential.user.lastname}`, {
@@ -53,18 +57,23 @@ const SignUpForm = () => {
         },
       });
     }
+    finally{
+      setPending(false)
+    }
+  
   };
 
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs"> 
       <Box
         sx={{
           justifyContent: 'center',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          height: '100vh',
+          minHeight: '100svh',
+          padding: "15px",
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -140,7 +149,8 @@ const SignUpForm = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+            <Tooltip  title="Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)" placement="top-end">
+            <TextField
                 required
                 fullWidth
                 name="password"
@@ -148,8 +158,26 @@ const SignUpForm = () => {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+               
                 inputRef={passwordRef}
               />
+          </Tooltip>
+              
+            </Grid>
+
+            <Grid item xs={12}>
+            <Tooltip  title="Make sure both passwords match." placement="top-end">
+              <TextField
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="confirmPassword"
+                inputRef={confirmPasswordRef}
+              />
+              </Tooltip>
             </Grid>
             {/* <Grid item xs={12}>
             <Typography variant='body1' sx={{ color: 'gray'}}>Role (User / Admin)*</Typography>
@@ -173,14 +201,16 @@ const SignUpForm = () => {
             type="submit"
             fullWidth
             variant="contained"
+            disabled = {pending}
             sx={{ mt: 3, mb: 2 }}
           >
             Sign Up
+         
           </Button>
           <Grid container justifyContent="center">
             <Grid item>
               <Link to="/">
-                <Typography variant="h6">
+                <Typography variant="body2">
                   Already have an account? <span className="underline underline-offset-4">Sign In</span>
                 </Typography>
               </Link>

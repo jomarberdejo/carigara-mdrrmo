@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
+import {useAuth} from '../../context/AuthContext'
 import {
   MaterialReactTable,
   createMRTColumnHelper,
@@ -13,16 +16,22 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
-import { useNavigate } from 'react-router-dom';
 import  Avatar  from '@mui/material/Avatar';
-import { useMemo } from 'react';
 
 
 
 const ExportIncidentTable = () => {
   const navigate = useNavigate()
+  const {token} = useAuth()
   const fetchReports = async () => {
-    const result = await axios.get('http://localhost:4000/api/reports/');
+    const result = await axios.get('http://localhost:4000/api/reports/', 
+     {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+     }
+    );
+   
     const data = await result.data;
     const sortedIncidents = data.sort((a, b) => new Date(b.reported_at) - new Date(a.reported_at));
 

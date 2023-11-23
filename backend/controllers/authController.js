@@ -55,11 +55,11 @@ const signInUser = async (req, res) => {
 
 // signup a user
 const signUpUser = async (req, res) => {
-  const { firstname, lastname, age, location,  email, password, role} = req.body;
-  console.log(req.body)
+  const { firstname, lastname, age, location,  email, password, confirmPassword, role} = req.body;
+
   try {
     // validation
-    if (!firstname || !lastname || !age || !location || !role || !email || !password) {
+    if (!firstname || !lastname || !age || !location || !role || !email || !password || !confirmPassword) {
       return res.status(400).json({ error: 'All fields must be filled' });
     }
     if (!validator.isInt(age.toString(), {min: 0})) {
@@ -72,6 +72,11 @@ const signUpUser = async (req, res) => {
     if (!validator.isStrongPassword(password)) {
       return res.status(400).json({ error: 'Password not strong enough' });
     }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: 'Password does not match' });
+    }
+    
 
     const checkQuery = 'SELECT * FROM users WHERE email = ?';
     connection.query(checkQuery, [email], async (error, results) => {

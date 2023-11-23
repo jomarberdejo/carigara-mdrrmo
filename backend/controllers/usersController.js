@@ -61,7 +61,7 @@ const getAllUsers = (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const { firstname, lastname, age, location, email, password, role } = req.body;
+    const { firstname, lastname, age, location, email, password, confirmPassword, role } = req.body;
 
     try {
         if (!firstname || !lastname || !age || !location || !email || !password || !role) {
@@ -76,6 +76,9 @@ const createUser = async (req, res) => {
           }
           if (!validator.isStrongPassword(password)) {
             return res.status(400).json({ error: 'Password not strong enough' });
+          }
+          if(password !== confirmPassword){
+            return res.status(400).json({ error: 'Password does not match!' });
           }
       
         const existingUser = await getUserByEmail(email);

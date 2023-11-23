@@ -19,15 +19,25 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import WarningIcon from '@mui/icons-material/Warning';
 import LocationOn from '@mui/icons-material/LocationOn';
 import Masonry from '@mui/lab/Masonry';
+import { useAuth } from '../context/AuthContext';
+import LoadingItem from '../utils/LoadingItem';
 
 
 
 
 const User = () => {
   const { id } = useParams();
+  const {token} = useAuth()
 
   const fetchSingleUser = async () => {
-    const result = await axios.get(`http://localhost:4000/api/users/${Number(id)}`);
+    const result = await axios.get(`http://localhost:4000/api/users/${Number(id)}`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+    
+    );
     const data = await result.data[0];
 
     return data;
@@ -41,9 +51,18 @@ const User = () => {
 
 
   const fetchUserReports = async () => {
-    const result = await axios.get(`http://localhost:4000/api/reports/user/${Number(id)}`);
+    const result = await axios.get(`http://localhost:4000/api/reports/user/${Number(id)}`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+    );
     const data = await result.data;
-    return data;
+    return data.map(report => ({
+      ...report,
+      mediaType: report.file_path ? (report.file_path.includes('.mp4') ? 'video' : 'image') : null,
+    }));
   };
 
   const { data: userReports, isLoading: reportsIsLoading, isError: reportsIsError } = useQuery({
@@ -52,14 +71,16 @@ const User = () => {
   });
 
   if (userIsLoading || reportsIsLoading) {
-    return <div>Loading...</div>;
+  
+    return  null  
+
   }
 
   if (userIsError || !userData || reportsIsError) {
     return <div>Error loading user data</div>;
   }
 
-  const imageUrlArray = userReports.map((path) => (path?.file_path ? `http://localhost:4000/${path.file_path}` : null));
+  const imageUrlArray = userReports?.map((path) => (path?.file_path ? `http://localhost:4000/${path.file_path}` : null));
 
   return (
     <Container>
@@ -109,7 +130,7 @@ const User = () => {
        
         <Container sx={{ py: 2 }}>
            <Divider sx={{ marginBottom:8, marginTop: 8 }}>
-        <Typography variant="h6"> {`${userData.firstname} ${userData.lastname}`}`s Reported Incidents</Typography>
+        <Typography variant="h6" > {`${userData.firstname} ${userData.lastname}`}`s Reports</Typography>
         </Divider>
           
           <Masonry  columns={{ sm:1, md:2}}  spacing={2}>
@@ -143,14 +164,22 @@ const User = () => {
         </Box>
     
        
-        {imageUrlArray[index] !== null && (
-          <CardMedia
-            component="img"
-            height="194"
-            image={imageUrlArray[index]}
-            alt={imageUrlArray[index]}
-          />
-        )}
+        {report.mediaType === 'video' ? (
+              <CardMedia
+                component="video"
+                controls
+                height="194"
+                src={imageUrlArray[index]}
+                alt={`Video ${index}`}
+              />
+            ) : report.mediaType === 'image' ? (
+              <CardMedia
+                component="img"
+                height="194"
+                image={imageUrlArray[index]}
+                alt={`Image ${index}`}
+              />
+            ) : null}
 
         
 

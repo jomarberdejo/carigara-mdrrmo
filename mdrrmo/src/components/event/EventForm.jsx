@@ -17,20 +17,22 @@ import Stack from '@mui/material/Stack'
 import AddIcon from '@mui/icons-material/Add'
 import CheckIcon from '@mui/icons-material/Check'
 import {useAuth} from '../../context/AuthContext'
-import { Typography } from '@mui/material'
+
+import EventList from './EventList'
 
 const EventForm = () => {
+  const [pending, setPending] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const eventTypeRef = useRef()
     
     const eventLocationRef = useRef()
     const eventDescriptionRef = useRef()
-    const eventOrganizerRef = useRef()
     const startDateRef = useRef()
     const endDateRef = useRef()
+    const eventOrganizerRef = useRef()
     const eventLinkRef = useRef()
 
-    const {user} = useAuth()
+    const {user, token} = useAuth()
 
     const queryClient = useQueryClient()
 
@@ -42,24 +44,10 @@ const EventForm = () => {
         setIsModalOpen(false)
     }
 
-    const getAllEvents = async() => {
-      const response = await axios.get('http://localhost:4000/api/events')
-      const data = await response.data
-      return data
-    }
-
-    const {data, isLoading} = useQuery({
-      queryKey: ['events'],
-      queryFn: getAllEvents,
-    })
-
-    if (isLoading) {
-      return <div>Loading</div>
-    }
-
-    console.log(data)
+   
 
     const handleAddEvent = async () => {
+      setPending(true)
       try{  
         const eventData = {
           type: eventTypeRef.current.value,
@@ -67,11 +55,16 @@ const EventForm = () => {
           description: eventDescriptionRef.current.value,
           start_date: startDateRef.current.value,
           end_date: endDateRef.current.value,
+          organizer: eventOrganizerRef.current.value,
           link: eventLinkRef.current.value,
           user_id: user.user_id,
         }
         console.log(eventData)
-        const response = await axios.post('http://localhost:4000/api/events/', eventData )
+        const response = await axios.post('http://localhost:4000/api/events/', eventData, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        } )
         const data = await response.data
         
 
@@ -83,7 +76,9 @@ const EventForm = () => {
             color: 'white',
           },
         });
+        setIsModalOpen(false)
         queryClient.invalidateQueries(['events'])
+       
         return data
       }
       catch(error){
@@ -98,6 +93,9 @@ const EventForm = () => {
    
 
     }
+    finally{
+      setPending(false)
+    }
   }
 
   return (
@@ -106,32 +104,25 @@ const EventForm = () => {
 
 
 
-    <Container maxWidth= "md">
+    <Container maxWidth= "lg">
     
        
            
     <Stack
-              sx={{ pt: 4 }}
+              sx={{ pt: 1   }}
               direction="row"
               spacing={2}
-              justifyContent="center"
+              justifyContent= "end"
+             
             >
               <Button variant="contained" 
+               disabled= {pending}
                onClick={() => setIsModalOpen(true)}
                > <AddIcon/> Post Event</Button>
         
             </Stack>
-            {
-          data?.map(event=> (
-            <div key={event.event_id}>
-               <Typography > {event?.type}  </Typography>
-               <Typography > {event?.schedule}  </Typography>
-               <Typography > {event?.status}  </Typography>
-               <Typography > {event?.start_date}  </Typography>
-               {/* <Typography > {event?.end_date}  </Typography> */}
-            </div>
-          ))
-        }
+         
+          <EventList/>
      
     <Dialog open= {isModalOpen} onClose={onClose} >
     <DialogTitle variant="h5">Post Event</DialogTitle>

@@ -239,8 +239,9 @@ const updateReport = (req, res) => {
 };
 
 const updateReportStatus = (req, res) => {
+    const {status} = req.body
     const { id } = req.params;
-    const status = "Resolved"
+   
     try{
    
         

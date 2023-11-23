@@ -2,14 +2,16 @@
 const express = require('express')
 const router = express.Router();
 
-const { createEvent, updateEvent, deleteEvent,getOneEvent , getAllEvents } = require('../controllers/eventsController');
+const { createEvent, deleteEvent , getAllEvents } = require('../controllers/eventsController');
+const requireAuth = require('../middleware/requireAuth')
 
+//require auth for all routes
+router.use(requireAuth)
 
 //GET ALL events
 router.get('/' , getAllEvents)
 
-//GET SINGLE events
-router.get('/:id' , getOneEvent)
+
 
 //ADD NEW events
 router.post('/' , createEvent)
@@ -18,8 +20,8 @@ router.post('/' , createEvent)
 router.delete('/:id' , deleteEvent)
 
 
-//UPDATE events
-router.patch('/:id' , updateEvent)
+// //UPDATE events
+// router.patch('/:id' , updateEvent)
 
 
 

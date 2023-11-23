@@ -36,7 +36,7 @@
 
   const IncidentsTable = () => {
     const queryClient = useQueryClient()
-    const {user} = useAuth()    
+    const {user, token} = useAuth()    
    
     const severityRef = useRef('');
     const descriptionRef = useRef();
@@ -153,7 +153,8 @@
             const result = await axios.post('http://localhost:4000/api/reports/', formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
-              },
+                  'Authorization': `Bearer ${token}`
+              },  
             });
             const data = await result.data;
   
@@ -196,7 +197,13 @@
     }
   
     const getAllIncidents = async () => {
-      const result = await axios.get('http://localhost:4000/api/reports/')
+      const result = await axios.get('http://localhost:4000/api/reports/', 
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+       }
+      )
       const data = result.data
   
       return data
@@ -218,7 +225,13 @@
            
         
         try {
-          const result = await axios.patch(`http://localhost:4000/api/reports/${values.report_id}`, values)
+          const result = await axios.patch(`http://localhost:4000/api/reports/${values.report_id}`, values,
+            {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            }
+          )
           const data = await result.data
       
   
@@ -254,28 +267,63 @@
      
       return useMutation({
         mutationFn: async (reportId) => {
-          console.log(reportId)
-          const result = await axios.delete(`http://localhost:4000/api/reports/${reportId}`)
+        try{
+          const result = await axios.delete(`http://localhost:4000/api/reports/${reportId}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
           const data = await result.data;
+
+          toast.success(data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            style: {
+              backgroundColor: 'green',
+              color: 'white',
+            },
+          });
+         
+        
    
           queryClient.invalidateQueries(['incidents'])
-        },
-  
-      });
-    }
+        }
+catch (error) {
+        toast.error(`Error updating reported incident:  ${error.response.data.error}`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          style: {
+            backgroundColor: '#2f2d2d',
+            color: 'white',
+          },
+        });
+      }
+        }})}
+    
   
 
     const handleResolved = async(report) => {
+      
+      if (report.status === 'Resolved'){
+        toast.info('Nothing to changed, status already resolved.', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+          
+        });
+        return
+      }
+
+      
        try{
-        if (report.status === 'Resolved'){
-          toast.info('Nothing to changed, status already resolved.', {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-            
-          });
-          return
+        const values = {
+          status: "Resolved"
         }
-        const result = await axios.patch(`http://localhost:4000/api/reports/status/${report.report_id}`)
+        const result = await axios.patch(`http://localhost:4000/api/reports/status/${report.report_id}`, values,  {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+         })
         const data = await result.data
         toast.success(data.message, {
           position: toast.POSITION.TOP_RIGHT,
