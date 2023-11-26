@@ -1,4 +1,6 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
+import io from 'socket.io-client';
+import {toast} from 'react-toastify'
 import {NavLink, useNavigate, useLocation} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext'
 import { useGetUser } from '../hooks/useGetUser';
@@ -26,7 +28,6 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import Groups3Icon from '@mui/icons-material/Groups3';
 import EventNoteIcon from '@mui/icons-material/EventNote';
-import { Container } from '@mui/material';
 const drawerWidth = 260;
 const settings = [
   {
@@ -47,9 +48,46 @@ const settings = [
 
 function AdminLayout({children}) {
   const {fetchUser} = useGetUser()
-  const navigate = useNavigate()
+  
   const location = useLocation();
   const [currUserName, setCurrUserName] = useState('')
+
+
+  const socketRef = useRef();
+  const navigate= useNavigate()
+
+  useEffect(() => {
+    console.log('useEffect is running');
+
+   
+    socketRef.current = io('http://localhost:4000');
+
+  
+    socketRef.current.on('notification', ({message, severity}) => {
+    
+      toast.success(`
+      ${message}, (${severity})
+      Check It Now!
+      `, {
+        position: toast.POSITION.RIGHT,
+        autoClose: false,
+        style: {
+          backgroundColor: 'orange',
+          color: 'white',
+        },
+        onClick: () => {
+          
+          navigate('/incidents');
+        },
+      
+      });
+    });
+
+    return () => {
+      
+      socketRef.current.disconnect();
+    };
+  }, []); 
 
   const {logoutUser, user} = useAuth();
  
@@ -106,7 +144,7 @@ function AdminLayout({children}) {
           variant="h6"
           
           >
-             MDRRMO LOGO
+             MDRRMO
           </Typography>        
       </Toolbar>
 

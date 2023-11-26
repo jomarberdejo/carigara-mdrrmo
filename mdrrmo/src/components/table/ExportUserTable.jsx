@@ -76,6 +76,10 @@ const columns = useMemo( () => [
     header: 'Age',
     size: 30,
   }),
+  columnHelper.accessor('contact', {
+    header: 'Contact Number',
+    size: 50,
+  }),
   columnHelper.accessor('location', {
     header: 'Location',
     size: 100,

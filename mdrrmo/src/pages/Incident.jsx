@@ -17,12 +17,12 @@ import WarningIcon from '@mui/icons-material/Warning';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import { useAuth } from '../context/AuthContext';
-import LoadingItem from '../utils/LoadingItem';
 
- function Incident() {
+
+function Incident() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const {token} = useAuth();
+  const { token } = useAuth();
 
   const fetchSingleIncident = async () => {
     const result = await axios.get(`http://localhost:4000/api/reports/${Number(id)}`,
@@ -40,53 +40,55 @@ import LoadingItem from '../utils/LoadingItem';
     queryKey: ['singleIncident'],
     queryFn: fetchSingleIncident,
   })
-  
-  const imageUrl = data?.file_path ?  `http://localhost:4000/${data?.file_path}` : null
 
-  
-  if (isLoading ) {
-    return  null  
+  const imageUrl = data?.file_path ? `${data?.file_path}` : null
+
+
+  if (isLoading) {
+    return null
   }
 
 
 
-  
+
+
 
   return (
     <Container>
-      <Divider sx={{ margin: 1}}>
+      <Divider sx={{ margin: 1 }}>
         <Typography variant='h5'>
           Incident Report
         </Typography>
       </Divider>
-    
-      <Card sx={{ maxWidth: 700 }} className='block mx-auto' >
-        <Box className= 'flex sm:flex-row justify-between items-start sm:items-center  flex-col'>
-        <CardHeader
-        sx={{cursor: 'pointer' }}
-        onClick= {()=> navigate(`/user/${data?.user_id}`)}
-        
-          avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="user-profile"
-            >
-              {data?.firstname[0]}
-            </Avatar>
-          }
-          title= {`${data?.firstname} ${data?.lastname}`}
-          subheader={data?.reported_at}
-        >
-            
-        </CardHeader>
 
-        
-        <Typography aria-label="status" className='text-red-600 flex items-center gap-1 px-4' variant='h6'>
-           <PendingActionsIcon/> Status: {data?.status}
+      <Card sx={{ maxWidth: "100%" }} className='block mx-auto' >
+        <Box className='flex sm:flex-row justify-between items-start sm:items-center  flex-col'>
+          <CardHeader
+            sx={{ cursor: 'pointer' }}
+            onClick={() => navigate(`/user/${data?.user_id}`)}
+
+            avatar={
+              <Avatar sx={{ bgcolor: red[500] }} aria-label="user-profile"
+              >
+                {data?.firstname[0]}
+              </Avatar>
+            }
+            title={`${data?.firstname} ${data?.lastname}`}
+            subheader={data?.reported_at}
+          >
+
+          </CardHeader>
+
+
+          <Typography aria-label="status" className='text-red-600 flex items-center gap-1 px-4 mb-2' variant='h6'>
+            <PendingActionsIcon /> Status: {data?.status}
           </Typography>
 
-           
-       
+
+
         </Box>
-        { imageUrl !== null && imageUrl.includes('mp4') ? (
+        {imageUrl !== null && (
+          imageUrl?.includes('mp4') ? (
             <CardMedia
               component="video"
               controls
@@ -94,35 +96,36 @@ import LoadingItem from '../utils/LoadingItem';
               src={imageUrl}
               alt={`Video`}
             />
-          ) : imageUrl.includes('img') ? (
+          ) : (
             <CardMedia
               component="img"
               height="194"
               image={imageUrl}
               alt={`Image`}
             />
-          ) : null}
+          )
+        )}
 
-        
-         
+
+
 
         <CardContent>
 
-          <Divider sx= {{marginBottom: 2}}/>
-          <Typography aria-label="status" className='text-gray-600 flex items-center gap-1 text-base'  sx= {{marginBottom: 1}} >
-            <WarningIcon className='text-green-700'/>Severity: {data?.severity}
-              </Typography>
-              <Typography aria-label="location" className='text-gray-600 flex items-center gap-1 text-base' sx= {{marginBottom: 1}} > 
-            <LocationOn className='text-green-700'/>Location: {data?.location}
-             </Typography> 
+          <Divider sx={{ marginBottom: 2 }} />
+          <Typography aria-label="status" className='text-gray-600 flex items-center gap-1 text-base' sx={{ marginBottom: 1 }} >
+            <WarningIcon className='text-green-700' />Severity: {data?.severity}
+          </Typography>
+          <Typography aria-label="location" className='text-gray-600 flex items-center gap-1 text-base' sx={{ marginBottom: 1 }} >
+            <LocationOn className='text-green-700' />Location: {data?.location}
+          </Typography>
 
-         
-            <Typography aria-label="description"className=' text-gray-600 flex items-center gap-1 text-base'  sx= {{marginBottom: 1}} > 
-             <CheckCircleIcon className='text-green-700'/>Description: {data?.description}
-             </Typography> 
-             
 
-         
+          <Typography aria-label="description" className=' text-gray-600 flex items-center gap-1 text-base' sx={{ marginBottom: 1 }} >
+            <CheckCircleIcon className='text-green-700' />Description: {data?.description}
+          </Typography>
+
+
+
         </CardContent>
 
 

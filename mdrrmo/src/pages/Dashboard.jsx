@@ -5,7 +5,10 @@ import Charts from '../components/charts/Charts'
 import ExportUserTable from '../components/table/ExportUserTable'
 import ExportIncidentTable from '../components/table/ExportIncidentTable'
 
+
+
 const Dashboard = () => {
+ 
   return (
     <>
       <main>

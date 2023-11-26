@@ -18,9 +18,10 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import WarningIcon from '@mui/icons-material/Warning';
 import LocationOn from '@mui/icons-material/LocationOn';
+import PhoneIcon from '@mui/icons-material/Phone';
 import Masonry from '@mui/lab/Masonry';
 import { useAuth } from '../context/AuthContext';
-import LoadingItem from '../utils/LoadingItem';
+
 
 
 
@@ -59,9 +60,9 @@ const User = () => {
     }
     );
     const data = await result.data;
-    return data.map(report => ({
+    return data?.map(report => ({
       ...report,
-      mediaType: report.file_path ? (report.file_path.includes('.mp4') ? 'video' : 'image') : null,
+      mediaType: report?.file_path ? (report?.file_path.includes('mp4') ? 'video' : 'image') : null,
     }));
   };
 
@@ -80,7 +81,7 @@ const User = () => {
     return <div>Error loading user data</div>;
   }
 
-  const imageUrlArray = userReports?.map((path) => (path?.file_path ? `http://localhost:4000/${path.file_path}` : null));
+  const imageUrlArray = userReports?.map((path) => (path?.file_path ? `${path.file_path}` : null));
 
   return (
     <Container>
@@ -121,12 +122,20 @@ const User = () => {
             <PersonPinCircleIcon className="text-green-700" />
             Location: {userData.location}
           </Typography>
+          <Typography
+            aria-label="contact"
+            className="text-gray-600 flex items-center gap-1 text-base"
+            sx={{ marginBottom: 1 }}
+          >
+            <PhoneIcon className="text-green-700" />
+            Contact: {userData.contact}
+          </Typography>
         </CardContent>
       </Card>
     
    
       
-      {userReports.length > 0 && (
+      {userReports?.length > 0 && (
        
         <Container sx={{ py: 2 }}>
            <Divider sx={{ marginBottom:8, marginTop: 8 }}>

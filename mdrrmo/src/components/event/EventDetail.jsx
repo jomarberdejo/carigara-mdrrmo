@@ -48,7 +48,7 @@ const EventDetail = ({events, title}) => {
     <Box sx={{ width: 'auto', minHeight: 250, margin: 'auto', }}>
       <Typography variant='h6' sx= {{marginBottom: 4}}>{title}</Typography>
    
-      <Masonry columns={{lg:3, sm:1}} spacing={2}>
+      <Masonry columns={{ sm:1, md: 2 ,lg:3, xl: 4}} spacing={2}>
         {events?.length > 0 ? events?.map((event, index) => (
           <Paper key={index}>
             <Accordion>
@@ -59,7 +59,7 @@ const EventDetail = ({events, title}) => {
              
               </AccordionSummary>
               
-              <AccordionDetails sx= {{display:'flex', flexDirection: 'column', gap: 2, color: "gray"}}>
+              <AccordionDetails sx= {{display:'flex', flexDirection: 'column', gap: 1, color: "gray"}}>
                
                 <Typography>Event Status: <span className='text-red-500'>{event.status.toUpperCase()}</span></Typography>
                 <Typography>Event Type: <span className='text-gray-700'> {event.type} </span></Typography>
@@ -67,9 +67,9 @@ const EventDetail = ({events, title}) => {
                 <Typography>Event Details: <span className='text-gray-700'> {event.description} </span></Typography>
                 <Typography>Event Organizer: <span className='text-gray-700'>  {event.organizer}</span></Typography>
                 
-                  {event.link && (
+                  {event.link ? (
                    <Typography>Additional Info:   <Link href= {event.link} target= '_blank'>{event.link}</Link></Typography> 
-                  )
+                  ) : null
                 }
                
               </AccordionDetails>

@@ -29,6 +29,7 @@ const ProfilePage = () => {
     firstname: '',
     lastname: '',
     age: '',
+    contact: '',
     role: '',
     location: '',
   })
@@ -69,6 +70,7 @@ const ProfilePage = () => {
       firstname: userData?.firstname,
       lastname: userData?.lastname,
       age: userData?.age,
+      contact: userData?.contact,
       role: userData?.role,
       location: userData?.location,
     })
@@ -78,7 +80,7 @@ const ProfilePage = () => {
     setModalOpen(false);
   };
   
-  const handleSave = async () => {  
+  const handleSave = async (e) => {  
     setPending(true)
     try {
       const result = await axios.patch(`http://localhost:4000/api/users/${userData?.user_id}`, formData, 
@@ -97,6 +99,7 @@ const ProfilePage = () => {
         firstname: formData.firstname,
         lastname: formData.lastname,
         age: formData.age,
+        contact: formData.contact,
         role: formData.role,
         location: formData.location,
       };
@@ -160,10 +163,10 @@ const ProfilePage = () => {
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
            {`${userData?.age}, ${userData?.role}`}
           </Typography>
-    
        
        
         <Typography variant="body1" className='text-gray-600'>Location: {userData?.location}</Typography>
+        <Typography variant="body1" className='text-gray-600'>Contact Number: {userData?.contact}</Typography>
         <Button
           variant="outlined"
           startIcon={<EditIcon />}
@@ -176,7 +179,7 @@ const ProfilePage = () => {
           Edit Profile
         </Button>
         <Modal open={isModalOpen} onClose={handleModalClose} className="fixed inset-0 flex items-center justify-center">
-          <Paper className="max-w-[450px] w-[90%] p-6">
+          <Paper className="max-w-[450px] w-[90%] p-6 h-[95%] overflow-auto">
             <Typography variant="h6" gutterBottom sx={{ marginBottom: 2 }}>
               Edit Profile
             </Typography>
@@ -205,7 +208,17 @@ const ProfilePage = () => {
               value={formData.age}
               onChange={(e) => setFormData({ ...formData, age: e.target.value })}
             />
-         
+           
+            
+            <TextField
+              label="Contact Number (en-PH)"
+              variant="outlined"
+              fullWidth
+              type='tel'
+              sx={{ marginBottom: 2 }}
+              value={formData.contact}
+              onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+            />
             
             <Typography variant='body1' sx={{ color: 'gray'}}>Role (User / Admin)*</Typography>
             <FormControl fullWidth  sx={{ marginBottom: 2 }}>
@@ -246,7 +259,7 @@ const ProfilePage = () => {
                   ))}
                 </Select>
               </FormControl> 
-            <Button variant="contained" onClick={handleSave} sx={{ marginBottom: 2, width: '100%' }}>
+            <Button type='submit' disabled= {pending} variant="contained" onClick={handleSave} sx={{ marginBottom: 2, width: '100%' }}>
               Save
             </Button>
           </Paper>

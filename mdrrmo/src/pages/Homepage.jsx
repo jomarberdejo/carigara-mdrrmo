@@ -1,4 +1,4 @@
-import {useState, useRef} from 'react'
+import {useState, useRef, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { locationOptions } from '../utils/locationOptions';
@@ -34,8 +34,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import  IconButton  from '@mui/material/IconButton';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { Tooltip } from '@mui/material';
+import io from 'socket.io-client';
 
-import LoadingItem from '../utils/LoadingItem';
 
 
 
@@ -53,6 +53,9 @@ const Homepage = () => {
   const queryClient = useQueryClient();
   const { user, token } = useAuth();
 
+
+  const socket = io('http://localhost:4000');
+
   const fetchReports = async () => {
     const result = await axios.get(`http://localhost:4000/api/reports/user/${user.user_id}`,
     {
@@ -62,10 +65,10 @@ const Homepage = () => {
     }
     );
     const data = await result.data;
-    const sortedIncidents = data.sort((a, b) => new Date(b.reported_at) - new Date(a.reported_at));
-    return sortedIncidents.map(report => ({
+    const sortedIncidents = data?.sort((a, b) => new Date(b.reported_at) - new Date(a.reported_at));
+    return sortedIncidents?.map(report => ({
       ...report,
-      mediaType: report.file_path ? (report.file_path.includes('.mp4') ? 'video' : 'image') : null,
+      mediaType: report.file_path ? (report.file_path.includes('mp4') ? 'video' : 'image') : null,
     }));
    
   };
@@ -76,12 +79,14 @@ const Homepage = () => {
   });
 
   if (isLoading){
-    return <LoadingItem/>
+    return null
     
   }
 
 
-  const imageUrlArray = data?.map((path) => (path?.file_path ? `http://localhost:4000/${path.file_path}` : null));
+  const imageUrlArray = data?.map((path) => (path?.file_path ? `${path?.file_path}` : null));
+
+
 
   const onClose = () => {
     setModalOpen(false);
@@ -157,9 +162,9 @@ const Homepage = () => {
         },
       });
       const responseData = await result.data;
-
+      
       setModalOpen(false);
-      toast.success('Report Added Successfully.', {
+      toast.success('Report Submitted Successfully.', {
         position: toast.POSITION.RIGHT,
         autoClose: 3000,
         style: {
@@ -167,7 +172,12 @@ const Homepage = () => {
           color: 'white',
         },
       });
-
+      const notificationData = {
+        message: 'New report submitted!',
+        severity: severityRef.current.value,
+      };
+      
+      socket.emit('notification', notificationData);
       queryClient.invalidateQueries(['reports']);
       return responseData;
     } catch (error) {
@@ -258,7 +268,7 @@ const Homepage = () => {
         
         <Typography aria-label="status"
         sx= {{marginBottom: 2}}
-        className='text-red-600 flex items-center gap-1 px-4' variant='h6'>
+        className='text-red-600 flex items-center gap-1 px-4 mb-2' variant='h6'>
            <PendingActionsIcon/> Status: {report?.status}
           </Typography>
 
@@ -267,7 +277,7 @@ const Homepage = () => {
       
     
        
-          {report.mediaType === 'video' ? (
+          {report?.mediaType === 'video' ? (
             <CardMedia
               component="video"
               controls
@@ -275,7 +285,7 @@ const Homepage = () => {
               src={imageUrlArray[index]}
               alt={`Video ${index}`}
             />
-          ) : report.mediaType === 'image' ? (
+          ) : report?.mediaType === 'image' ? (
             <CardMedia
               component="img"
               height="194"

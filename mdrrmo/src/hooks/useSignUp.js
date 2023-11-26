@@ -9,6 +9,7 @@ const useSignUp = () => {
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const ageRef = useRef(null);
+  const contactRef = useRef(null)
   const locationRef = useRef(null);
   
   const emailRef = useRef(null);
@@ -22,6 +23,7 @@ const useSignUp = () => {
         firstname: firstNameRef.current.value,
         lastname: lastNameRef.current.value,
         age: ageRef.current.value,
+        contact: contactRef.current.value,
         location: locationRef.current.value,
         email: emailRef.current.value,   
         password: passwordRef.current.value,
@@ -48,6 +50,7 @@ const useSignUp = () => {
     firstNameRef,
     lastNameRef,
     ageRef,
+    contactRef,
     locationRef,
     emailRef,
     passwordRef,

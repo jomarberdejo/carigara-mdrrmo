@@ -4,14 +4,13 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Grid  from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import { Box, IconButton } from '@mui/material';
 
 
 
 
-export default function CardItem({title, values, icon}) {
+const CardItem = ({title, values, icon}) => {
   const navigate = useNavigate()
   return (
     
@@ -51,3 +50,5 @@ export default function CardItem({title, values, icon}) {
    
   );
 }
+
+export default CardItem;

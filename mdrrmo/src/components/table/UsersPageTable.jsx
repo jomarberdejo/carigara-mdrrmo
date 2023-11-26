@@ -45,6 +45,7 @@ const UsersTable = () => {
   const {token} = useAuth()
   const firstnameRef = useRef();
   const lastnameRef = useRef();
+  const contactRef = useRef();
   const ageRef = useRef();
   const locationRef = useRef();
   const emailRef = useRef();
@@ -107,6 +108,14 @@ const UsersTable = () => {
         accessorKey: 'age',
         header: 'Age',
         size: 30,
+        muiEditTextFieldProps: {
+          required: true,
+        },
+      },
+      {
+        accessorKey: 'contact',
+        header: 'Contact Number',
+        size: 50,
         muiEditTextFieldProps: {
           required: true,
         },
@@ -222,6 +231,7 @@ const UsersTable = () => {
         firstname: firstnameRef.current.value,
         lastname: lastnameRef.current.value,
         age: ageRef.current.value,
+        contact: contactRef.current.value,
         location: locationRef.current.value,
         email: emailRef.current.value,
         role: roleRef.current.value,
@@ -268,6 +278,15 @@ const UsersTable = () => {
             inputRef={ageRef}
           />
 
+<TextField
+            id="age"
+            label="Contact Number (en-PH)"
+            placeholder='01234567891'
+            type="tel"
+            variant="outlined"
+            inputRef={contactRef}
+          />
+
           <Typography variant='body1' sx={{ color: 'gray' }}>Location*</Typography>
           <FormControl fullWidth>
 
@@ -302,7 +321,7 @@ const UsersTable = () => {
             inputRef={passwordRef}
           />
           </Tooltip>
-          <Tooltip  title="Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)" placement="top-end">
+          <Tooltip  title="Make sure both passwords match." placement="top-end">
 <TextField
             id="confirm-password"
             label="Confirm Password"

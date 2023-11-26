@@ -12,6 +12,7 @@ const getOneUser = async (req, res) => {
         firstname,
         lastname, 
         age,
+        contact,
         location,
         email,
         role,
@@ -38,6 +39,7 @@ const getAllUsers = (req, res) => {
     firstname,
     lastname,
     age,
+    contact,
     location,
     email,
     role,
@@ -61,16 +63,18 @@ const getAllUsers = (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const { firstname, lastname, age, location, email, password, confirmPassword, role } = req.body;
+    const { firstname, lastname, age, contact, location, email, password, confirmPassword, role } = req.body;
 
     try {
-        if (!firstname || !lastname || !age || !location || !email || !password || !role) {
+        if (!firstname || !lastname || !age || !contact || !location || !email || !password || !role) {
             return res.status(400).json({ error: 'All fields must be filled' });
           }
           if (!validator.isInt(age.toString(), {min: 0})) {
             return res.status(400).json({ error: 'Age must be a valid integer' });
           }
-      
+          if (!validator.isMobilePhone(contact, 'en-PH')){
+            return res.status(400).json({ error: 'Invalid phone number format' });
+          }
           if (!validator.isEmail(email)) {
             return res.status(400).json({ error: 'Email not valid' });
           }
@@ -91,11 +95,12 @@ const createUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const sql = `INSERT INTO users (firstname, lastname, age, location, email, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        const sql = `INSERT INTO users (firstname, lastname, age, contact, location, email, password, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
         const values = [
             firstname,
             lastname,
             ageInput,
+            contact,
             location,
             email,
             hashedPassword,
@@ -131,17 +136,20 @@ const getUserByEmail = (email) => {
 
 
 const updateUser = async (req, res) => {
-    const { firstname, lastname, age, role, location } = req.body;
+    const { firstname, lastname, age, contact, role, location } = req.body;
     const { id } = req.params;
 
     try{
-        if (!firstname || !lastname || !age || !location || !role) {
+        if (!firstname || !lastname || !age || !contact || !location || !role) {
             return res.status(400).json({ error: 'All fields must be filled' });
           }
           
 
           if (!validator.isInt(age.toString(), {min: 0})) {
             return res.status(400).json({ error: 'Age must be a valid integer' });
+          }
+          if (!validator.isMobilePhone(contact, 'en-PH')){
+            return res.status(400).json({ error: 'Invalid phone number format' });
           }
       
         
@@ -155,10 +163,10 @@ const updateUser = async (req, res) => {
 
         const sql = `
         UPDATE users 
-        SET firstname = ?, lastname = ?, age = ?, role = ?, location = ?
+        SET firstname = ?, lastname = ?, age = ? , contact = ? , role = ?, location = ?
         WHERE user_id = ? `;
 
-    const values = [firstname, lastname, age, role, location, Number(id)];
+    const values = [firstname, lastname, age, contact, role, location, Number(id)];
 
     connection.query(sql, values, (error, result) => {
         if (error) {

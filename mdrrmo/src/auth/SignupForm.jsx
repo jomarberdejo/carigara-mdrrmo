@@ -23,6 +23,7 @@ const SignUpForm = () => {
     firstNameRef,
     lastNameRef,
     ageRef,
+    contactRef,
     locationRef,
     emailRef,
     passwordRef,
@@ -117,6 +118,20 @@ const SignUpForm = () => {
                 autoComplete="age"
                 type='number'
                 inputRef={ageRef}
+              />
+            </Grid>
+       
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="contact"
+                label="Contact Number (en-PH)"
+                name="contact"
+                placeholder='01234567891'
+                autoComplete="contact"
+                type="tel"
+                inputRef={contactRef}
               />
             </Grid>
             <Grid item xs={12}>
