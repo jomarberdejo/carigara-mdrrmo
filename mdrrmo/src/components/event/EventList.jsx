@@ -61,7 +61,7 @@ function a11yProps(index) {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/events", {
+      const response = await axios.get("https://mdrrmoserver.onrender.com/api/events", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

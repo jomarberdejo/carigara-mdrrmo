@@ -29,7 +29,7 @@ const LineChart = () => {
   };
 
   const fetchReports = async() => {
-    const response = await axios.get('http://localhost:4000/api/reports/', 
+    const response = await axios.get('https://mdrrmoserver.onrender.com/api/reports/', 
     {
       headers: {
         'Authorization': `Bearer ${token}`

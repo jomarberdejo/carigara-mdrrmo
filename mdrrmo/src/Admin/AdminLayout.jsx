@@ -60,7 +60,7 @@ function AdminLayout({children}) {
     console.log('useEffect is running');
 
    
-    socketRef.current = io('http://localhost:4000');
+    socketRef.current = io('https://mdrrmoserver.onrender.com');
 
   
     socketRef.current.on('notification', ({message, severity}) => {

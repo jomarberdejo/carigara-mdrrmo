@@ -25,7 +25,7 @@ function Incident() {
   const { token } = useAuth();
 
   const fetchSingleIncident = async () => {
-    const result = await axios.get(`http://localhost:4000/api/reports/${Number(id)}`,
+    const result = await axios.get(`https://mdrrmoserver.onrender.com/api/reports/${Number(id)}`,
       {
         headers: {
           'Authorization': `Bearer ${token}`

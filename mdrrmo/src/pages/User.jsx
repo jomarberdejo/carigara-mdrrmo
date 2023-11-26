@@ -31,7 +31,7 @@ const User = () => {
   const {token} = useAuth()
 
   const fetchSingleUser = async () => {
-    const result = await axios.get(`http://localhost:4000/api/users/${Number(id)}`,
+    const result = await axios.get(`https://mdrrmoserver.onrender.com/api/users/${Number(id)}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -52,7 +52,7 @@ const User = () => {
 
 
   const fetchUserReports = async () => {
-    const result = await axios.get(`http://localhost:4000/api/reports/user/${Number(id)}`,
+    const result = await axios.get(`https://mdrrmoserver.onrender.com/api/reports/user/${Number(id)}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`

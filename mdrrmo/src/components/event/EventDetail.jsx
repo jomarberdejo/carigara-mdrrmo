@@ -23,7 +23,7 @@ const EventDetail = ({events, title}) => {
 
   const handleDeleteEvent = async(event_id) => {
     if (confirm("Are you sure you want to delete this event?") === true){
-      const response = await axios.delete(`http://localhost:4000/api/events/${event_id}`, {
+      const response = await axios.delete(`https://mdrrmoserver.onrender.com/api/events/${event_id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

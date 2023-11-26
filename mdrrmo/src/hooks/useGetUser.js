@@ -4,7 +4,7 @@ export const useGetUser = ()=> {
     const {token} = useAuth()
     const fetchUser = async(id) => {
         try{
-            const result = await axios.get(`http://localhost:4000/api/users/${id}`,
+            const result = await axios.get(`https://mdrrmoserver.onrender.com/api/users/${id}`,
             {
                 headers: {
                   'Authorization': `Bearer ${token}`

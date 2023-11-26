@@ -18,7 +18,7 @@ const Cards = () => {
   const {token} = useAuth()
   const fetchReports = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/dashboard/stats/', {
+      const response = await axios.get('https://mdrrmoserver.onrender.com/api/dashboard/stats/', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

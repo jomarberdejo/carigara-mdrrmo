@@ -410,7 +410,7 @@ const UsersTable = () => {
     return useMutation({
       mutationFn: async ({ values, table }) => {
         try {
-          const result = await axios.post('http://localhost:4000/api/users/', values,
+          const result = await axios.post('https://mdrrmoserver.onrender.com/api/users/', values,
           {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -450,7 +450,7 @@ const UsersTable = () => {
     return useQuery({
       queryKey: ['users'],
       queryFn: async () => {
-        const result = await axios.get('http://localhost:4000/api/users/',
+        const result = await axios.get('https://mdrrmoserver.onrender.com/api/users/',
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -471,7 +471,7 @@ const UsersTable = () => {
 
 
         try {
-          const result = await axios.patch(`http://localhost:4000/api/users/${values.user_id}`, values,
+          const result = await axios.patch(`https://mdrrmoserver.onrender.com/api/users/${values.user_id}`, values,
           {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -513,7 +513,7 @@ const UsersTable = () => {
     return useMutation({
       mutationFn: async (user_id) => {
       try{
-        const result = await axios.delete(`http://localhost:4000/api/users/${user_id}`,
+        const result = await axios.delete(`https://mdrrmoserver.onrender.com/api/users/${user_id}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
