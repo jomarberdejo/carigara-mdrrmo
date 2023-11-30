@@ -12,7 +12,7 @@ const { getAllReports, getOneReport, addReport, updateReport, deleteReport, getA
 const requireAuth = require('../middleware/requireAuth')
 
 
-// Initialize Firebase Admin SDK
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: 'gs://mdrrmostorage.appspot.com',
@@ -61,13 +61,13 @@ router.post('/', upload.single('file_path'), (req, res) => {
   const file = req.file;
 
   if (file){
-     // Create a unique filename
+    
   const filename = Date.now().toString();
 
-  // Reference to the Firebase Storage bucket
+
   const bucket = admin.storage().bucket();
 
-  // Upload the file to Firebase Storage
+
   const fileUpload = bucket.file(filename);
 
   const stream = fileUpload.createWriteStream({
@@ -81,15 +81,13 @@ router.post('/', upload.single('file_path'), (req, res) => {
     res.status(500).json({ error: 'Failed to upload file' });
   });
 
-  const fileExtension = file.mimetype.split('/')[1]; // Extract file extension from mimetype
-
-  // The file has been uploaded successfully
-  // Now, you can update your database with the file path in Firebase Storage
+  const fileExtension = file.mimetype.split('/')[1]; 
+ 
   const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(fileUpload.name)}?alt=media&type=${fileExtension}`;
 
-  req.body.filePath = fileUrl; // Assuming your database field is named 'file_path'
+  req.body.filePath = fileUrl; 
   
-  // Call your addReport function here passing req.body
+  
   addReport(req, res);
   stream.end(file.buffer);
   }

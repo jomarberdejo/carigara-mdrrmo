@@ -175,10 +175,10 @@ const deleteReport = (req, res) => {
                         error: errorDelete.message,
                     });
                 } else {
-                    // If there is a file associated with the report, delete it from Firebase Storage
+                    
                     if (filePath) {
                         const parsedUrl = new URL(filePath);
-                        const fileName = path.basename(parsedUrl.pathname); // Extract the file name
+                        const fileName = path.basename(parsedUrl.pathname); 
 
                         const bucket = admin.storage().bucket();
                         const file = bucket.file(fileName);
