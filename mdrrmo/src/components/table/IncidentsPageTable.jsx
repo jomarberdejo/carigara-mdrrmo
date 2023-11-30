@@ -150,7 +150,7 @@
           formData.append('file_path', values.file_path);
           formData.append('user_id', values.user_id);
   
-            const result = await axios.post('https://mdrrmoserver.onrender.com/api/reports/', formData, {
+            const result = await axios.post('http://localhost:4000/api/reports/', formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
                   'Authorization': `Bearer ${token}`
@@ -197,7 +197,7 @@
     }
   
     const getAllIncidents = async () => {
-      const result = await axios.get('https://mdrrmoserver.onrender.com/api/reports/', 
+      const result = await axios.get('http://localhost:4000/api/reports/', 
       {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -225,7 +225,7 @@
            
         
         try {
-          const result = await axios.patch(`https://mdrrmoserver.onrender.com/api/reports/${values.report_id}`, values,
+          const result = await axios.patch(`http://localhost:4000/api/reports/${values.report_id}`, values,
             {
               headers: {
                 'Authorization': `Bearer ${token}`
@@ -268,7 +268,7 @@
       return useMutation({
         mutationFn: async (reportId) => {
         try{
-          const result = await axios.delete(`https://mdrrmoserver.onrender.com/api/reports/${reportId}`,
+          const result = await axios.delete(`http://localhost:4000/api/reports/${reportId}`,
           {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -319,7 +319,7 @@ catch (error) {
         const values = {
           status: "Resolved"
         }
-        const result = await axios.patch(`https://mdrrmoserver.onrender.com/api/reports/status/${report.report_id}`, values,  {
+        const result = await axios.patch(`http://localhost:4000/api/reports/status/${report.report_id}`, values,  {
           headers: {
             'Authorization': `Bearer ${token}`
           }

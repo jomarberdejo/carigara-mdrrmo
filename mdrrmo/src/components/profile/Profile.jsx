@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import Box from '@mui/material/Box';
+
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,13 +13,15 @@ import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import Paper from '@mui/material/Paper';
+import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
 import EditIcon from '@mui/icons-material/Edit';
-
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogActions  from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent'
 import { toast } from 'react-toastify';
 import {locationOptions} from '../../utils/locationOptions.js'
+
 
 
 const ProfilePage = () => {
@@ -38,7 +40,7 @@ const ProfilePage = () => {
   
   
   const fetchUser = async () => {
-    const result = await axios.get(`https://mdrrmoserver.onrender.com/api/users/${user.user_id}`,
+    const result = await axios.get(`http://localhost:4000/api/users/${user.user_id}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -60,7 +62,7 @@ const ProfilePage = () => {
 
   
   if (isLoading ) {
-    return  null  
+    return  <p>Loading, please wait...</p>  
   }
 
 
@@ -83,7 +85,7 @@ const ProfilePage = () => {
   const handleSave = async (e) => {  
     setPending(true)
     try {
-      const result = await axios.patch(`https://mdrrmoserver.onrender.com/api/users/${userData?.user_id}`, formData, 
+      const result = await axios.patch(`http://localhost:4000/api/users/${userData?.user_id}`, formData, 
       {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -178,16 +180,17 @@ const ProfilePage = () => {
         >
           Edit Profile
         </Button>
-        <Modal open={isModalOpen} onClose={handleModalClose} className="fixed inset-0 flex items-center justify-center">
-          <Paper className="max-w-[450px] w-[90%] p-6 h-[95%] overflow-auto">
-            <Typography variant="h6" gutterBottom sx={{ marginBottom: 2 }}>
-              Edit Profile
-            </Typography>
+        <Dialog open={isModalOpen} onClose={handleModalClose}>
+          <DialogTitle>Edit Profile</DialogTitle>
+         <DialogContent className="max-w-[450px]  p-6">
+
+        
+          
             <TextField
               label="Firstname"
               variant="outlined"
               fullWidth
-              sx={{ marginBottom: 2 }}
+              sx={{ marginBottom: 2, marginTop: 2 }}
               value={formData.firstname}
               onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
             />
@@ -259,11 +262,17 @@ const ProfilePage = () => {
                   ))}
                 </Select>
               </FormControl> 
-            <Button type='submit' disabled= {pending} variant="contained" onClick={handleSave} sx={{ marginBottom: 2, width: '100%' }}>
+              </DialogContent>
+            <DialogActions>
+          <Button variant="outlined" onClick= {handleModalClose}>
+            Cancel
+          </Button>
+          <Button type='submit' disabled= {pending} variant="contained" onClick={handleSave}>
               Save
             </Button>
-          </Paper>
-        </Modal>
+        </DialogActions>
+          
+        </Dialog>
       </CardContent>
     </Card>
   );

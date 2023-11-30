@@ -29,7 +29,7 @@ const LineChart = () => {
   };
 
   const fetchReports = async() => {
-    const response = await axios.get('https://mdrrmoserver.onrender.com/api/reports/', 
+    const response = await axios.get('http://localhost:4000/api/reports/', 
     {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -50,7 +50,7 @@ const LineChart = () => {
   });
 
   if (isLoading || isAllReportsLoading) {
-    return  null
+    return  <p>Loading, please wait</p>
   }
 
   if (error) {

@@ -12,7 +12,7 @@ import { useAuth } from '../../context/AuthContext';
 const PieChart = () => {
   const {token} = useAuth()
   const fetchReports = async() => {
-    const response = await axios.get('https://mdrrmoserver.onrender.com/api/dashboard/piechart',
+    const response = await axios.get('http://localhost:4000/api/dashboard/piechart',
     {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -28,7 +28,7 @@ const PieChart = () => {
   });
 
   if (isLoading) {
-    return  null
+    return  <p>Loading, please wait...</p>
   }
 
   if (error) {

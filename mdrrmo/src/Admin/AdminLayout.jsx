@@ -57,10 +57,10 @@ function AdminLayout({children}) {
   const navigate= useNavigate()
 
   useEffect(() => {
-    console.log('useEffect is running');
+
 
    
-    socketRef.current = io('https://mdrrmoserver.onrender.com');
+    socketRef.current = io('http://localhost:4000');
 
   
     socketRef.current.on('notification', ({message, severity}) => {

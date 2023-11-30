@@ -173,7 +173,7 @@ const SignUpForm = () => {
                 type="password"
                 id="password"
                 autoComplete="new-password"
-               
+                  placeholder='Ex: @Testpassword1'
                 inputRef={passwordRef}
               />
           </Tooltip>
@@ -190,6 +190,7 @@ const SignUpForm = () => {
                 type="password"
                 id="confirmPassword"
                 autoComplete="confirmPassword"
+                placeholder='Ex: @Testpassword1'
                 inputRef={confirmPasswordRef}
               />
               </Tooltip>

@@ -101,7 +101,7 @@ const columns = useMemo( () => [
 
   const navigate = useNavigate();
   const fetchUsers = async () => {
-    const result = await axios.get('https://mdrrmoserver.onrender.com/api/users/',
+    const result = await axios.get('http://localhost:4000/api/users/',
     {
       headers: {
         'Authorization': `Bearer ${token}`

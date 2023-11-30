@@ -54,10 +54,10 @@ const Homepage = () => {
   const { user, token } = useAuth();
 
 
-  const socket = io('https://mdrrmoserver.onrender.com');
+  const socket = io('http://localhost:4000');
 
   const fetchReports = async () => {
-    const result = await axios.get(`https://mdrrmoserver.onrender.com/api/reports/user/${user.user_id}`,
+    const result = await axios.get(`http://localhost:4000/api/reports/user/${user.user_id}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -79,7 +79,7 @@ const Homepage = () => {
   });
 
   if (isLoading){
-    return null
+    return <p>Loading, please wait...</p>
     
   }
 
@@ -96,7 +96,7 @@ const Homepage = () => {
   const handleDeleteReport = async(id) => {
     if (confirm("Are you sure you want to delete this report?")=== true){
       try{
-        const result = await axios.delete(`https://mdrrmoserver.onrender.com/api/reports/${id}`, 
+        const result = await axios.delete(`http://localhost:4000/api/reports/${id}`, 
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -155,7 +155,7 @@ const Homepage = () => {
       formData.append('file_path', filepathRef.current.files[0]);
       formData.append('user_id', user.user_id);
       
-      const result = await axios.post('https://mdrrmoserver.onrender.com/api/reports/', formData, {
+      const result = await axios.post('http://localhost:4000/api/reports/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`

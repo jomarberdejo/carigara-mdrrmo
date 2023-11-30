@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-
+const jwt = require('jsonwebtoken')
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -21,7 +21,6 @@ const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashboard');
 const eventsRoutes = require('./routes/events');
 
-app.use('/uploads/reports', express.static(path.join(__dirname, 'uploads/reports')));
 app.use(express.json());
 
 const connection = require('./dbConfig/db');
@@ -46,6 +45,7 @@ if (connection){
         console.log('Connected and app is running on port ', PORT);
     });
 }
+
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
