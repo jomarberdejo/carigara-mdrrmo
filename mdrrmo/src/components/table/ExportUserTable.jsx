@@ -101,7 +101,7 @@ const columns = useMemo( () => [
 
   const navigate = useNavigate();
   const fetchUsers = async () => {
-    const result = await axios.get('http://localhost:4000/api/users/',
+    const result = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/`,
     {
       headers: {
         'Authorization': `Bearer ${token}`

@@ -22,16 +22,12 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import Masonry from '@mui/lab/Masonry';
 import { useAuth } from '../context/AuthContext';
 
-
-
-
-
 const User = () => {
   const { id } = useParams();
   const {token} = useAuth()
 
   const fetchSingleUser = async () => {
-    const result = await axios.get(`http://localhost:4000m/api/users/${Number(id)}`,
+    const result = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/${Number(id)}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -52,7 +48,7 @@ const User = () => {
 
 
   const fetchUserReports = async () => {
-    const result = await axios.get(`http://localhost:4000m/api/reports/user/${Number(id)}`,
+    const result = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/reports/user/${Number(id)}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`

@@ -40,7 +40,7 @@ const ProfilePage = () => {
   
   
   const fetchUser = async () => {
-    const result = await axios.get(`http://localhost:4000/api/users/${user.user_id}`,
+    const result = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/${user.user_id}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -85,7 +85,7 @@ const ProfilePage = () => {
   const handleSave = async (e) => {  
     setPending(true)
     try {
-      const result = await axios.patch(`http://localhost:4000/api/users/${userData?.user_id}`, formData, 
+      const result = await axios.patch(`${import.meta.env.VITE_API_BASE_URL}/api/users/${userData?.user_id}`, formData, 
       {
         headers: {
           'Authorization': `Bearer ${token}`

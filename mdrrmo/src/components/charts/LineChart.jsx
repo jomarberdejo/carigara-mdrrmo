@@ -14,7 +14,7 @@ const LineChart = () => {
   const {token} = useAuth()
   const fetchMonthlyData = async () => {
     try {
-      const result = await axios.get(`http://localhost:4000/api/dashboard/linechart`,
+      const result = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/dashboard/linechart`,
       {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -29,7 +29,7 @@ const LineChart = () => {
   };
 
   const fetchReports = async() => {
-    const response = await axios.get('http://localhost:4000/api/reports/', 
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/reports/`, 
     {
       headers: {
         'Authorization': `Bearer ${token}`

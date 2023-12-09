@@ -28,6 +28,8 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import Groups3Icon from '@mui/icons-material/Groups3';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import CarigaraLogo from '../assets/images/Carigara-Logo.png'
+
 const drawerWidth = 260;
 const settings = [
   {
@@ -60,7 +62,7 @@ function AdminLayout({children}) {
 
 
    
-    socketRef.current = io('http://localhost:4000');
+    socketRef.current = io(import.meta.env.VITE_API_BASE_URL);
 
   
     socketRef.current.on('notification', ({message, severity}) => {
@@ -140,12 +142,7 @@ function AdminLayout({children}) {
       <Toolbar
        className= "flex justify-center"
       >
-        <Typography
-          variant="h6"
-          
-          >
-             MDRRMO
-          </Typography>        
+        <img src={CarigaraLogo} alt= {CarigaraLogo}/>   
       </Toolbar>
 
       <Divider
@@ -271,8 +268,8 @@ function AdminLayout({children}) {
           </IconButton>
           <Typography
           
-          variant="h6" noWrap component="div">
-             Incident Reporting and Management System  
+          variant="h6" noWrap component="div" sx= {{fontFamily: 'cursive'}}>
+             Igsumat
           </Typography>
           
           <Box 

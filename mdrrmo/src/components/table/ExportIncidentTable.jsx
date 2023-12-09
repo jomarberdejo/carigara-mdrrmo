@@ -24,7 +24,7 @@ const ExportIncidentTable = () => {
   const navigate = useNavigate()
   const {token} = useAuth()
   const fetchReports = async () => {
-    const result = await axios.get('http://localhost:4000/api/reports/', 
+    const result = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/reports/`, 
      {
       headers: {
         'Authorization': `Bearer ${token}`

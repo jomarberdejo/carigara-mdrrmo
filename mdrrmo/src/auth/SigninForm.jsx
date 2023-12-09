@@ -19,9 +19,10 @@ import { toast } from 'react-toastify';
 const SignInForm = () => {
   const [pending, setPending] = useState(false)
   const { emailRef, passwordRef, handleSignIn } = useSignIn();
-
+ 
   const handleSubmit = async(event) => {
     event.preventDefault(); 
+ 
     setPending(true)
     try {
       const credential = await handleSignIn();

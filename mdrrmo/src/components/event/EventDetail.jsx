@@ -23,7 +23,7 @@ const EventDetail = ({events, title}) => {
 
   const handleDeleteEvent = async(event_id) => {
     if (confirm("Are you sure you want to delete this event?") === true){
-      const response = await axios.delete(`http://localhost:4000/api/events/${event_id}`, {
+      const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/events/${event_id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -61,14 +61,14 @@ const EventDetail = ({events, title}) => {
               
               <AccordionDetails sx= {{display:'flex', flexDirection: 'column', gap: 1, color: "gray"}}>
                
-                <Typography>Event Status: <span className='text-red-500'>{event.status.toUpperCase()}</span></Typography>
-                <Typography>Event Type: <span className='text-gray-700'> {event.type} </span></Typography>
-                <Typography>Event Venue: <span className='text-gray-700'> {event.location} </span></Typography>
-                <Typography>Event Details: <span className='text-gray-700'> {event.description} </span></Typography>
-                <Typography>Event Organizer: <span className='text-gray-700'>  {event.organizer}</span></Typography>
+                <Typography sx = {{color: "#333"}}>Event Status: <span className={`${event.status === "upcoming" ? 'text-blue-500' : event.status === "happening now" ? 'text-yellow-500' : event.status === "past" ? 'text-red-500' : null }`}>{event.status.toUpperCase()}</span></Typography>
+                <Typography sx= {{color: '#333'}}>Event Type: <span className='text-gray-500'> {event.type} </span></Typography>
+                <Typography sx= {{color: '#333'}}>Event Venue: <span className='text-gray-500'> {event.location} </span></Typography>
+                <Typography sx= {{color: '#333'}}>Event Details: <span className='text-gray-500'> {event.description} </span></Typography>
+                <Typography sx= {{color: '#333'}}  >Event Organizer: <span className='text-gray-500'>  {event.organizer}</span></Typography>
                 
                   {event.link ? (
-                   <Typography>Additional Info:   <Link href= {event.link} target= '_blank'>{event.link}</Link></Typography> 
+                   <Typography sx= {{color: '#333', textUnderlineOffset: '2px'}}>Additional Info:   <Link href= {event.link} target= '_blank'>{event.link}</Link></Typography> 
                   ) : null
                 }
                

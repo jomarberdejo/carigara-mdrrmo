@@ -60,7 +60,7 @@ const EventForm = () => {
           user_id: user.user_id,
         }
         console.log(eventData)
-        const response = await axios.post('http://localhost:4000/api/events/', eventData, {
+        const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/events/`, eventData, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

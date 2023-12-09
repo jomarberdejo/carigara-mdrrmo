@@ -1,6 +1,6 @@
 
 import {useEffect, useState} from 'react';
-import { useNavigate, useLocation} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext'
 import { useGetUser } from '../hooks/useGetUser';
 import AppBar from '@mui/material/AppBar';
@@ -16,31 +16,14 @@ import MenuItem from '@mui/material/MenuItem';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import HomeIcon from '@mui/icons-material/Home';
-import { Container } from '@mui/material';
-import logo from '../assets/images/mdrrmo-logo.png'
+import Container from '@mui/material/Container';
 
 
-
-// function Copyright() {
-//     return (
-//       <Typography variant="body2" color="text.secondary" align="center">
-//         {'Copyright © '}
-//         <Link color="inherit" href="https://mui.com/">
-//           Your Website
-//         </Link>{' '}
-//         {new Date().getFullYear()}
-//         {'.'}
-//       </Typography>
-//     );
-//   }
-  
 export default function UserLayout({children}) {
-    
-
 
     const {fetchUser} = useGetUser()
   const navigate = useNavigate()
-  const location = useLocation();
+
   const [currUserName, setCurrUserName] = useState('')
 
   const {logoutUser, user} = useAuth();
@@ -60,15 +43,16 @@ export default function UserLayout({children}) {
   }, [fetchUser, user.user_id]);
 
 const settings = [
-  {
-    name: 'Profile',
-    icon: <PersonIcon/>,
-    path: '/profile',
-  },
+
   {
     name: 'Homepage',
     icon: <HomeIcon/>,
     path: '/',
+  },
+  {
+    name: 'Profile',
+    icon: <PersonIcon/>,
+    path: '/profile',
   },
   {
     name: 'Logout',
@@ -109,9 +93,9 @@ const settings = [
         className = "bg-bkg text-content h-[65px]"
         >
             <div className='flex items-center'>
-            <Avatar src={logo} alt='MDRRMO CARIGARA'/>
-              <Typography variant='h6'   sx= {{marginLeft: 2}}>
-               MDRRMO CARIGARA
+            
+              <Typography variant='h5'   sx= {{marginLeft: 2, fontFamily: 'cursive'}}>
+             Igsumat
 
               </Typography>
             </div>
@@ -175,22 +159,7 @@ const settings = [
         </Container>
  
       </Box>
-                
-      {/* Footer
-      <Box sx={{ bgcolor: 'background.paper', p: 6, minHeight: '200px'}} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </Box> */}
+        
      </>
   );
 }

@@ -4,7 +4,7 @@ export const useGetUser = ()=> {
     const {token} = useAuth()
     const fetchUser = async(id) => {
         try{
-            const result = await axios.get(`http://localhost:4000/api/users/${id}`,
+            const result = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/${id}`,
             {
                 headers: {
                   'Authorization': `Bearer ${token}`

@@ -412,7 +412,7 @@ const UsersTable = () => {
     return useMutation({
       mutationFn: async ({ values, table }) => {
         try {
-          const result = await axios.post('http://localhost:4000/api/users/', values,
+          const result = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/users/`, values,
           {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -452,7 +452,7 @@ const UsersTable = () => {
     return useQuery({
       queryKey: ['users'],
       queryFn: async () => {
-        const result = await axios.get('http://localhost:4000/api/users/',
+        const result = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -473,7 +473,7 @@ const UsersTable = () => {
 
 
         try {
-          const result = await axios.patch(`http://localhost:4000/api/users/${values.user_id}`, values,
+          const result = await axios.patch(`${import.meta.env.VITE_API_BASE_URL}/api/users/${values.user_id}`, values,
           {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -515,7 +515,7 @@ const UsersTable = () => {
     return useMutation({
       mutationFn: async (user_id) => {
       try{
-        const result = await axios.delete(`http://localhost:4000/api/users/${user_id}`,
+        const result = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/users/${user_id}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`

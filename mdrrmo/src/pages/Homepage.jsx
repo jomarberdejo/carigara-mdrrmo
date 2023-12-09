@@ -1,10 +1,12 @@
-import {useState, useRef, useEffect} from 'react'
+import {useState, useRef} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { locationOptions } from '../utils/locationOptions';
+import io from 'socket.io-client';
 import axios from 'axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import Footer from '../components/footer/Footer';
+import { locationOptions } from '../utils/locationOptions';
 import Box from '@mui/material/Box';
 import Masonry from '@mui/lab/Masonry';
 import Stack from '@mui/material/Stack';
@@ -33,12 +35,7 @@ import LocationOn from '@mui/icons-material/LocationOn';
 import DeleteIcon from '@mui/icons-material/Delete';
 import  IconButton  from '@mui/material/IconButton';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-import { Tooltip } from '@mui/material';
-import io from 'socket.io-client';
-
-
-
-
+import Tooltip from '@mui/material/Tooltip';
 
 const Homepage = () => {
   const [pending, setPending] = useState()
@@ -54,10 +51,10 @@ const Homepage = () => {
   const { user, token } = useAuth();
 
 
-  const socket = io('http://localhost:4000');
+  const socket = io(import.meta.env.VITE_API_BASE_URL);
 
   const fetchReports = async () => {
-    const result = await axios.get(`http://localhost:4000/api/reports/user/${user.user_id}`,
+    const result = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/reports/user/${user.user_id}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -96,7 +93,7 @@ const Homepage = () => {
   const handleDeleteReport = async(id) => {
     if (confirm("Are you sure you want to delete this report?")=== true){
       try{
-        const result = await axios.delete(`http://localhost:4000/api/reports/${id}`, 
+        const result = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/reports/${id}`, 
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -155,7 +152,7 @@ const Homepage = () => {
       formData.append('file_path', filepathRef.current.files[0]);
       formData.append('user_id', user.user_id);
       
-      const result = await axios.post('http://localhost:4000/api/reports/', formData, {
+      const result = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/reports/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
@@ -196,7 +193,8 @@ const Homepage = () => {
   };
 
   return (
-    <main>
+    <>
+    <main className='min-h-[100svh]'>
       <Box
           sx={{
             bgcolor: 'background.paper',
@@ -233,7 +231,7 @@ const Homepage = () => {
       <Container sx= {{display: "grid", placeItems:"center"}}  >
    
       {data?.length > 0 ? (
-        <Masonry columns={{sm: 1,md:2, lg:3}} spacing={4}>
+        <Masonry columns={{xs: 1,md:2, lg:3}} spacing={4}>
            {data?.map((report, index) => (
               <div key={report.report_id}>
                    <Card sx= {{maxWidth: 345}}>
@@ -411,6 +409,8 @@ const Homepage = () => {
         </DialogActions>
       </Dialog>
     </main>
+    <Footer/>
+    </>
   );
 };
 

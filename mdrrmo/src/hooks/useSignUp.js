@@ -33,7 +33,7 @@ const useSignUp = () => {
 
       console.log(userInfo);
 
-      const result = await axios.post('http://localhost:4000/api/auth/signup', userInfo);
+      const result = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/signup`, userInfo);
       const data = await result.data;
 
       loginUser(data?.user, data?.token);

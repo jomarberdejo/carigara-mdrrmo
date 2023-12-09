@@ -14,6 +14,7 @@ import Event from '@mui/icons-material/Event';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import AccessTime from '@mui/icons-material/AccessTime';
 import History from '@mui/icons-material/History';
+import PageIntro from '../pageIntro/PageIntro';
 
 
 
@@ -61,7 +62,7 @@ function a11yProps(index) {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/events", {
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/events`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -98,10 +99,12 @@ function a11yProps(index) {
 
   return (
     <Box sx={{ width: '100%' }}>
+       <PageIntro/>
        <Divider sx= {{margin: 2}}>
         <Typography variant='h6'>
           Event List
         </Typography>
+       
       </Divider>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs
