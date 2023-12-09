@@ -99,7 +99,7 @@ function a11yProps(index) {
 
   return (
     <Box sx={{ width: '100%' }}>
-       <PageIntro/>
+      
        <Divider sx= {{margin: 2}}>
         <Typography variant='h6'>
           Event List

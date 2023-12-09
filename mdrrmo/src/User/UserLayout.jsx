@@ -94,8 +94,8 @@ const settings = [
         >
             <div className='flex items-center'>
             
-              <Typography variant='h5'   sx= {{marginLeft: 2, fontFamily: 'cursive'}}>
-             Igsumat
+              <Typography variant='h5' >
+             MDRRMO Carigara
 
               </Typography>
             </div>

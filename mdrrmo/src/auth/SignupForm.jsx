@@ -163,8 +163,13 @@ const SignUpForm = () => {
                 inputRef={emailRef}
               />
             </Grid>
+
             <Grid item xs={12}>
+            <Typography variant= "body2 text-gray-500">
+            Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)
+            </Typography>
             <Tooltip  title="Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)" placement="top-end">
+            
             <TextField
                 required
                 fullWidth
@@ -173,7 +178,7 @@ const SignUpForm = () => {
                 type="password"
                 id="password"
                 autoComplete="new-password"
-                  placeholder='Ex: @Testpassword1'
+                sx= {{marginTop: '10px'}}
                 inputRef={passwordRef}
               />
           </Tooltip>
@@ -190,7 +195,7 @@ const SignUpForm = () => {
                 type="password"
                 id="confirmPassword"
                 autoComplete="confirmPassword"
-                placeholder='Ex: @Testpassword1'
+                
                 inputRef={confirmPasswordRef}
               />
               </Tooltip>

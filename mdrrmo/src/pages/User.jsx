@@ -191,16 +191,16 @@ const User = () => {
         <CardContent>
 
           <Divider sx= {{marginBottom: 2}}/>
-          <Typography aria-label="status" className='text-gray-600 flex items-center gap-1 text-base'  sx= {{marginBottom: 1}} >
-            <WarningIcon className='text-green-700'/>Severity: {report?.severity}
+          <Typography aria-label="status" className='text-gray-600 text-base'  sx= {{marginBottom: 1}} >
+          <WarningIcon className='text-gray-700'/> <span className='font-bold text-gray-700'> Severity: </span> {report?.severity}
               </Typography>
-              <Typography aria-label="location" className='text-gray-600 flex items-center gap-1 text-base' sx= {{marginBottom: 1}} > 
-            <LocationOn className='text-green-700'/>Location: {report?.location}
+              <Typography aria-label="location" className='text-gray-600 text-base' sx= {{marginBottom: 1}} > 
+              <LocationOn className='text-gray-700'/><span className='font-bold text-gray-700'> Location: </span> {report?.location}
              </Typography> 
 
          
-            <Typography aria-label="description"className=' text-gray-600 flex items-center gap-1 text-base'  sx= {{marginBottom: 1}} > 
-             <CheckCircleIcon className='text-green-700'/>Description: {report?.description}
+            <Typography aria-label="description"className=' text-gray-600 text-base'  sx= {{marginBottom: 1}} > 
+            <CheckCircleIcon className='text-gray-700'/> <span className='font-bold text-gray-700'> Description: </span> {report?.description}
              </Typography> 
              
 

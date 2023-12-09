@@ -142,7 +142,7 @@ function AdminLayout({children}) {
       <Toolbar
        className= "flex justify-center"
       >
-        <img src={CarigaraLogo} alt= {CarigaraLogo}/>   
+        <img src={CarigaraLogo} alt= {CarigaraLogo} className='max-w-[200px] my-4'/>   
       </Toolbar>
 
       <Divider
@@ -268,8 +268,8 @@ function AdminLayout({children}) {
           </IconButton>
           <Typography
           
-          variant="h6" noWrap component="div" sx= {{fontFamily: 'cursive'}}>
-             Igsumat
+          variant="h6" noWrap component="h6">
+             MDRRMO Carigara
           </Typography>
           
           <Box 

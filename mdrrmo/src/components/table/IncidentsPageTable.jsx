@@ -449,7 +449,7 @@ catch (error) {
             </FormControl>
 
             <TextField
-
+              required
               label="Description"
               type="text"
               variant="outlined"
@@ -490,7 +490,7 @@ catch (error) {
               </Select>
             </FormControl>
 
-            <Typography variant='body1' sx={{ color: 'gray' }}>Image / Video (Optional)*</Typography>
+            <Typography variant='body1' sx={{ color: 'gray' }}>Image / Video (Optional)</Typography>
             <Button sx={{border: "1px dashed gray", cursor: "pointer"}}>
             <input type="file"
               className=' p-1  cursor-pointer w-full' ref={filepathRef} />
@@ -550,7 +550,7 @@ catch (error) {
         table.setCreatingRow(true);
     }}
 >
-    Report New Incident
+    Report
 </Button>
 
       ),

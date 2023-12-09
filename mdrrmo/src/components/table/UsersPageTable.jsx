@@ -254,6 +254,7 @@ const UsersTable = () => {
 
 
           <TextField
+          required
             sx={{ marginTop: 2 }}
             label="Firstname"
             type="text"
@@ -263,6 +264,7 @@ const UsersTable = () => {
 
 
           <TextField
+          required
             id="lastname"
             label="Lastname"
             type="text"
@@ -271,6 +273,7 @@ const UsersTable = () => {
           />
 
           <TextField
+          required
             id="age"
             label="Age"
             type="number"
@@ -305,31 +308,38 @@ const UsersTable = () => {
           </FormControl>
 
           <TextField
+          required
             id="email"
             label="Email"
             type="email"
             variant="outlined"
             inputRef={emailRef}
           />
-
-<Tooltip  title="Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)" placement="top-end">
-          <TextField
-            id="password"
-            label="Password"
-            type="password"
-            variant="outlined"
-            inputRef={passwordRef}
-            placeholder='Ex: @Testpassword1'
-          />
+            <Typography variant= "body2 text-gray-500">
+            Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)
+            </Typography>
+            <Tooltip  title="Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)" placement="top-end">
+            
+            <TextField
+                required
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+               
+                inputRef={passwordRef}
+              />
           </Tooltip>
           <Tooltip  title="Make sure both passwords match." placement="top-end">
 <TextField
+            required
             id="confirm-password"
             label="Confirm Password"
             type="password"
             variant="outlined"
             inputRef={confirmPasswordRef}
-            placeholder='Ex: @Testpassword1'
+           
           />
    </Tooltip>
           <Typography variant='body1' sx={{ color: 'gray' }}>Role (User / Admin)*</Typography>
@@ -395,7 +405,7 @@ const UsersTable = () => {
           table.setCreatingRow(true);
         }}
       >
-        Create User
+        Create
       </Button>
     ),
     state: {

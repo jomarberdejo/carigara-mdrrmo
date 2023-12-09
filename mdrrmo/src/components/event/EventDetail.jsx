@@ -1,4 +1,7 @@
-
+import { useAuth } from '../../context/AuthContext';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Masonry from '@mui/lab/Masonry';
 import Box from '@mui/material/Box';
@@ -9,11 +12,14 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton, Tooltip } from '@mui/material';
-import { useAuth } from '../../context/AuthContext';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import { useQueryClient } from '@tanstack/react-query';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import LinkIcon from '@mui/icons-material/Link';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -61,14 +67,14 @@ const EventDetail = ({events, title}) => {
               
               <AccordionDetails sx= {{display:'flex', flexDirection: 'column', gap: 1, color: "gray"}}>
                
-                <Typography sx = {{color: "#333"}}>Event Status: <span className={`${event.status === "upcoming" ? 'text-blue-500' : event.status === "happening now" ? 'text-yellow-500' : event.status === "past" ? 'text-red-500' : null }`}>{event.status.toUpperCase()}</span></Typography>
-                <Typography sx= {{color: '#333'}}>Event Type: <span className='text-gray-500'> {event.type} </span></Typography>
-                <Typography sx= {{color: '#333'}}>Event Venue: <span className='text-gray-500'> {event.location} </span></Typography>
-                <Typography sx= {{color: '#333'}}>Event Details: <span className='text-gray-500'> {event.description} </span></Typography>
-                <Typography sx= {{color: '#333'}}  >Event Organizer: <span className='text-gray-500'>  {event.organizer}</span></Typography>
+                <Typography sx = {{color: "#333", fontWeight: 'bold'}}><InfoOutlinedIcon/> Event Status: <span className={`mx-1 ${event.status === "upcoming" ? 'text-blue-500' : event.status === "happening now" ? 'text-yellow-500' : event.status === "past" ? 'text-red-500' : null }`}>{event.status.toUpperCase()}</span></Typography>
+                <Typography sx= {{color: '#333', fontWeight: 'bold'}}><CategoryOutlinedIcon/> Event Type: <span className='text-gray-500 mx-1  font-normal'> {event.type} </span></Typography>
+                <Typography sx= {{color: '#333', fontWeight: 'bold'}}><RoomOutlinedIcon/> Event Venue: <span className='text-gray-500 mx-1 font-normal'> {event.location} </span></Typography>
+                <Typography sx= {{color: '#333', fontWeight: 'bold'}}><DescriptionOutlinedIcon/> Event Details: <span className='text-gray-500 mx-1 font-normal'> {event.description} </span></Typography>
+                <Typography sx= {{color: '#333', fontWeight: 'bold'}}x><PersonOutlineIcon/> Event Organizer: <span className='text-gray-500 mx-1 font-normal'>  {event.organizer}</span></Typography>
                 
                   {event.link ? (
-                   <Typography sx= {{color: '#333', textUnderlineOffset: '2px'}}>Additional Info:   <Link href= {event.link} target= '_blank'>{event.link}</Link></Typography> 
+                   <Typography sx= {{color: '#333', textUnderlineOffset: '2px'}}><LinkIcon/>  <Link href= {event.link} target= '_blank'>{event.link}</Link></Typography> 
                   ) : null
                 }
                

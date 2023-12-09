@@ -112,16 +112,16 @@ function Incident() {
         <CardContent>
 
           <Divider sx={{ marginBottom: 2 }} />
-          <Typography aria-label="status" className='text-gray-600 flex items-center gap-1 text-base' sx={{ marginBottom: 1 }} >
-            <WarningIcon className='text-green-700' />Severity: {data?.severity}
+          <Typography aria-label="status" className='text-gray-600 text-base' sx={{ marginBottom: 1 }} >
+          <WarningIcon className='text-gray-700'/> <span className='font-bold text-gray-700'> Severity: </span> {data?.severity}
           </Typography>
-          <Typography aria-label="location" className='text-gray-600 flex items-center gap-1 text-base' sx={{ marginBottom: 1 }} >
-            <LocationOn className='text-green-700' />Location: {data?.location}
+          <Typography aria-label="location" className='text-gray-600 text-base' sx={{ marginBottom: 1 }} >
+          <LocationOn className='text-gray-700'/><span className='font-bold text-gray-700'> Location: </span> {data?.location}
           </Typography>
 
 
-          <Typography aria-label="description" className=' text-gray-600 flex items-center gap-1 text-base' sx={{ marginBottom: 1 }} >
-            <CheckCircleIcon className='text-green-700' />Description: {data?.description}
+          <Typography aria-label="description" className=' text-gray-600 text-base' sx={{ marginBottom: 1 }} >
+          <CheckCircleIcon className='text-gray-700'/> <span className='font-bold text-gray-700'> Description: </span> {data?.description}
           </Typography>
 
 

@@ -10,6 +10,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     
-    host: '0.0.0.0', // this makes your server accessible externally
+    host: '0.0.0.0', 
   },
 })

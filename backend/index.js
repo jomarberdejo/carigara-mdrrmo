@@ -10,6 +10,7 @@ const io = new Server(server, {
   }
 });
 
+
 app.use(cors());
 
 require('dotenv').config();
