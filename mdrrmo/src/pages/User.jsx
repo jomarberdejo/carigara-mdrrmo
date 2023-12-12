@@ -80,8 +80,11 @@ const User = () => {
   const imageUrlArray = userReports?.map((path) => (path?.file_path ? `${path.file_path}` : null));
 
   return (
-    <Container>
-      <Divider sx={{ margin: 1 }}>
+   
+      <Container>
+
+    
+      <Divider sx={{ margin: '1rem auto' }}>
         <Typography variant="h5">User Information</Typography>
       </Divider>
 
@@ -133,15 +136,15 @@ const User = () => {
       
       {userReports?.length > 0 && (
        
-        <Container sx={{ py: 2 }}>
-           <Divider sx={{ marginBottom:8, marginTop: 8 }}>
-        <Typography variant="h6" > {`${userData.firstname} ${userData.lastname}`}`s Reports</Typography>
+        <>
+           <Divider sx={{ margin: '2rem auto' }}>
+        <Typography variant="h6" > {`${userData.firstname}`}`s Reports</Typography>
         </Divider>
           
-          <Masonry  columns={{ sm:1, md:2}}  spacing={2}>
+          <Masonry  columns={{xs:1, sm:2}} sx= {{margin: 'auto'}}  spacing={2}>
             {userReports.map((report, index) => (
               <div key={report.report_id}>
-                  <Card sx={{ maxWidth: 700 }} className='block mx-auto' >
+                  <Card sx={{ maxWidth: '100%' }} className='block mx-auto' >
         <Box className= 'flex sm:justify-between sm:items-center flex-col sm:flex-row items-start'>
         <CardHeader
 
@@ -212,7 +215,7 @@ const User = () => {
               </div>
             ))}
           </Masonry>
-        </Container>
+        </>
       )}
     </Container>
   );

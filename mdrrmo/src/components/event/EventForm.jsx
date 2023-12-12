@@ -107,7 +107,7 @@ const EventForm = () => {
        
            
     <Stack
-              sx={{ pt: 1   }}
+              sx={{ pt: 1, pb:2   }}
               direction="row"
               spacing={2}
               justifyContent= "end"

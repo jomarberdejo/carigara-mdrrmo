@@ -30,12 +30,12 @@ const Footer = () => {
      <Container>
           <Divider/>
       <Box sx={{ bgcolor: 'background.paper', p: 4, minHeight: '150px'}} component="footer">
-        <footer className='flex justify-evenly items-start flex-wrap gap-8'>
+        <footer className='flex justify-evenly items-start flex-wrap gap-4'>
 
       
         <div>
           <img src= {CarigaraLogo} 
-          className='max-w-[200px]'
+          className='max-w-[150px]'
           />
         </div>
         

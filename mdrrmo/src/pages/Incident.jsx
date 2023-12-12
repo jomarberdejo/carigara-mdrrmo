@@ -54,7 +54,7 @@ function Incident() {
 
 
   return (
-    <Container>
+    <Container maxWidth= "md">
       <Divider sx={{ margin: 1 }}>
         <Typography variant='h5'>
           Incident Report

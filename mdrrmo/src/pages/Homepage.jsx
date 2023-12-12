@@ -228,13 +228,13 @@ const Homepage = () => {
             </Typography>
           </Container>
         </Box>
-      <Container sx= {{display: "grid", placeItems:"center"}}  >
+     
    
       {data?.length > 0 ? (
-        <Masonry columns={{xs: 1,md:2, lg:3}} spacing={4}>
+        <Masonry columns={{xs:1, sm:2}} spacing={4} sx= {{margin: 'auto'}}>
            {data?.map((report, index) => (
               <div key={report.report_id}>
-                   <Card sx= {{maxWidth: 345}}>
+                   <Card sx= {{maxWidth: '100%'}}>
        
         <CardHeader
         
@@ -322,7 +322,7 @@ const Homepage = () => {
             You haven't submitted any reports yet.
           </Typography>
         )}
-      </Container>
+     
       <Dialog open={isModalOpen} onClose={onClose}>
         <DialogTitle variant="h5">Report New Incident</DialogTitle>
         <DialogContent

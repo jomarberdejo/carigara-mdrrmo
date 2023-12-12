@@ -52,11 +52,11 @@ const EventDetail = ({events, title}) => {
   
   return (
     <Box sx={{ width: 'auto', minHeight: 250, margin: 'auto', }}>
-      <Typography variant='h6' sx= {{marginBottom: 4}}>{title}</Typography>
+      <Typography variant='h6' sx= {{marginBottom: 4, marginTop:2}}>{title}</Typography>
    
-      <Masonry columns={{ sm:1, md: 2 ,lg:3, xl: 4}} spacing={2}>
+      <Masonry columns={{ sm:1, md: 2 ,lg:3, xl: 4}} spacing={2} sx= {{margin: 'auto'}}>
         {events?.length > 0 ? events?.map((event, index) => (
-          <Paper key={index}>
+          <Paper key={index} >
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                

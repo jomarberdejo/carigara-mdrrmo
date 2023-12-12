@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const admin = require('firebase-admin');
-const serviceAccount = require('../mdrrmostorage-firebase-adminsdk-k59o9-f04915f7a3.json');
+
 const router = express.Router();
 
 const {
@@ -15,10 +15,29 @@ const {
 } = require('../controllers/reportsController');
 const requireAuth = require('../middleware/requireAuth');
 
+const firebaseCredentials = {
+
+    type: process.env.FIREBASE_TYPE,
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
+    universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN
+  }
+  
+
+
+
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'gs://mdrrmostorage.appspot.com',
+  credential: admin.credential.cert(firebaseCredentials),
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
 });
+
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });

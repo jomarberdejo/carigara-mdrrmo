@@ -14,7 +14,7 @@ import Event from '@mui/icons-material/Event';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import AccessTime from '@mui/icons-material/AccessTime';
 import History from '@mui/icons-material/History';
-import PageIntro from '../pageIntro/PageIntro';
+
 
 
 
@@ -30,7 +30,7 @@ function CustomTabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box>
           <div>{children}</div>
         </Box>
       )}
