@@ -7,6 +7,15 @@ app.use(cors());
 app.use(express.json());
 require('dotenv').config();
 const server = http.createServer(app);
+const requireAuth = require('./middleware/requireAuth')
+const usersRoutes = require('./routes/users');
+const reportsRoutes = require('./routes/reports');
+const authRoutes = require('./routes/auth');
+const dashboardRoutes = require('./routes/dashboard');
+const eventsRoutes = require('./routes/events');
+const connection = require('./dbConfig/db');
+
+
 const io = new Server(server, {
   cors: {
     origin: process.env.PORT_ORIGIN
@@ -16,16 +25,7 @@ const io = new Server(server, {
 
 
 
-const path = require('path');
-const usersRoutes = require('./routes/users');
-const reportsRoutes = require('./routes/reports');
-const authRoutes = require('./routes/auth');
-const dashboardRoutes = require('./routes/dashboard');
-const eventsRoutes = require('./routes/events');
 
-
-
-const connection = require('./dbConfig/db');
 const PORT = process.env.PORT_NUMBER;
 
 io.on('connection', (socket) => {
@@ -49,7 +49,12 @@ if (connection){
 }
 
 
+
 app.use('/api/auth', authRoutes);
+
+//require auth for all routes
+app.use(requireAuth)
+
 app.use('/api/users', usersRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/dashboard', dashboardRoutes);

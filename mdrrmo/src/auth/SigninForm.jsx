@@ -115,6 +115,7 @@ const SignInForm = () => {
               type="submit"
               fullWidth
               disabled = {pending}
+              
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
@@ -122,9 +123,9 @@ const SignInForm = () => {
             </Button>
             <Grid container justifyContent="center">
               <Grid item>
-                <Link to="/signup">
+                <Link to= {!pending ? "/signup" : ''}>
                   <Typography variant="body2">
-                    Don't have an account? <span className="underline underline-offset-4">Sign Up</span>
+                    Don't have an account? <span className={`underline underline-offset-4 ${pending && 'text-gray-600 cursor-wait'}`}>Sign Up</span>
                   </Typography>
                 </Link>
               </Grid>

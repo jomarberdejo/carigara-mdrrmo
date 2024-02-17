@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from 'react';
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import EventDetail from './EventDetail';
@@ -7,7 +7,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import  Container  from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import Event from '@mui/icons-material/Event';
@@ -112,7 +111,7 @@ function a11yProps(index) {
           variant="scrollable"
           value={value}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          aria-label="Events Category"
           sx={{ borderRight: 1, borderColor: 'divider'}}
         >
          <Tooltip title= "All Events" placement="top">

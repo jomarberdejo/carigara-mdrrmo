@@ -77,6 +77,7 @@ const User = () => {
     return <div>Error loading user data</div>;
   }
 
+  console.log(userReports)
   const imageUrlArray = userReports?.map((path) => (path?.file_path ? `${path.file_path}` : null));
 
   return (
@@ -92,9 +93,12 @@ const User = () => {
         <Box className="flex justify-end items-center">
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="user-profile">
-                {userData.firstname[0]}
-              </Avatar>
+              <Avatar sx={{ bgcolor: red[500] }} aria-label="user-profile"
+              alt= {userData.profileImagePath ? userData.profileImagePath : userData.firstname[0].toUpperCase()}
+              src= {userData.profileImagePath ? userData.profileImagePath : userData.firstname[0]}
+              />
+              
+         
             }
             title={`${userData.firstname} ${userData.lastname}`}
             subheader={`${userData.age}, ${userData.role} `}
@@ -144,6 +148,7 @@ const User = () => {
           <Masonry  columns={{xs:1, sm:2}} sx= {{margin: 'auto'}}  spacing={2}>
             {userReports.map((report, index) => (
               <div key={report.report_id}>
+                
                   <Card sx={{ maxWidth: '100%' }} className='block mx-auto' >
         <Box className= 'flex sm:justify-between sm:items-center flex-col sm:flex-row items-start'>
         <CardHeader
@@ -152,8 +157,10 @@ const User = () => {
         
           avatar={
             <Avatar sx= {{background: 'red'}} aria-label="user-profile"
+            alt= {report?.profileImagePath ? report?.profileImagePath : report?.firstname[0].toUpperCase()}
+            src= {report?.profileImagePath ? report?.profileImagePath : report?.firstname[0]}
             >
-              {report?.firstname[0]}
+              
             </Avatar>
           }
           title= {`${report?.firstname} ${report?.lastname}`}

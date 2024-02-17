@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const connection = require('../dbConfig/db');
 
 const createToken = (user_id) => {
-  return jwt.sign({ user_id }, process.env.SECRET, { expiresIn: '3d' });
+  return jwt.sign({ user_id }, process.env.SECRET, { expiresIn: '2hr' });
 };
 
 // login a user
@@ -28,7 +28,7 @@ const signInUser = async (req, res) => {
       }
 
       if (results.length > 0) {
-        const user = results[0];
+        let user = results[0];
         const storedHashedPassword = user.password;
 
         const isPasswordMatch = await bcrypt.compare(password, storedHashedPassword);
@@ -36,7 +36,18 @@ const signInUser = async (req, res) => {
         if (isPasswordMatch) {
          
           const token = createToken(user.user_id);
-          
+          user = {
+            user_id: user.user_id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            age: user.age,
+            contact: user.contact,
+            location: user.location,
+            email: user.email,
+            role: user.role,
+            profileImagePath: user.profileImagePath,
+            created_at: user.created_at
+          };
           return res.status(200).json({ user, token });
         } else {
           
@@ -95,7 +106,7 @@ const signUpUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const insertQuery = 'INSERT INTO users (firstname, lastname, age, contact, location, email, password, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        connection.query(insertQuery, [firstname, lastname, age, contact, location, email,hashedPassword,  role, ], (error, results) => {
+        connection.query(insertQuery, [firstname, lastname, age, contact, location, email,hashedPassword,  role, ], async (error, results) => {
           if (error) {
             return res.status(500).json({ error: 'Error creating user' });
           }

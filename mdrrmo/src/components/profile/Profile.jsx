@@ -34,6 +34,7 @@ const ProfilePage = () => {
     contact: '',
     role: '',
     location: '',
+    profileImagePath: '',
   })
   const { user, setUserData, token} = useAuth();
 
@@ -83,11 +84,23 @@ const ProfilePage = () => {
   };
   
   const handleSave = async (e) => {  
+    e.preventDefault()
     setPending(true)
     try {
-      const result = await axios.patch(`${import.meta.env.VITE_API_BASE_URL}/api/users/${userData?.user_id}`, formData, 
+   
+      const newFormData = new FormData();
+      newFormData.append('firstname', formData.firstname);
+      newFormData.append('lastname', formData.lastname);
+      newFormData.append('age', formData.age);
+      newFormData.append('contact', formData.contact);
+      newFormData.append('role', formData.role);
+      newFormData.append('location', formData.location);
+      newFormData.append('profileImagePath', formData.profileImagePath)
+      
+      const result = await axios.patch(`${import.meta.env.VITE_API_BASE_URL}/api/users/${userData?.user_id}`, newFormData, 
       {
         headers: {
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
         }
        }
@@ -104,10 +117,14 @@ const ProfilePage = () => {
         contact: formData.contact,
         role: formData.role,
         location: formData.location,
+        profileImagePath: userData.profileImagePath,
       };
+
+    
       
       
-      toast.success('Profile Updated Sucessfully.', {
+      
+      toast.success( data?.message, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
         style: {
@@ -154,7 +171,7 @@ const ProfilePage = () => {
               height: 100,  
             }}
             alt={userData?.firstname.toUpperCase()}
-            src={userData?.firstname}
+            src={userData.profileImagePath ? userData.profileImagePath : userData.firstname}
           />
         </Toolbar>
         <Divider sx={{ marginTop: 2 }} />
@@ -262,6 +279,25 @@ const ProfilePage = () => {
                   ))}
                 </Select>
               </FormControl> 
+              <FormControl fullWidth  sx={{ marginBottom: 2 }}>
+                     <Typography variant='body1' sx={{ color: 'gray' }}>Profile Picture (Optional)</Typography>
+                  <Button sx={{border: "1px dashed gray", cursor: "pointer"}}>
+                <input
+                type="file"
+                className="p-1 cursor-pointer w-full"
+                onChange={(e) => {
+                  if (e.target.files.length > 0) {
+                    const selectedFile = e.target.files[0];
+                    setFormData((prevData) => ({ ...prevData, profileImagePath: selectedFile }));
+                  }
+                }}
+              />
+
+
+                  </Button>
+                </FormControl>
+             
+
               </DialogContent>
             <DialogActions>
           <Button variant="outlined" onClick= {handleModalClose}>

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import AdminLayout from '../Admin/AdminLayout';
 import Incidents from '../pages/Incidents';
@@ -13,15 +13,13 @@ import User from '../pages/User';
 import NotFound from '../pages/NotFound';
 import Homepage from '../pages/Homepage';
 import UserLayout from '../User/UserLayout';
-import axios from 'axios';
-import {  useQuery } from '@tanstack/react-query';
 import Events from '../pages/Events';
 import EventList from '../components/event/EventList';
 
 
 
 const RouteLayout = () => {
-  const { isAuthenticated, user, token } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   // const fetchUser = async() => {
   //   const response = await axios.get(`https://mdrrmoserver.onrender.com/api/users/${user.user_id}`,

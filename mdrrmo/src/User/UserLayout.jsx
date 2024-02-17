@@ -24,7 +24,7 @@ export default function UserLayout({children}) {
     const {fetchUser} = useGetUser()
   const navigate = useNavigate()
 
-  const [currUserName, setCurrUserName] = useState('')
+  const [currUserData, setcurrUserData] = useState('')
 
   const {logoutUser, user} = useAuth();
  
@@ -33,14 +33,15 @@ export default function UserLayout({children}) {
     const fetchData = async () => {
       try {
         const userData = await fetchUser(user.user_id);
-        setCurrUserName(userData.firstname);
+        setcurrUserData(userData);
       } catch (error) {
         console.error(error.message);
       }
     };
 
     fetchData();
-  }, [fetchUser, user.user_id]);
+  }, [user.user_id]);
+  //[fetchUser, user.user_id]);
 
 const settings = [
 
@@ -114,8 +115,10 @@ const settings = [
               <IconButton 
               
               onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar   src= {currUserName}
-                sx={{ backgroundColor: '#EE4B2B' }}  alt={currUserName.toUpperCase()}  />
+                <Avatar  
+                alt={currUserData?.firstname}
+                src={currUserData.profileImagePath ? currUserData.profileImagePath : currUserData.firstname}
+                sx={{ backgroundColor: '#EE4B2B' }}  />
               </IconButton>
             </Tooltip>
             <Menu

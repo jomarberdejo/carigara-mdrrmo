@@ -69,9 +69,12 @@ function Incident() {
 
             avatar={
               <Avatar sx={{ bgcolor: red[500] }} aria-label="user-profile"
-              >
-                {data?.firstname[0]}
-              </Avatar>
+              alt= {data.profileImagePath ? data.profileImagePath : data.firstname[0].toUpperCase()}
+              src= {data.profileImagePath ? data.profileImagePath : data.firstname[0]}
+              
+              />
+              
+     
             }
             title={`${data?.firstname} ${data?.lastname}`}
             subheader={data?.reported_at}

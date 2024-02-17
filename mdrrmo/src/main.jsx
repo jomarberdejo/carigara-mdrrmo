@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import App from './App.jsx'
 import './App.css'
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
+// import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 import AuthContextWrapper from './context/AuthContext';
 import './index.css'
 

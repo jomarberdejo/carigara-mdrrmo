@@ -6,6 +6,7 @@ const connection = require('../dbConfig/db');
 
 const getOneUser = async (req, res) => {
     const { id } = req.params;
+    // console.log(req.user)
     const sql = `
         SELECT 
         user_id,
@@ -16,6 +17,7 @@ const getOneUser = async (req, res) => {
         location,
         email,
         role,
+        profileImagePath,
        created_at
         FROM users WHERE user_id = ${Number(id)}
     `;
@@ -43,6 +45,7 @@ const getAllUsers = (req, res) => {
     location,
     email,
     role,
+    profileImagePath,
     created_at
     FROM users  ORDER BY created_at DESC`;
 
@@ -136,12 +139,12 @@ const getUserByEmail = (email) => {
 
 
 const updateUser = async (req, res) => {
-    const { firstname, lastname, age, contact, role, location } = req.body;
+    const { firstname, lastname, age, contact, role, location, profileImagePath} = req.body;
     const { id } = req.params;
 
     try{
         if (!firstname || !lastname || !age || !contact || !location || !role) {
-            return res.status(400).json({ error: 'All fields must be filled' });
+            return res.status(400).json({ error: 'All required fields must be filled' });
           }
           
 
@@ -160,13 +163,24 @@ const updateUser = async (req, res) => {
             return res.status(400).json({ error: 'Please choose available roles.' });
           }
 
+          const file_path = profileImagePath ? profileImagePath : null;
 
-        const sql = `
-        UPDATE users 
-        SET firstname = ?, lastname = ?, age = ? , contact = ? , role = ?, location = ?
-        WHERE user_id = ? `;
+          
 
-    const values = [firstname, lastname, age, contact, role, location, Number(id)];
+          const sql = `
+    UPDATE users 
+    SET firstname = ?, lastname = ?, age = ?, contact = ?, role = ?, location = ? ${file_path ? ', profileImagePath = ?' : ''}
+    WHERE user_id = ?`;
+
+
+let values;
+if (file_path) {
+    values = [firstname, lastname, age, contact, role, location, file_path, Number(id)];
+} else {
+    values = [firstname, lastname, age, contact, role, location, Number(id)];
+}
+
+      
 
     connection.query(sql, values, (error, result) => {
         if (error) {

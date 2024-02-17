@@ -67,6 +67,7 @@ const columns = useMemo(()=> [
   columnHelper.accessor('description', {
     header: 'Description',
     size: 200,
+    
   }),
   columnHelper.accessor('location', {
     header: 'Location',
@@ -94,9 +95,9 @@ const columns = useMemo(()=> [
         }}
       >
         <Avatar
-          alt= {row.original.firstname.toUpperCase()}
-          height={30}
-          src= {row.original.firstname}
+         alt= {row.original.profileImagePath ? row.original.profileImagePath : row.original.firstname.toUpperCase()}
+         height={30}
+         src= {row?.original.profileImagePath ? row.original.profileImagePath : row.original.firstname}
           sx={{ backgroundColor: '#EE4B2B' }} 
           loading="lazy"
           style={{ borderRadius: '50%' }}

@@ -15,7 +15,8 @@ const getAllUserReports = (req, res) => {
         r.file_path,
         r.reported_at,
         u.firstname,
-        u.lastname
+        u.lastname,
+        u.profileImagePath
       FROM 
         reports AS r
       JOIN 
@@ -49,7 +50,8 @@ const getAllReports = (req, res) => {
       r.file_path,
       r.reported_at,
       u.firstname,
-      u.lastname
+      u.lastname,
+      u.profileImagePath
   FROM 
       reports AS r
   JOIN 
@@ -67,6 +69,7 @@ const getAllReports = (req, res) => {
                 report.reported_at = moment(report.reported_at).format('MMM, DD, YYYY h:mm A');
 
             })
+            
             res.json(result);
         }
     });
@@ -89,7 +92,8 @@ const getOneReport = (req, res) => {
     r.reported_at, 
     r.user_id, 
     u.firstname,
-    u.lastname
+    u.lastname,
+    u.profileImagePath
 FROM 
     reports AS r
 JOIN 
@@ -103,6 +107,7 @@ JOIN
             result.forEach((report) => {
                 report.reported_at = moment(report.reported_at).fromNow();
             });
+            
             res.json(result);
         }
     });

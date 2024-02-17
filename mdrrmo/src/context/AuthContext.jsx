@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useLayoutEffect } from 'react';
-
+import {jwtDecode} from 'jwt-decode'; 
 
 const AuthContext = createContext();
 
@@ -13,16 +13,24 @@ const AuthContextWrapper = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [token, setToken] = useState(null);
 
-
-
   useLayoutEffect(() => {
-    
     const storedToken = localStorage.getItem('token');
+    
     if (storedToken) {
-
-      setIsAuthenticated(true);
-      setToken(storedToken);
-      setUserData(JSON.parse(localStorage.getItem('user')));
+      const decodedToken = jwtDecode(storedToken);
+      const currentTime = Date.now() / 1000; 
+      // console.log(decodedToken)
+      // console.log(currentTime)
+     
+      if (decodedToken.exp < currentTime) { 
+        logoutUser();
+        alert("Login session has expired, Login with your account again to continue.") 
+        
+      } else {
+        setIsAuthenticated(true);
+        setToken(storedToken);
+        setUserData(JSON.parse(localStorage.getItem('user')));
+      }
     }
   }, []); 
 

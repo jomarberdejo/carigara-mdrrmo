@@ -53,9 +53,9 @@ const columns = useMemo( () => [
         }}
       >
         <Avatar
-          alt= {row.original.firstname.toUpperCase()}
+          alt= {row.original.profileImagePath ? row.original.profileImagePath : row.original.firstname.toUpperCase()}
           height={30}
-          src= {row?.original.firstname}
+          src= {row?.original.profileImagePath ? row.original.profileImagePath : row.original.firstname}
           sx={{ backgroundColor: '#EE4B2B' }} 
           loading="lazy"
           style={{ borderRadius: '50%' }}
@@ -93,6 +93,7 @@ const columns = useMemo( () => [
     header: 'Role',
     size: 30,
   }),
+
   columnHelper.accessor('created_at', {
     header: 'Created At',
     size: 200,

@@ -242,9 +242,11 @@ const Homepage = () => {
         
           avatar={
             <Avatar sx={{background: 'red'}} aria-label="user-profile"
-            >
-              {report?.firstname[0]}
-            </Avatar>
+            alt={report?.firstname}
+            src={report.profileImagePath ? report?.profileImagePath : report?.firstname}
+            />
+          
+          
           }
           action={
             <Tooltip title= "Delete this report" placement='top-end'>

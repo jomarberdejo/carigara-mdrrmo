@@ -119,9 +119,9 @@
               }}
             >
               <Avatar
-                alt= {row.original.firstname.toUpperCase()}
-                height={30}
-                src= {row.original.firstname}
+               alt= {row.original.profileImagePath ? row.original.profileImagePath : row.original.firstname.toUpperCase()}
+               height={30}
+               src= {row?.original.profileImagePath ? row.original.profileImagePath : row.original.firstname}
                 sx={{ backgroundColor: '#EE4B2B' }} 
                 loading="lazy"
                 style={{ borderRadius: '50%' }}
@@ -142,6 +142,19 @@
           
          
           try {
+          
+            if (values.file_path && !values.file_path.type.startsWith('image/') && !values.file_path.type.startsWith('video/')) {
+              toast.error('Please upload only an image or video.', {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+                style: {
+                  backgroundColor: '#2f2d2d',
+                  color: 'white',
+                },
+              });
+              return;
+            }
+
             const formData = new FormData();
           formData.append('severity', values.severity);
           formData.append('description', values.description);

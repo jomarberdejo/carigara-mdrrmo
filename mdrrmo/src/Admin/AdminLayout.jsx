@@ -52,7 +52,7 @@ function AdminLayout({children}) {
   const {fetchUser} = useGetUser()
   
   const location = useLocation();
-  const [currUserName, setCurrUserName] = useState('')
+  const [currUserData, setCurrUserData] = useState('')
 
 
   const socketRef = useRef();
@@ -93,19 +93,21 @@ function AdminLayout({children}) {
 
   const {logoutUser, user} = useAuth();
  
- 
+  const fetchData = async () => {
+    try {
+      const userData = await fetchUser(user.user_id);
+      console.log(userData)
+      setCurrUserData(userData);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = await fetchUser(user.user_id);
-        setCurrUserName(userData.firstname);
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
+   
 
     fetchData();
-  }, [fetchUser, user.user_id]);
+  }, [ user]);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -276,15 +278,17 @@ function AdminLayout({children}) {
           className= "ml-auto bg-bkg text-content"
           sx={{ flexGrow: 0 }}>
             
-           
+            
             <Tooltip
             
             title="Open settings">
               <IconButton 
               
               onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar   src= {currUserName}
-                sx={{ backgroundColor: '#EE4B2B' }}  alt={currUserName.toUpperCase()}  />
+                <Avatar   
+                 alt={currUserData?.firstname}
+                 src={currUserData.profileImagePath ? currUserData?.profileImagePath : currUserData?.firstname}
+                sx={{ backgroundColor: '#EE4B2B' }}   />
               </IconButton>
             </Tooltip>
             <Menu

@@ -230,9 +230,9 @@ const SignUpForm = () => {
           </Button>
           <Grid container justifyContent="center">
             <Grid item>
-              <Link to="/">
+              <Link to= {!pending ? "/" : ''}>
                 <Typography variant="body2">
-                  Already have an account? <span className="underline underline-offset-4">Sign In</span>
+                  Already have an account? <span className={`underline underline-offset-4 ${pending && 'text-gray-600 cursor-wait'}`}>Sign In</span>
                 </Typography>
               </Link>
             </Grid>
